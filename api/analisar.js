@@ -135,6 +135,25 @@ const NOMES = {
 };
 const CAT_MENU = KB.map(c => `- ${c.id}: ${NOMES[c.id] || c.id}`).join('\n');
 
+/* estratégias específicas por categoria injetadas no passe B (correções aprendidas na validação) */
+const ESTRATEGIAS = {
+  'crim-trafico': `ESTRATÉGIA ESPECÍFICA — TRÁFICO (obrigatória):
+- Pedido principal: rejeição/absolvição por falta de provas, conforme as nulidades encontradas.
+- Subsidiário quando primário/sem antecedentes: tráfico privilegiado (art. 33, §4º, Lei 11.343/06), redutor no grau máximo (2/3), regime aberto e substituição — inclua um tópico de mérito.
+- Prisão preventiva com fundamentação genérica (gravidade abstrata): pedido de revogação/substituição pelas cautelares do art. 319 do CPP.
+- Se a quantidade for pequena e a prova de mercancia frágil, suscite a desclassificação para uso (art. 28) e/ou a falta de laudo toxicológico DEFINITIVO (art. 50, §1º, da Lei 11.343/06) como preliminar.`,
+  'crim-homicidio': `ESTRATÉGIA ESPECÍFICA — HOMICÍDIO/JÚRI (rito arts. 406-421 CPP, obrigatória):
+- Se a autoria se apoia SÓ no inquérito (não ratificada em juízo) ou em prova por "ouvir dizer", o pedido correto é IMPRONÚNCIA (art. 414 do CPP) — NÃO "absolvição sumária", NÃO "rejeição/inépcia".
+- Cite o art. 155 do CPP (vedação de decidir com base EXCLUSIVA nos elementos do inquérito) e o art. 413 do CPP (a pronúncia exige prova da materialidade e INDÍCIOS SUFICIENTES de autoria).
+- NUNCA deixe "merito" vazio: desenvolva a insuficiência probatória para a pronúncia e, se cabível, a desclassificação ou o in dubio pro reo (art. 414).`,
+  'crim-vd': `ESTRATÉGIA ESPECÍFICA — VIOLÊNCIA DOMÉSTICA (Lei 11.340/06, obrigatória):
+- AMEAÇA (art. 147 CP) é ação penal CONDICIONADA à representação: se a vítima não quer prosseguir, a renúncia só vale pelo RITO DO ART. 16 da Lei 11.340/06 — ratificada perante o JUIZ, em audiência designada para isso, ouvido o MP. A manifestação na fase policial NÃO basta; peça a designação dessa audiência.
+- NÃO invoque a Súmula 542/STJ a favor da defesa: ela diz que a LESÃO CORPORAL em VD é INCONDICIONADA (contraria a tese). Distinga: 542 é para lesão; a ameaça segue condicionada.`,
+  'civ-familia': `ESTRATÉGIA ESPECÍFICA — FAMÍLIA/ALIMENTOS (obrigatória):
+- Alimentos são questão de MÉRITO/QUANTUM, não de nulidade: NÃO force "inépcia/falta de justa causa". Ataque o BINÔMIO NECESSIDADE-POSSIBILIDADE (art. 1.694, §1º, do CC) e peça a REDUÇÃO do percentual pedido, quantificando conforme a real capacidade do alimentante.
+- Guarda: a compartilhada é a regra (art. 1.584, §2º, do CC) quando ambos os genitores são aptos.`,
+};
+
 function extrairJson(s){
   try { return JSON.parse(s); } catch(e){ return null; }
 }
@@ -314,15 +333,14 @@ JURISPRUDÊNCIA PERMITIDA (você SÓ pode citar estes precedentes/súmulas, copi
 ${cat.juris.map((j, i) => `${i+1}. ${j.ref} — ${j.tese}`).join('\n')}
 ${sumulasRag.length ? `\nSÚMULAS RECUPERADAS PARA ESTE CASO (por similaridade semântica — use SOMENTE as que realmente se aplicam ao fato concreto dos autos; copie a referência EXATAMENTE):\n${sumulasRag.map((s, i) => `${cat.juris.length + i + 1}. ${s.ref} — ${s.tese}`).join('\n')}\n` : ''}
 
-${cat.id === 'crim-trafico' ? `ESTRATÉGIA ESPECÍFICA PARA TRÁFICO (obrigatória):
-- Pedido principal: rejeição da denúncia/absolvição por falta de provas (conforme as nulidades encontradas).
-- Pedido SUBSIDIÁRIO obrigatório quando o acusado for primário/sem antecedentes: reconhecimento do tráfico privilegiado (art. 33, §4º, da Lei 11.343/06) com redutor no grau máximo (2/3), regime aberto e substituição da pena — inclua também um tópico de mérito desenvolvendo esse ponto.
-- Se houver prisão preventiva com fundamentação genérica (gravidade abstrata), inclua pedido de revogação/substituição pelas cautelares do art. 319 do CPP.
-` : ''}REGRAS DE ESTILO DO ADVOGADO (obrigatórias):
+${ESTRATEGIAS[cat.id] ? ESTRATEGIAS[cat.id] + '\n' : ''}REGRAS DE ESTILO DO ADVOGADO (obrigatórias):
 - Peça OBJETIVA: no máximo 10 páginas no total. O juiz quer bater o olho e entender.
 - Cada preliminar/nulidade DEVE citar a lei seca (artigo, parágrafo, inciso) e explicar em 1-3 parágrafos POR QUE se aplica a ESTE caso, referindo o fato concreto dos autos que a sustenta.
 - Jurisprudência: NO MÁXIMO 1 por tópico, e SOMENTE nos 1-2 tópicos mais importantes (defina "prioritario": true neles). A MAIORIA dos tópicos fica SEM jurisprudência (jurisprudencia: null). O advogado detesta peça com muita jurisprudência.
 - NUNCA repita o mesmo precedente em tópicos diferentes: cada referência da lista pode aparecer NO MÁXIMO UMA VEZ em TODA a peça. Coloque-a apenas no ÚNICO tópico onde ela é mais forte (ex.: a busca pessoal do RHC 158.580/BA vai só no tópico da nulidade da busca, não também no da justa causa).
+- COERÊNCIA preliminar↔remédio e PODA: cada preliminar deve casar com o remédio correto (condição de procedibilidade = art. 395, II, CPP; inépcia/pressuposto = art. 395, I; no cível, questão de MÉRITO não é extinção sem resolução). NÃO empilhe preliminares genéricas/frágeis — ex.: "falta de interesse por não tentar acordo" em despejo, "ilegitimidade" onde a parte é claramente legítima, ou "falta de título executivo" em ação de CONHECIMENTO (cobrança). Prefira POUCAS teses fortes a muitas fracas.
+- HIGIENE DE PRECEDENTES: cite somente da lista permitida, com referência EXATA. NUNCA invente número de HC/REsp nem cite julgado "pendente"/de ano futuro; na dúvida, use jurisprudência consolidada sem número.
+- ANTES de citar uma súmula/precedente, confirme que ele AJUDA a tese da defesa (não a contraria).
 - Nulidade só entra em "preliminares" se houver base CONCRETA no texto (cite o trecho em "trecho_base"). O que não der para verificar pelo documento vai para "verificar_nos_autos" (lista de conferências para o advogado).
 - Tudo que for nulidade deve ser alegado AGORA (preclusão) — seja minucioso no checklist, não deixe passar nada que o texto sustente.
 - Redija em português forense claro, sem retórica vazia, pronto para protocolar.

@@ -13,7 +13,9 @@ process.env.OPENAI_API_KEY = fs.readFileSync(path.join(ROOT,'dados','.env.produc
   .split('\n').find(l=>l.startsWith('OPENAI_API_KEY=')).split('=').slice(1).join('=').trim().replace(/^"|"$/g,'');
 
 /* preços OpenAI (US$ por 1 milhão de tokens) — lista aproximada 2026 */
-const PRICE = { 'gpt-4o':{i:2.5,o:10}, 'gpt-4o-mini':{i:0.15,o:0.6}, 'text-embedding-3-small':{i:0.02,o:0} };
+const PRICE = { 'gpt-4o':{i:2.5,o:10}, 'gpt-4o-mini':{i:0.15,o:0.6},
+  'gpt-4.1':{i:2.0,o:8.0}, 'gpt-4.1-mini':{i:0.4,o:1.6}, 'gpt-5':{i:1.25,o:10}, 'gpt-5.1':{i:1.25,o:10},
+  'text-embedding-3-small':{i:0.02,o:0} }; /* preços aprox. 2026 — confira antes de decidir */
 const USD_BRL = 5.5;
 const custo = { usd:0, byModel:{}, calls:0 };
 function precoDe(model){ /* chaves mais longas primeiro: 'gpt-4o-mini' antes de 'gpt-4o' */
@@ -75,7 +77,7 @@ const ESPERADO = {
   '08-crim-ctb':       { cat:'crim-ctb',        tokens:['306','nemo','etil'], obs:'recusa etilômetro / prova objetiva' },
   '09-civ-consumidor': { cat:'civ-consumidor',  tokens:['385'], obs:'Súmula 385 (negativação preexistente)' },
   '10-civ-cobranca':   { cat:'civ-cobranca',    tokens:['prescri','206'], obs:'prescrição quinquenal' },
-  '11-civ-familia':    { cat:'civ-familia',     tokens:['1.694','1694','1.584','1584'], obs:'binômio alimentos / guarda' },
+  '11-civ-familia':    { cat:'civ-familia',     tokens:['1.694','1.584'], obs:'binômio alimentos / guarda' },
   '12-civ-locacao':    { cat:'civ-locacao',     tokens:['62','purg'], obs:'purgação da mora' },
   '13-civ-execucao':   { cat:'civ-execucao',    tokens:['bem de família','8.009','833','364'], obs:'impenhorabilidade' },
   '14-civ-danos':      { cat:'civ-danos',       tokens:['aborrecimento'], obs:'ISCA: deve evitar inventar nulidade', isca:true },
