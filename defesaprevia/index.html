@@ -286,6 +286,17 @@
         </div>
         <div id="statusIA" style="margin-bottom:10px;font-size:.92rem"></div>
         <div id="nulidadesIA"></div>
+        <!-- ══ correção + aprendizado: o advogado corrige e a IA aprende para a próxima ══ -->
+        <div id="ensinarBox" style="margin-top:1.3rem;border-top:1px solid var(--line);padding-top:1rem">
+          <div style="font-family:var(--font-mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem">🎓 Corrigir e ensinar a IA</div>
+          <p style="font-size:.85rem;color:var(--dim);margin-bottom:.7rem;line-height:1.55">Errou ou faltou algo? Escreva a correção — ela vira uma <b style="color:var(--muted)">regra permanente</b> para as próximas análises <b style="color:var(--muted)">desta categoria</b>. A IA aprende com você. <span id="aprAplicados" style="color:var(--ok)"></span></p>
+          <div id="aprLista" style="margin-bottom:.7rem"></div>
+          <textarea id="aprTexto" rows="2" placeholder="Ex.: No júri, sempre pedir impronúncia (art. 414 do CPP), nunca absolvição sumária." style="width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);resize:vertical"></textarea>
+          <div style="margin-top:.6rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+            <button class="btn-navy" onclick="salvarAprendizado()">＋ Salvar correção (a IA aprende)</button>
+            <span id="aprMsg" style="font-size:.82rem;color:var(--dim)"></span>
+          </div>
+        </div>
       </div>
 
       <div class="panel">
@@ -318,6 +329,7 @@
       <div class="toolbar">
         <button class="btn-gold" onclick="baixarPdf()">⬇ Baixar PDF (pronto para protocolo)</button>
         <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (Word)</button>
+        <button class="btn-ghost" id="btnEditarPeca" onclick="toggleEditarPeca()">✏️ Editar peça</button>
         <button class="btn-ghost" onclick="copiarTexto('documento-analise')">📋 Copiar texto</button>
         <button class="btn-navy" onclick="salvarProcesso()">💾 Arquivar análise</button>
       </div>
@@ -1062,6 +1074,7 @@ function renderIA(){
     html += '<div class="achado '+cls+'"><div class="ico">🚨</div><div class="tx"><b>'+esc(n.titulo)+'</b> '+tag
          + (n.lei_seca?'<br><em>'+esc(n.lei_seca)+'</em>':'')
          + (n.trecho_base?'<br><small>📌 Base nos autos: “'+esc(n.trecho_base)+'”</small>':'')
+         + '<div style="margin-top:.5rem"><button onclick="prefillCorrecao(\''+jsEsc(n.titulo)+'\')" style="background:none;border:1px solid var(--line);color:var(--dim);font-size:.66rem;letter-spacing:.08em;padding:.22rem .6rem;border-radius:3px;cursor:pointer;font-family:var(--font-mono);text-transform:uppercase">✎ corrigir / ensinar</button></div>'
          + '</div></div>';
   });
   (r.merito||[]).forEach(function(t){
@@ -1086,6 +1099,65 @@ function renderIA(){
   document.getElementById('nulidadesIA').innerHTML = html;
   var nPrel = (r.preliminares||[]).length;
   setStatusIA('✅ Análise minuciosa concluída: <b>'+nPrel+' preliminar(es)/nulidade(s)</b> com base concreta no documento. A peça abaixo já está montada — revisar antes de protocolar.', 'var(--ok)');
+  carregarAprendizados();
+  var na = r.aprendizados_aplicados||0;
+  var ap = document.getElementById('aprAplicados'); if(ap) ap.textContent = na ? ('✓ '+na+' correção(ões) sua(s) já aplicada(s) nesta análise.') : '';
+}
+
+/* ═══════════ CORREÇÃO + APRENDIZADO (o advogado corrige, a IA aprende) ═══════════ */
+function jsEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' '); }
+
+function carregarAprendizados(){
+  var box = document.getElementById('aprLista'); if(!box) return;
+  if(!AN.cat || !supaOn()){ box.innerHTML = supaOn()?'':'<div style="font-size:.82rem;color:var(--dim)">Faça login para salvar correções na nuvem.</div>'; return; }
+  supaFetch('aprendizados?select=id,texto&categoria_id=eq.'+encodeURIComponent(AN.cat.id)+'&ativo=eq.true&order=created_at.desc').then(function(rows){
+    rows = rows||[];
+    if(!rows.length){ box.innerHTML='<div style="font-size:.82rem;color:var(--dim)">Nenhuma correção ensinada ainda para <b>'+esc(AN.cat.nome)+'</b>.</div>'; return; }
+    box.innerHTML = '<div style="font-size:.66rem;font-family:var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.45rem">'+rows.length+' regra(s) que a IA já aplica nesta categoria</div>'
+      + rows.map(function(a){
+        return '<div style="display:flex;gap:.6rem;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:.5rem .7rem;margin-bottom:.35rem">'
+          + '<span style="color:var(--gold)">✓</span>'
+          + '<span style="flex:1;font-size:.85rem;color:var(--soft);line-height:1.45">'+esc(a.texto)+'</span>'
+          + '<button title="remover regra" onclick="removerAprendizado(\''+jsEsc(a.id)+'\')" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:1rem;padding:0 .2rem">✕</button>'
+          + '</div>';
+      }).join('');
+  }).catch(function(){ box.innerHTML=''; });
+}
+function salvarAprendizado(){
+  var el = document.getElementById('aprTexto'); var txt = (el.value||'').trim();
+  var msg = document.getElementById('aprMsg');
+  if(txt.length < 6){ msg.textContent='Escreva a correção com um pouco mais de detalhe.'; return; }
+  if(!AN.cat){ msg.textContent='Abra uma análise primeiro.'; return; }
+  if(!supaOn()){ msg.textContent='Faça login para salvar (o aprendizado fica na nuvem).'; return; }
+  msg.textContent='Salvando…';
+  supaFetch('aprendizados', {method:'POST', headers:{Prefer:'return=minimal'}, body: JSON.stringify({categoria_id: AN.cat.id, texto: txt})})
+    .then(function(){ el.value=''; msg.textContent='✓ Aprendido! A IA aplicará isso nas próximas análises de '+AN.cat.nome+'.'; carregarAprendizados(); })
+    .catch(function(e){ msg.textContent='Erro ao salvar: '+e.message; });
+}
+function removerAprendizado(id){
+  if(!confirm('Remover esta regra? A IA deixa de aplicá-la nas próximas análises.')) return;
+  supaFetch('aprendizados?id=eq.'+encodeURIComponent(id), {method:'DELETE'}).then(carregarAprendizados).catch(function(){});
+}
+function prefillCorrecao(titulo){
+  var el = document.getElementById('aprTexto'); if(!el) return;
+  el.value = 'Sobre "'+titulo+'": ';
+  el.focus();
+  document.getElementById('ensinarBox').scrollIntoView({behavior:'smooth', block:'center'});
+}
+function toggleEditarPeca(){
+  var doc = document.getElementById('documento-analise');
+  var btn = document.getElementById('btnEditarPeca');
+  var ligado = doc.getAttribute('contenteditable')==='true';
+  if(ligado){
+    doc.setAttribute('contenteditable','false'); doc.style.outline='';
+    btn.textContent='✏️ Editar peça';
+    AN.minutaArquivada = doc.innerHTML; /* edição manual tem prioridade sobre regenerar */
+    if(supaOn()) salvarProcesso();
+    setStatusIA('✅ Peça editada e salva. Suas edições manuais serão mantidas — a menos que você reanalise.', 'var(--ok)');
+  } else {
+    doc.setAttribute('contenteditable','true'); doc.style.outline='2px dashed var(--gold)'; doc.focus();
+    btn.textContent='💾 Salvar edição';
+  }
 }
 
 function rolTestemunhas(){

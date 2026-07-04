@@ -239,6 +239,18 @@ async function buscarSumulas(apiKey, consulta, opts){
   } catch (e) { return []; }
 }
 
+/* aprendizado: correções/preferências que o advogado ensinou para ESTA categoria (RLS por user).
+   Usa o token do próprio usuário → só traz os aprendizados dele. */
+async function buscarAprendizados(token, categoriaId){
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/aprendizados?select=texto&categoria_id=eq.${encodeURIComponent(categoriaId)}&ativo=eq.true&order=created_at.desc&limit=25`,
+      { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${token || SUPA_KEY}` } });
+    if (!r.ok) return [];
+    const rows = await r.json();
+    return (Array.isArray(rows) ? rows : []).map(x => x.texto).filter(Boolean);
+  } catch (e) { return []; }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({sucesso: false, erro: 'Método não permitido'});
 
@@ -314,6 +326,13 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
     ].filter(Boolean).join('. ')}`.slice(0, 3000);
     const sumulasRag = await buscarSumulas(apiKey, consultaRag, {minSim: 0.38, limite: 6});
 
+    /* aprendizado: correções que o advogado ensinou para esta categoria (viram regras no prompt) */
+    const tokenUser = (req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+    const aprendizados = await buscarAprendizados(tokenUser, cat.id);
+    const blocoAprendizados = aprendizados.length
+      ? `CORREÇÕES E PREFERÊNCIAS QUE O ADVOGADO TE ENSINOU para esta categoria (regras dele — têm PRIORIDADE, siga à risca):\n${aprendizados.map((a, i) => `${i+1}. ${a}`).join('\n')}\n\n`
+      : '';
+
     /* base de jurisprudência auditada para ESTE pedido = KB curado + súmulas recuperadas */
     const jurisPermitidas = new Set([...cat.juris.map(j => j.ref), ...sumulasRag.map(s => s.ref)]);
 
@@ -333,7 +352,7 @@ JURISPRUDÊNCIA PERMITIDA (você SÓ pode citar estes precedentes/súmulas, copi
 ${cat.juris.map((j, i) => `${i+1}. ${j.ref} — ${j.tese}`).join('\n')}
 ${sumulasRag.length ? `\nSÚMULAS RECUPERADAS PARA ESTE CASO (por similaridade semântica — use SOMENTE as que realmente se aplicam ao fato concreto dos autos; copie a referência EXATAMENTE):\n${sumulasRag.map((s, i) => `${cat.juris.length + i + 1}. ${s.ref} — ${s.tese}`).join('\n')}\n` : ''}
 
-${ESTRATEGIAS[cat.id] ? ESTRATEGIAS[cat.id] + '\n' : ''}REGRAS DE ESTILO DO ADVOGADO (obrigatórias):
+${blocoAprendizados}${ESTRATEGIAS[cat.id] ? ESTRATEGIAS[cat.id] + '\n' : ''}REGRAS DE ESTILO DO ADVOGADO (obrigatórias):
 - Peça OBJETIVA: no máximo 10 páginas no total. O juiz quer bater o olho e entender.
 - Cada preliminar/nulidade DEVE citar a lei seca (artigo, parágrafo, inciso) e explicar em 1-3 parágrafos POR QUE se aplica a ESTE caso, referindo o fato concreto dos autos que a sustenta.
 - Jurisprudência: NO MÁXIMO 1 por tópico, e SOMENTE nos 1-2 tópicos mais importantes (defina "prioritario": true neles). A MAIORIA dos tópicos fica SEM jurisprudência (jurisprudencia: null). O advogado detesta peça com muita jurisprudência.
@@ -375,7 +394,7 @@ Responda APENAS neste formato JSON:
     });
     peca.avisos = avisos;
 
-    return res.status(200).json({sucesso: true, estrutura, categoriaCorrigida, sumulas_rag: sumulasRag, ...peca});
+    return res.status(200).json({sucesso: true, estrutura, categoriaCorrigida, sumulas_rag: sumulasRag, aprendizados_aplicados: aprendizados.length, ...peca});
   } catch (err) {
     console.error('Erro na análise:', err);
     return res.status(err.status === 429 ? 429 : 500).json({sucesso: false, erro: err.message});
