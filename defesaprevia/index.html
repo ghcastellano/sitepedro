@@ -6,6 +6,12 @@
 <title>Resultados Pedro Adv — Análise de Processo e Defesa Prévia</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
+<!-- Favicon (kit RealFaviconGenerator, em /favicon) -->
+<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png?v=3" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg?v=3" />
+<link rel="shortcut icon" href="/favicon/favicon.ico?v=3" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/favicon/site.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -955,12 +961,32 @@ function dispararAnaliseIA(){
   });
 }
 
+function sincronizarCampos(){
+  /* grava no AN.dados o que o advogado digitou nos campos, para NÃO perder ao reanalisar/re-renderizar */
+  if(!AN.dados) return;
+  var g = function(id){ var el=document.getElementById(id); return el ? (el.value||'').trim() : ''; };
+  var nome=g('anNome'), num=g('anNum'), juizo=g('anJuizo'), test=g('anTestemunhas');
+  if(nome) AN.dados.parte = nome;
+  if(num){ if(!Array.isArray(AN.dados.processos)) AN.dados.processos=[]; AN.dados.processos[0]=num; }
+  if(juizo) AN.dados.juizo = juizo;
+  AN.dados.testemunhas = test; /* campo exclusivo do advogado — sempre reflete o que ele digitou */
+}
+
 function analisarComIA(manual){
   if(!AN.cat || !AN.texto){ if(manual) alert('Nenhuma análise em andamento. Envie um PDF primeiro.'); return; }
   if(AN.texto.replace(/\s/g,'').length < 400){
     setStatusIA('⚠️ Texto extraído insuficiente para a análise minuciosa por IA — a minuta segue no modo padrão.', '#a15c00');
     return;
   }
+  /* guardrail: evita reprocessar a mesma análise à toa (custo de IA) e avisa que a peça será regerada */
+  if(manual && AN.analiseIA){
+    var redundante = AN.analiseIA._cat === AN.cat.id;
+    var msg = redundante
+      ? 'Este processo JÁ foi analisado nesta categoria. Reanalisar vai gastar um novo processamento de IA (custo) e REGERAR a peça do zero — descartando ajustes feitos na própria análise. Seus campos preenchidos (parte, nº, juízo, testemunhas) são mantidos.\n\nDeseja mesmo reanalisar?'
+      : 'Já existe uma análise para este processo. Reanalisar vai REGERAR a peça com a nova análise. Seus campos preenchidos são mantidos.\n\nContinuar?';
+    if(!confirm(msg)) return;
+  }
+  sincronizarCampos(); /* preserva o que o advogado digitou antes de reanalisar */
   var gen = analiseSeq;
   var btn = document.getElementById('btnAnaliseIA');
   var btnLabel = btn.textContent;

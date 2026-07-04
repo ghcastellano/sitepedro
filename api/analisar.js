@@ -208,7 +208,10 @@ async function buscarSumulas(apiKey, consulta, opts){
     return (Array.isArray(linhas) ? linhas : [])
       .filter(s => (s.similaridade || 0) >= minSim)
       .slice(0, limite)
-      .map(s => ({ref: `${s.tribunal}, Súmula ${s.numero}`, tese: s.texto, sim: Number((s.similaridade || 0).toFixed(3))}));
+      .map(s => ({
+        ref: s.tipo === 'súmula vinculante' ? `${s.tribunal}, Súmula Vinculante ${s.numero}` : `${s.tribunal}, Súmula ${s.numero}`,
+        tese: s.texto, sim: Number((s.similaridade || 0).toFixed(3))
+      }));
   } catch (e) { return []; }
 }
 
