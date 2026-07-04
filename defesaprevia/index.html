@@ -1151,13 +1151,32 @@ function toggleEditarPeca(){
   if(ligado){
     doc.setAttribute('contenteditable','false'); doc.style.outline='';
     btn.textContent='✏️ Editar peça';
+    var editado = doc.innerText;
     AN.minutaArquivada = doc.innerHTML; /* edição manual tem prioridade sobre regenerar */
     if(supaOn()) salvarProcesso();
     setStatusIA('✅ Peça editada e salva. Suas edições manuais serão mantidas — a menos que você reanalise.', 'var(--ok)');
+    /* auto-aprendizado: a partir da sua edição, a IA sugere uma regra para as próximas peças */
+    if(AN.pecaAntesEdicao && editado.trim() !== AN.pecaAntesEdicao.trim()) aprenderComEdicao(AN.pecaAntesEdicao, editado);
   } else {
+    AN.pecaAntesEdicao = doc.innerText; /* guarda a versão antes de editar, para comparar */
     doc.setAttribute('contenteditable','true'); doc.style.outline='2px dashed var(--gold)'; doc.focus();
     btn.textContent='💾 Salvar edição';
   }
+}
+function aprenderComEdicao(original, editado){
+  var msg = document.getElementById('aprMsg');
+  if(!supaOn() || !AN.cat) return;
+  if(msg) msg.textContent='Analisando sua edição para sugerir uma regra…';
+  fetch('/api/aprender', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+((SESSION&&SESSION.access_token)||'')},
+    body: JSON.stringify({categoriaNome: AN.cat.nome, original: original, editado: editado})})
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(j && j.regra){
+        document.getElementById('aprTexto').value = j.regra;
+        if(msg) msg.innerHTML='💡 A partir da sua edição, sugeri esta regra — revise e clique em <b>Salvar correção</b> para a IA aprender.';
+        document.getElementById('ensinarBox').scrollIntoView({behavior:'smooth', block:'center'});
+      } else if(msg){ msg.textContent=''; }
+    }).catch(function(){ if(msg) msg.textContent=''; });
 }
 
 function rolTestemunhas(){
