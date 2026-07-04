@@ -162,6 +162,11 @@ async function chamarOpenAI(apiKey, model, prompt, maxTokens){
   return obj;
 }
 
+/* modelos configuráveis por env (default = comportamento atual) — permite testar/ligar
+   um modelo mais forte na redação sem mexer no código */
+const MODELO_TRIAGEM = process.env.MODELO_TRIAGEM || 'gpt-4o-mini';
+const MODELO_REDACAO = process.env.MODELO_REDACAO || 'gpt-4o';
+
 const SUPA_URL = process.env.SUPABASE_URL || 'https://kxiwvwbqnmqlaldqsaod.supabase.co';
 const SUPA_KEY = process.env.SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_wEgwVgL23ImxCFoUNUUf8Q_1LQANyMX';
 
@@ -263,7 +268,7 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
  "prisao": {"situacao": "solto|flagrante|preventiva|null", "fundamentos_da_decisao": "se constar"},
  "observacoes": ["qualquer detalhe processualmente relevante: falta de laudo, palavra só dos policiais, denúncia vaga, datas que sugerem prescrição..."]}`;
 
-    const estrutura = await chamarOpenAI(apiKey, 'gpt-4o-mini', promptA, 1500);
+    const estrutura = await chamarOpenAI(apiKey, MODELO_TRIAGEM, promptA, 1500);
 
     /* ── GUARDRAIL: só gera defesa para peça/processo judicial ──────────────── */
     if (estrutura && estrutura.ehProcessoJudicial === false) {
@@ -332,7 +337,7 @@ Responda APENAS neste formato JSON:
  "verificar_nos_autos": ["o que o advogado deve conferir no processo físico/eletrônico que o documento enviado não permite verificar"],
  "avisos": ["inconsistências, riscos, prazos, classificação possivelmente errada"]}`;
 
-    const peca = await chamarOpenAI(apiKey, 'gpt-4o', promptB, 4000);
+    const peca = await chamarOpenAI(apiKey, MODELO_REDACAO, promptB, 4000);
 
     /* ── Validação server-side: só jurisprudência auditada + SEM repetição ─────── */
     const avisos = Array.isArray(peca.avisos) ? peca.avisos : [];
