@@ -181,6 +181,37 @@ async function chamarOpenAI(apiKey, model, prompt, maxTokens){
   return obj;
 }
 
+/* variante em streaming: mesmo prompt/modelo/params; chama onDelta(texto) a cada pedaço.
+   O objeto final parseado é IDÊNTICO ao chamarOpenAI — não muda a qualidade, só entrega ao vivo. */
+async function chamarOpenAIStream(apiKey, model, prompt, maxTokens, onDelta){
+  const r = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
+    body: JSON.stringify({model, messages: [{role: 'user', content: prompt}], temperature: 0.3, max_tokens: maxTokens, response_format: {type: 'json_object'}, stream: true})
+  });
+  if(!r.ok){
+    let msg = 'Erro da API OpenAI (' + r.status + ')';
+    try { const e = await r.json(); msg = e.error?.message || msg; } catch(_){}
+    const err = new Error(msg); err.status = r.status; throw err;
+  }
+  const reader = r.body.getReader(); const dec = new TextDecoder(); let buf = '', full = '';
+  while(true){
+    const {done, value} = await reader.read(); if(done) break;
+    buf += dec.decode(value, {stream: true});
+    let idx;
+    while((idx = buf.indexOf('\n')) >= 0){
+      const line = buf.slice(0, idx).trim(); buf = buf.slice(idx + 1);
+      if(!line.startsWith('data:')) continue;
+      const payload = line.slice(5).trim();
+      if(payload === '[DONE]') continue;
+      try { const d = JSON.parse(payload).choices?.[0]?.delta?.content || ''; if(d){ full += d; if(onDelta) onDelta(d); } } catch(_){}
+    }
+  }
+  const obj = extrairJson(full);
+  if(!obj) throw new Error('Resposta da IA não é JSON válido');
+  return obj;
+}
+
 /* modelos configuráveis por env (default = comportamento atual) — permite testar/ligar
    um modelo mais forte na redação sem mexer no código */
 const MODELO_TRIAGEM = process.env.MODELO_TRIAGEM || 'gpt-4o-mini';
@@ -276,6 +307,23 @@ module.exports = async (req, res) => {
   const {texto, categoriaId, dados} = req.body || {};
   const apiKey = process.env.OPENAI_API_KEY;
 
+  /* streaming opcional (SSE): o front pede stream:true e recebe a peça sendo escrita ao vivo.
+     O resultado final é idêntico ao modo normal — só entrega progressivo. Degrada com segurança. */
+  const wantsStream = !!(req.body && req.body.stream === true);
+  let sseOn = false;
+  const emit = (ev, data) => {
+    if (!wantsStream) return;
+    if (!sseOn) {
+      res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
+      res.setHeader('X-Accel-Buffering', 'no');
+      sseOn = true;
+    }
+    res.write(`event: ${ev}\ndata: ${JSON.stringify(data)}\n\n`);
+    if (typeof res.flush === 'function') res.flush();
+  };
+  const responder = (payload) => { if (wantsStream) { emit('done', payload); return res.end(); } return res.status(200).json(payload); };
+
   if (!apiKey) return res.status(500).json({sucesso: false, erro: 'Servidor não configurado para análise por IA'});
 
   const user = await usuarioAutorizado(req).catch(() => null);
@@ -323,12 +371,13 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
  "prisao": {"situacao": "solto|flagrante|preventiva|null", "fundamentos_da_decisao": "se constar"},
  "observacoes": ["qualquer detalhe processualmente relevante: falta de laudo, palavra só dos policiais, denúncia vaga, datas que sugerem prescrição..."]}`;
 
+    emit('fase', {etapa: 'triagem', texto: 'Lendo o processo e classificando…'});
     const estrutura = await chamarOpenAI(apiKey, MODELO_TRIAGEM, promptA, 1500);
 
     /* ── GUARDRAIL: só gera defesa para peça/processo judicial ──────────────── */
     if (estrutura && estrutura.ehProcessoJudicial === false) {
       const tipo = estrutura.tipoDocumento || 'documento não jurídico';
-      return res.status(200).json({
+      return responder({
         sucesso: true,
         naoEhProcesso: true,
         tipoDocumento: tipo,
@@ -397,7 +446,8 @@ Responda APENAS neste formato JSON:
  "verificar_nos_autos": ["o que o advogado deve conferir no processo físico/eletrônico que o documento enviado não permite verificar"],
  "avisos": ["inconsistências, riscos, prazos, classificação possivelmente errada"]}`;
 
-    const peca = await chamarOpenAI(apiKey, MODELO_REDACAO, promptB, 4000);
+    emit('fase', {etapa: 'redigindo', texto: 'Redigindo a peça de defesa…'});
+    const peca = await chamarOpenAIStream(apiKey, MODELO_REDACAO, promptB, 4000, d => emit('delta', {t: d}));
 
     /* ── Validação server-side: só jurisprudência auditada + SEM repetição ─────── */
     const avisos = Array.isArray(peca.avisos) ? peca.avisos : [];
@@ -417,9 +467,10 @@ Responda APENAS neste formato JSON:
     });
     peca.avisos = avisos;
 
-    return res.status(200).json({sucesso: true, estrutura, categoriaCorrigida, sumulas_rag: sumulasRag, aprendizados_aplicados: aprendizados.length, ...peca});
+    return responder({sucesso: true, estrutura, categoriaCorrigida, sumulas_rag: sumulasRag, aprendizados_aplicados: aprendizados.length, ...peca});
   } catch (err) {
     console.error('Erro na análise:', err);
+    if (sseOn) { emit('erro', {erro: err.message}); return res.end(); }
     return res.status(err.status === 429 ? 429 : 500).json({sucesso: false, erro: err.message});
   }
 };

@@ -973,6 +973,45 @@ function dispararAnaliseIA(){
   });
 }
 
+/* chama /api/analisar em modo streaming (SSE): entrega a peça ao vivo; onProgresso(tipo,payload)
+   recebe 'fase' e 'delta'. Resolve com o resultado final. Cai para JSON normal se não vier stream. */
+function analisarFetchStream(corpo, onProgresso){
+  return fetch('/api/analisar', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+((SESSION && SESSION.access_token)||'')},
+    body: JSON.stringify(Object.assign({stream:true}, corpo))
+  }).then(function(r){
+    var ct = r.headers.get('content-type')||'';
+    if(ct.indexOf('text/event-stream') < 0 || !r.body || !r.body.getReader){
+      /* fallback: resposta JSON (erro, ou ambiente sem streaming) */
+      return r.json().catch(function(){ throw new Error('HTTP '+r.status); })
+        .then(function(j){ if(!r.ok || !j.sucesso) throw new Error(j.erro || ('HTTP '+r.status)); return j; });
+    }
+    var reader = r.body.getReader(), dec = new TextDecoder(), buf='', resultado=null, erro=null;
+    function pump(){
+      return reader.read().then(function(res){
+        if(res.done){ if(erro) throw new Error(erro); if(!resultado) throw new Error('Fluxo encerrado sem resultado.'); return resultado; }
+        buf += dec.decode(res.value, {stream:true});
+        var blocos = buf.split('\n\n'); buf = blocos.pop();
+        blocos.forEach(function(bloco){
+          var ev='message', data='';
+          bloco.split('\n').forEach(function(l){
+            if(l.indexOf('event:')===0) ev=l.slice(6).trim();
+            else if(l.indexOf('data:')===0) data += l.slice(5).trim();
+          });
+          if(!data) return;
+          var payload; try{ payload=JSON.parse(data); }catch(e){ return; }
+          if(ev==='done') resultado = payload;
+          else if(ev==='erro') erro = payload.erro || 'Falha na análise.';
+          else if(onProgresso) onProgresso(ev, payload);
+        });
+        return pump();
+      });
+    }
+    return pump();
+  });
+}
+
 function sincronizarCampos(){
   /* grava no AN.dados o que o advogado digitou nos campos, para NÃO perder ao reanalisar/re-renderizar */
   if(!AN.dados) return;
@@ -1007,13 +1046,11 @@ function analisarComIA(manual){
   if(manual) document.getElementById('painelIA').scrollIntoView({behavior:'smooth', block:'start'});
   setStatusIA('⏳ A IA está lendo o processo, varrendo o checklist de nulidades e redigindo a peça — leva de 20 a 50 segundos…');
 
-  fetch('/api/analisar', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+((SESSION && SESSION.access_token)||'')},
-    body: JSON.stringify({ texto: AN.texto.slice(0, 60000), categoriaId: AN.cat.id, dados: AN.dados })
-  }).then(function(r){
-    return r.json().catch(function(){ throw new Error('HTTP '+r.status); })
-      .then(function(j){ if(!r.ok || !j.sucesso) throw new Error(j.erro || ('HTTP '+r.status)); return j; });
+  var streamChars = 0;
+  analisarFetchStream({ texto: AN.texto.slice(0, 60000), categoriaId: AN.cat.id, dados: AN.dados }, function(tipo, p){
+    if(gen !== analiseSeq) return;
+    if(tipo==='fase'){ setStatusIA('⏳ '+esc(p.texto||'Processando…')); }
+    else if(tipo==='delta'){ streamChars += (p.t||'').length; setStatusIA('✍️ Redigindo a peça de defesa… <b>'+streamChars+'</b> caracteres — a IA está escrevendo em tempo real.'); }
   }).then(function(result){
     btn.disabled = false; btn.textContent = btnLabel;
     if(gen !== analiseSeq) return; /* usuário já trocou de processo — descarta */
