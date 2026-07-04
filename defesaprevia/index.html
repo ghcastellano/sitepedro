@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados Pedro Adv — Análise de Processo e Defesa Prévia</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Design system Pedro Henrik — dark cinematográfico editorial */
+    --black:#0a0a0b; --coal:#101012; --panel:#141416; --panel2:#191a1d;
+    --line:rgba(226,202,148,.12); --line-strong:rgba(226,202,148,.28);
+    --gold:#c9a96a; --gold-bright:#e3c888; --cream:#f2ede3;
+    --muted:#c2bcb1; --dim:#938d82; --soft:#d6d0c5;
+    --ok:#8fce9f; --ok-bg:rgba(143,206,159,.10); --ok-line:rgba(143,206,159,.5);
+    --warn:#e0b673; --warn-bg:rgba(224,182,115,.10); --warn-line:rgba(224,182,115,.5);
+    --danger:#e0938c; --danger-bg:rgba(224,147,140,.10); --danger-line:rgba(224,147,140,.5);
+    /* aliases legados usados em estilos inline */
+    --navy:var(--cream); --navy2:var(--gold-bright);
+    --font-display:"Cormorant Garamond",Georgia,serif;
+    --font-body:"Inter",-apple-system,system-ui,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);font-weight:400;background:var(--black);color:var(--cream);line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--gold);color:var(--black)}
+  a{color:inherit;text-decoration:none}
+  strong,b{font-weight:600;color:var(--cream)}
+  em{font-style:italic}
+
+  header{position:relative;padding:56px 22px 40px;border-bottom:1px solid var(--line);
+    background:radial-gradient(ellipse 80% 70% at 72% 0%,rgba(201,169,106,.06),transparent 60%),linear-gradient(180deg,var(--black),var(--coal))}
+  .wrap{width:min(1120px,100% - 40px);margin:0 auto}
+  header .over{display:flex;align-items:center;gap:1rem;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+  .rule{display:inline-block;width:42px;height:1px;background:var(--gold)}
+  header h1{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,5vw,3.2rem);line-height:1.02;letter-spacing:-.01em;color:var(--cream)}
+  header h1 span{font-style:italic;color:var(--gold)}
+  header p.sub{color:var(--muted);margin-top:1rem;font-size:.98rem;max-width:44rem}
+
+  nav{background:rgba(10,10,11,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+  nav .wrap{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;min-height:60px}
+  nav a{position:relative;padding:1rem .3rem;color:var(--muted);font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:color .3s;margin-right:1.6rem}
+  nav a::after{content:"";position:absolute;left:0;bottom:.55rem;width:100%;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+  nav a:hover,nav a.active{color:var(--cream)}
+  nav a:hover::after,nav a.active::after{transform:scaleX(1);transform-origin:left}
+  nav a.destaque{color:var(--gold);margin-right:1.6rem}
+  nav a.destaque::after{background:var(--gold-bright)}
+
+  section{padding:clamp(3rem,7vh,5.5rem) 22px}
+  .overline{display:flex;align-items:center;gap:.9rem;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem}
+  h2.sec{font-family:var(--font-display);color:var(--cream);font-size:clamp(1.9rem,3.6vw,2.9rem);font-weight:500;line-height:1.05;letter-spacing:-.01em;margin-bottom:.7rem}
+  h2.sec span{font-style:italic;color:var(--gold)}
+  p.secsub{color:var(--muted);margin-bottom:2.2rem;font-size:.98rem;max-width:44rem}
+
+  /* ---------- botões (fill-up no hover, estilo Pedro) ---------- */
+  button,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;position:relative;overflow:hidden;cursor:pointer;font-family:var(--font-body);font-weight:500;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;padding:.85rem 1.5rem;border:1px solid transparent;border-radius:2px;transition:color .4s var(--ease),border-color .4s,transform .3s var(--ease);background:none;color:var(--cream)}
+  button::before,.btn::before{content:"";position:absolute;inset:0;z-index:-1;transform:scaleY(0);transform-origin:bottom;transition:transform .45s var(--ease)}
+  .btn-gold{background:var(--gold);color:var(--black);border-color:var(--gold)}
+  .btn-gold::before{background:var(--cream)}
+  .btn-gold:hover::before{transform:scaleY(1)}
+  .btn-navy{color:var(--cream);border-color:var(--line-strong)}
+  .btn-navy::before{background:var(--gold)}
+  .btn-navy:hover{color:var(--black);border-color:var(--gold)}
+  .btn-navy:hover::before{transform:scaleY(1)}
+  .btn-ghost{color:var(--muted);border-color:var(--line)}
+  .btn-ghost::before{background:var(--gold)}
+  .btn-ghost:hover{color:var(--black);border-color:var(--gold)}
+  .btn-ghost:hover::before{transform:scaleY(1)}
+  button:disabled{opacity:.4;pointer-events:none}
+
+  /* ---------- barra de conta ---------- */
+  .conta-bar{display:flex;justify-content:flex-end;font-size:.8rem;color:var(--muted);margin-bottom:1.4rem;min-height:1.2em}
+  .conta-bar a{color:var(--gold);border-bottom:1px solid transparent;transition:border-color .3s}
+  .conta-bar a:hover{border-color:var(--gold)}
+
+  /* ---------- escolha: reabrir (barra compacta) + analisar novo (dropzone) ---------- */
+  .chooser{margin-bottom:1.6rem}
+  .abrir-bar{display:flex;align-items:center;gap:1.2rem 1.6rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1.1rem 1.4rem}
+  .abrir-bar .ab-text{flex:1;min-width:180px}
+  .abrir-bar .ab-text h3{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--cream);line-height:1.2}
+  .abrir-bar .ab-text span{font-size:.82rem;color:var(--muted)}
+  .abrir-bar select{flex:0 1 400px;min-width:240px}
+  .ou-linha{display:flex;align-items:center;gap:1rem;margin:1.2rem 0;color:var(--dim);font-size:.64rem;letter-spacing:.26em;text-transform:uppercase}
+  .ou-linha::before,.ou-linha::after{content:"";height:1px;flex:1;background:var(--line)}
+
+  .bigdrop{border:1px dashed var(--line-strong);border-radius:4px;padding:2.8rem 1.4rem;text-align:center;background:rgba(201,169,106,.025);cursor:pointer;transition:.3s var(--ease)}
+  .bigdrop:hover,.bigdrop.over{background:rgba(201,169,106,.07);border-color:var(--gold)}
+  .bigdrop .ic{font-size:2.1rem;margin-bottom:.8rem}
+  .bigdrop h4{color:var(--cream);font-size:1.12rem;font-weight:500;margin-bottom:.5rem}
+  .bigdrop p{color:var(--muted);font-size:.86rem;max-width:44rem;margin:0 auto}
+
+  /* ---------- switcher compacto (estado trabalhando) ---------- */
+  .switcher{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem}
+  .switcher label{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.3rem}
+  .switcher .sw-open{flex:1;min-width:220px}
+  .switcher strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--cream);display:block;line-height:1.3}
+  .switcher .sw-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+
+  select,input[type=text],input[type=email],input[type=password]{width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);transition:border-color .3s}
+  select:focus,input:focus,textarea:focus{outline:none;border-color:var(--gold)}
+  select option{background:var(--panel2);color:var(--cream)}
+
+  .progresso{display:none;margin:1.4rem 0;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1.3rem 1.5rem}
+  .progresso strong{color:var(--gold-bright);font-weight:500}
+  .progresso .bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:.8rem}
+  .progresso .bar>div{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .3s}
+
+  .confbox{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;background:rgba(201,169,106,.05);border:1px solid var(--line-strong);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem;font-size:.92rem}
+  .confbox select{width:auto;min-width:230px}
+
+  /* flex-wrap que faz cada linha PREENCHER a largura — sem coluna vazia ao lado do último card */
+  .cards{display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:1.8rem}
+  .card{background:var(--panel);padding:1.15rem 1.3rem;flex:1 1 220px;min-width:200px}
+  .card .k{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.45rem;opacity:.85}
+  .card .v{font-weight:500;color:var(--cream);font-size:.98rem;line-height:1.4}
+  .card .v small{font-weight:400;color:var(--muted);display:block;font-size:.82rem;margin-top:.25rem;line-height:1.45}
+
+  .tag{display:inline-block;padding:.15rem .7rem;border:1px solid var(--line-strong);border-radius:2px;font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .tag.red{color:var(--danger);border-color:var(--danger-line)}
+  .tag.green{color:var(--ok);border-color:var(--ok-line)}
+  .tag.amber{color:var(--warn);border-color:var(--warn-line)}
+  .tag.blue{color:var(--gold);border-color:var(--line-strong)}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1.8rem 1.9rem;margin-bottom:1.6rem}
+  .panel h3{font-family:var(--font-display);color:var(--cream);margin-bottom:1rem;font-size:1.4rem;font-weight:600}
+  .panel ul{margin:.5rem 0 .5rem 1.2rem}
+  .panel li{margin-bottom:.5rem;font-size:.92rem;color:var(--muted)}
+
+  .achado{display:flex;gap:.8rem;align-items:flex-start;padding:.9rem 1.1rem;border:1px solid var(--line);border-left-width:3px;border-radius:3px;margin-bottom:.7rem;background:var(--panel2)}
+  .achado .ico{font-size:1.1rem;line-height:1.4}
+  .achado.forte{border-left-color:var(--ok-line);background:var(--ok-bg)}
+  .achado.atencao{border-left-color:var(--warn-line);background:var(--warn-bg)}
+  .achado.critico{border-left-color:var(--danger-line);background:var(--danger-bg)}
+  .achado .tx{font-size:.92rem;color:var(--soft);line-height:1.55}
+  .achado .tx b{color:var(--cream)}
+  .achado .tx em{color:var(--gold-bright);font-style:italic}
+  .achado .tx small{color:var(--muted)}
+
+  .juris{border-left:2px solid var(--gold);background:rgba(201,169,106,.05);padding:1rem 1.3rem;border-radius:0 3px 3px 0;margin:.9rem 0}
+  .juris .ref{font-weight:600;color:var(--gold-bright);font-size:.88rem;letter-spacing:.01em}
+  .juris .txt{font-size:.92rem;color:var(--soft);font-style:italic;margin-top:.45rem;line-height:1.55}
+
+  .toolbar{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.4rem}
+
+  /* ---------- a peça: folha branca sobre o fundo escuro ---------- */
+  .paper{background:#fbfaf6;border:1px solid #d8d4c4;border-radius:2px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:64px 72px;font-family:"Times New Roman",Georgia,serif;font-size:1.02rem;font-weight:400;line-height:1.85;color:#141414;text-align:justify;letter-spacing:0}
+  .paper strong,.paper b{color:#141414}
+  .paper h1{font-size:1.05rem;text-align:center;text-transform:uppercase;letter-spacing:.5px;margin:26px 0 18px;color:#141414}
+  .paper h2{font-size:1rem;text-transform:uppercase;margin:26px 0 10px;letter-spacing:.3px;color:#141414}
+  .paper h3{font-size:.98rem;margin:18px 0 8px;color:#141414;font-family:"Times New Roman",Georgia,serif}
+  .paper p{margin-bottom:14px;text-indent:2.2em}
+  .paper p.ni{text-indent:0}
+  .paper p.center{text-align:center;text-indent:0}
+  .paper p.right{text-align:right;text-indent:0}
+  .paper blockquote{margin:14px 30px 14px 60px;font-size:.92rem;font-style:italic;border-left:2px solid #999;padding-left:14px;text-align:justify;color:#333}
+  .paper .addr{text-transform:uppercase;font-weight:700;text-indent:0;margin-bottom:60px}
+  .paper ol{margin:0 0 14px 46px}
+  .paper ol li{margin-bottom:10px}
+  .paper .sign{text-align:center;margin-top:46px;text-indent:0}
+
+  label{display:block;font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:.06em;margin:0 0 .4rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1.2rem;margin-bottom:.4rem}
+
+  .note{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn);padding:.9rem 1.2rem;border-radius:3px;font-size:.85rem;margin:1.2rem 0}
+  .note strong{color:var(--gold-bright)}
+
+  footer{border-top:1px solid var(--line);background:var(--coal);color:var(--dim);text-align:center;padding:2.6rem 22px;font-size:.78rem;margin-top:3rem}
+  footer strong{color:var(--muted)}
+
+  @media(max-width:820px){
+    .chooser{grid-template-columns:1fr}
+    .chooser__div{flex-direction:row;padding:.4rem 0}
+    .chooser__div::before,.chooser__div::after{width:auto;height:1px;flex:1}
+  }
+  @media(max-width:640px){.paper{padding:34px 24px}.grid2{grid-template-columns:1fr}}
+  @media print{
+    header,nav,.toolbar,.confbox,.conta-bar,.chooser,.switcher,#painelIA,#achados,#jurisCategoria,.note,footer,#loginGate{display:none!important}
+    .panel,.cards{display:none!important}
+    #documentoWrap,.paper{display:block!important}
+    section{padding:0}body{background:#fff;color:#000}
+    .paper{border:none;box-shadow:none;padding:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ PORTÃO DE LOGIN (e-mail + senha) ══════════ -->
+<div id="loginGate" style="display:none;position:fixed;inset:0;background:rgba(5,5,6,.86);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(201,169,106,.08),transparent 60%),var(--panel);border:1px solid var(--line-strong);border-radius:6px;max-width:420px;width:100%;padding:42px 36px;box-shadow:0 30px 80px rgba(0,0,0,.6);text-align:center">
+    <div style="font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem">Área restrita</div>
+    <h3 style="font-family:var(--font-display);color:var(--cream);margin:0 0 .5rem;font-size:1.9rem;font-weight:500">Resultados <em style="color:var(--gold)">Pedro Adv</em></h3>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1.6rem;font-weight:300">Acesso exclusivo do escritório. Entre com seu e-mail e senha.</p>
+    <form onsubmit="entrarComSenha(event)">
+      <input type="email" id="loginEmail" placeholder="seu e-mail" required autocomplete="username" style="margin-bottom:.7rem">
+      <input type="password" id="loginSenha" placeholder="sua senha" required autocomplete="current-password" style="margin-bottom:1rem">
+      <button type="submit" class="btn-gold" style="width:100%;justify-content:center">Entrar</button>
+    </form>
+    <p id="loginMsg" style="font-size:.85rem;margin-top:1rem;color:var(--muted);min-height:1.2em"></p>
+    <p style="font-size:.72rem;color:var(--dim);margin-top:1rem;font-weight:300">Você entra uma vez e o acesso fica salvo neste computador. Sigilo profissional preservado (art. 7º, II, EOAB).</p>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="over"><i class="rule"></i> Resultados Pedro Adv · Sistema de defesa</div>
+    <h1>Análise de processo &amp; <span>defesa quase pronta</span></h1>
+    <p class="sub">Suba o processo — criminal ou cível — e o sistema lê os autos, aponta as nulidades e devolve a Defesa Prévia/Preliminar formatada, pronta para revisão e protocolo.</p>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#analisador" class="destaque active">Analisar processo</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════ ANALISADOR AUTOMÁTICO ══════════════════════ -->
+<section id="analisador">
+  <div class="wrap">
+    <div class="overline"><i class="rule"></i> Fluxo de trabalho</div>
+    <h2 class="sec">Análise automática do <span>processo</span></h2>
+    <p class="secsub">Abra um processo já analisado ou suba um novo PDF. A leitura, a extração e a defesa saem em seguida — com as nulidades identificadas e a jurisprudência prioritária.</p>
+
+    <div class="conta-bar" id="storageStatus"></div>
+
+    <!-- ESTADO INICIAL: reabrir (barra compacta) + analisar novo (dropzone) -->
+    <div class="chooser" id="chooser">
+      <div class="abrir-bar" id="colAbrir" style="display:none">
+        <div class="ab-text">
+          <h3>Reabrir processo já analisado</h3>
+          <span>Abre na hora — sem novo upload, sem reprocessamento, sem custo.</span>
+        </div>
+        <select id="selProcessos" onchange="abrirProcessoSalvo()"><option value="">— nenhum processo arquivado ainda —</option></select>
+      </div>
+      <div class="ou-linha" id="chooserDiv" style="display:none"><span>ou analise um novo processo</span></div>
+      <div class="bigdrop" id="bigdrop" onclick="document.getElementById('pdfProcesso').click()">
+        <input type="file" id="pdfProcesso" accept=".pdf" style="display:none" onchange="iniciarAnalise(this)">
+        <div class="ic">📄⚖️</div>
+        <h4 id="bigdropTitulo">Arraste o PDF do processo aqui ou clique para selecionar</h4>
+        <p id="bigdropSub">Criminal ou cível. Extração e OCR rodam no seu navegador; o texto segue com segurança para a análise por IA (sigilo profissional preservado). A defesa sai quase pronta, com as nulidades apontadas.</p>
+      </div>
+    </div>
+
+    <div class="progresso" id="progresso">
+      <strong id="progTexto">Lendo o documento…</strong>
+      <div class="bar"><div id="progBarra"></div></div>
+    </div>
+
+    <div id="resultadoAnalise" style="display:none">
+      <!-- BARRA COMPACTA: processo aberto + trocar/novo -->
+      <div class="switcher">
+        <div class="sw-open">
+          <label>Processo aberto</label>
+          <strong id="swNome">—</strong>
+        </div>
+        <div class="sw-actions">
+          <button class="btn-gold" onclick="novoProcesso()">＋ Analisar outro processo</button>
+        </div>
+      </div>
+
+      <div class="confbox">
+        <span>Categoria identificada: <strong id="catDetectada" style="color:var(--gold-bright)"></strong> <span id="catConfianca" class="tag blue"></span> <span id="saveStatus" class="tag green" style="display:none"></span></span>
+        <span style="margin-left:auto">Ajustar: <select id="catManual" onchange="reclassificar()"></select></span>
+      </div>
+
+      <div class="cards" id="cardsAnalise"></div>
+
+      <div class="panel" id="painelIA" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.9rem">
+          <h3 style="margin:0">🧠 Nulidades e irregularidades — análise por IA</h3>
+          <button class="btn-ghost" onclick="analisarComIA(true)" id="btnAnaliseIA">↻ Reanalisar com IA</button>
+        </div>
+        <div id="statusIA" style="margin-bottom:10px;font-size:.92rem"></div>
+        <div id="nulidadesIA"></div>
+      </div>
+
+      <div class="panel">
+        <h3>🔎 Pontos identificados na leitura do processo</h3>
+        <div id="achados"></div>
+      </div>
+
+      <div class="panel">
+        <h3>⚖️ Jurisprudência prioritária da categoria</h3>
+        <div id="jurisCategoria"></div>
+      </div>
+
+      <div class="panel">
+        <h3>📝 Dados para a minuta (ajuste se necessário)</h3>
+        <div class="grid2">
+          <div><label>Nome da parte defendida</label><input type="text" id="anNome"></div>
+          <div><label>Nº do processo</label><input type="text" id="anNum"></div>
+        </div>
+        <div class="grid2">
+          <div><label>Juízo (Vara / Comarca)</label><input type="text" id="anJuizo"></div>
+          <div><label>Advogado(a) — OAB</label><input type="text" id="anAdv" placeholder="ex.: Nome — OAB/SP 000.000"></div>
+        </div>
+        <div style="margin-top:.6rem">
+          <label>Rol de testemunhas (uma por linha — Nome, qualificação, endereço)</label>
+          <textarea id="anTestemunhas" rows="3" placeholder="Deixe em branco se não for arrolar agora. Ex.:&#10;João da Silva, RG 00.000.000-0, Rua X, 100 — Guarujá/SP&#10;Maria Souza, CPF 000.000.000-00, Rua Y, 200 — Santos/SP" style="width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);resize:vertical"></textarea>
+        </div>
+        <div style="margin-top:16px"><button class="btn-navy" onclick="AN.minutaArquivada=null;atualizarMinuta()">↻ Atualizar minuta com estes dados</button></div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn-gold" onclick="baixarPdf()">⬇ Baixar PDF (pronto para protocolo)</button>
+        <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (Word)</button>
+        <button class="btn-ghost" onclick="copiarTexto('documento-analise')">📋 Copiar texto</button>
+        <button class="btn-navy" onclick="salvarProcesso()">💾 Arquivar análise</button>
+      </div>
+      <div class="note">⚠️ Análise e minuta geradas automaticamente a partir do texto extraído do PDF. <strong>Revisão obrigatória pelo advogado responsável antes do protocolo.</strong></div>
+      <div class="paper" id="documento-analise"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Resultados Pedro Adv</strong> — ferramenta interna de apoio à advocacia criminal.</p>
+  <p>As minutas geradas não substituem o juízo técnico do advogado. Conteúdo confidencial — sigilo profissional (art. 7º, II, EOAB).</p>
+</footer>
+
+<script>
+/* ══════════ util: download .doc / copiar ══════════ */
+function baixarDoc(idEl, nomeArq){
+  var conteudo = document.getElementById(idEl).innerHTML;
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;text-align:justify;line-height:1.5}p{margin:0 0 10pt;text-indent:35pt}h1,h2,h3{font-size:12pt}h1{text-align:center;text-transform:uppercase}blockquote{margin-left:120pt;font-size:10pt;font-style:italic}</style></head><body>'+conteudo+'</body></html>';
+  var blob = new Blob(['﻿'+html], {type:'application/msword'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nomeArq;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+function copiarTexto(idEl){
+  var texto = document.getElementById(idEl).innerText;
+  navigator.clipboard.writeText(texto).then(function(){ alert('Texto copiado para a área de transferência.'); });
+}
+
+function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+/* nav ativo */
+document.querySelectorAll('nav a').forEach(function(a){
+  a.addEventListener('click', function(){
+    document.querySelectorAll('nav a').forEach(function(b){ b.classList.remove('active'); });
+    a.classList.add('active');
+  });
+});
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ═══════════════════ ANALISADOR AUTOMÁTICO DE PROCESSOS ═══════════════════ */
+if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+var KB = [
+ {id:'crim-trafico', area:'Criminal', nome:'Tráfico de drogas (art. 33, Lei 11.343/06)',
+  peca:'DEFESA PRÉVIA (art. 55 da Lei nº 11.343/2006)', fundamento:'art. 55 da Lei nº 11.343/2006', prazo:'10 dias',
+  kw:[['11.343',10],['lei de drogas',8],['trafico',6],['entorpecente',5],['maconha',4],['cocaina',4],['crack',4],['tablete',3],['mercancia',3],['traficancia',5],['defesa previa',4]],
+  juris:[
+   {ref:'STJ, RHC 158.580/BA, Rel. Min. Rogerio Schietti Cruz, 6ª Turma, j. 19/04/2022', tese:'Busca pessoal sem mandado exige fundada suspeita objetiva e verificável; nervosismo ou "atitude suspeita" não bastam (art. 244 CPP). Prova de abordagem ilegal é ilícita.'},
+   {ref:'STF, HC 118.533/MS, Tribunal Pleno, Rel. Min. Cármen Lúcia, j. 23/06/2016', tese:'Tráfico privilegiado (art. 33, §4º) não é crime equiparado a hediondo.'},
+   {ref:'STF, ARE 666.334-RG (Tema 712), Rel. Min. Gilmar Mendes', tese:'Natureza e quantidade da droga só podem ser valoradas em uma única fase da dosimetria — vedação de bis in idem.'},
+   {ref:'STF, HC 97.256/RS, Tribunal Pleno, Rel. Min. Ayres Britto, j. 01/09/2010', tese:'Inconstitucional a vedação abstrata à substituição da pena por restritivas de direitos em tráfico.'},
+   {ref:'STF, HC 104.339/SP, Tribunal Pleno, Rel. Min. Gilmar Mendes, j. 10/05/2012', tese:'Inconstitucional a vedação apriorística à liberdade provisória (art. 44 da Lei 11.343/06); prisão exige requisitos concretos do art. 312 CPP.'},
+   {ref:'STF, RE 635.659 (Tema 506), Rel. Min. Gilmar Mendes, j. 26/06/2024', tese:'Porte de maconha para uso pessoal descriminalizado (permanece ilícito administrativo, sem efeitos penais nem registro de antecedentes); presunção relativa de usuário até 40 g ou 6 plantas-fêmea.'}],
+  teses:[
+   {t:'Ilicitude da abordagem/busca sem fundada suspeita', d:'A abordagem fundada em impressões genéricas ("atitude suspeita", "comportamento incompatível") viola o art. 244 do CPP. Requer-se o desentranhamento das provas derivadas (art. 5º, LVI, CF; art. 157 CPP), nos termos do RHC 158.580/BA (STJ).'},
+   {t:'Ausência de justa causa — rejeição da denúncia', d:'Imputação lastreada exclusivamente na palavra dos agentes da prisão, sem corroboração objetiva (art. 155 CPP; art. 5º, LVII, CF), impõe a rejeição da denúncia (art. 395, III, CPP).'},
+   {t:'Ausência de indícios de mercancia', d:'Sem dinheiro fracionado, balança, anotações, porções individualizadas ou diversidade de drogas, as circunstâncias do art. 52, I, da Lei 11.343/06 militam pela defesa; subsidiariamente, desclassificação para o art. 28 (STF, RE 635.659).'},
+   {t:'Subsidiariamente: tráfico privilegiado (art. 33, §4º)', d:'Primariedade, bons antecedentes e ausência de elemento concreto de dedicação criminosa impõem o redutor em grau máximo (2/3); a quantidade, por si só, não o afasta (STF, HC 118.533/MS).'},
+   {t:'Dosimetria e regime', d:'Pena-base no mínimo; vedação de bis in idem (Tema 712/STF); regime aberto e substituição da pena (STF, HC 97.256/RS).'},
+   {t:'Revogação da prisão preventiva', d:'Gravidade abstrata não é fundamento idôneo; primariedade, residência fixa e ocupação lícita autorizam as cautelares do art. 319 CPP (STF, HC 104.339/SP).'}],
+  provas:['Requisição das imagens de câmeras (concessionária/municipais) do local e horário dos fatos','Perícia papiloscópica nos invólucros apreendidos','Registros COPOM/CAD da ocorrência e de abordagens correlatas','Laudo toxicológico definitivo','Extração consentida de dados do celular (GPS/aplicativos) para comprovar atividade lícita'],
+  pedidos:['O não recebimento (rejeição) da denúncia, por ausência de justa causa (art. 395, III, CPP)','O reconhecimento da ilicitude da busca e o desentranhamento das provas derivadas (art. 157 CPP)','A revogação da prisão preventiva ou sua substituição pelas cautelares do art. 319 CPP','Subsidiariamente, a absolvição (art. 386, V e VII, CPP); o privilégio do §4º em grau máximo, regime aberto e substituição da pena']},
+
+ {id:'crim-furto', area:'Criminal', nome:'Furto / Receptação (arts. 155 e 180, CP)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['furto',8],['subtracao',5],['coisa alheia movel',6],['receptacao',8],['origem ilicita',4],['res furtiva',6]],
+  juris:[
+   {ref:'STF, HC 84.412/SP, Rel. Min. Celso de Mello', tese:'Princípio da insignificância — vetores: mínima ofensividade, ausência de periculosidade social, reduzido grau de reprovabilidade e inexpressividade da lesão jurídica.'},
+   {ref:'Súmula 511 do STJ', tese:'Cabe furto privilegiado-qualificado: primariedade + pequeno valor da coisa + qualificadora de ordem objetiva.'},
+   {ref:'STJ, Súmula 442', tese:'É inadmissível aplicar ao furto qualificado pelo concurso de agentes (art. 155, §4º, IV) a majorante do roubo (art. 157, §2º) por analogia.'},
+   {ref:'STJ/STF — insignificância e reincidência (linha reafirmada)', tese:'A reincidência ou a reiteração, por si sós, não afastam automaticamente a insignificância no furto — o afastamento exige análise do caso concreto e fundamentação específica.'},
+   {ref:'STJ, Súmula 567', tese:'O sistema de vigilância/monitoramento, por si só, não torna impossível o furto (inidoneidade relativa do meio) — limite a considerar: a tese de crime impossível não prospera só por haver câmeras; buscar tentativa (art. 14, II) ou insignificância.'}],
+  teses:[
+   {t:'Princípio da insignificância', d:'Presentes os vetores do HC 84.412/SP (STF), a conduta é materialmente atípica — absolvição sumária (art. 397, III, CPP).'},
+   {t:'Furto privilegiado (art. 155, §2º, CP)', d:'Primariedade e pequeno valor da coisa: substituição ou redução da pena, aplicável mesmo ao furto qualificado (Súmula 511/STJ).'},
+   {t:'Ausência de dolo na receptação', d:'A mera posse não presume ciência da origem ilícita; o dolo deve ser provado — in dubio pro reo; subsidiariamente, receptação culposa (art. 180, §3º) e perdão judicial (§5º).'},
+   {t:'Fragilidade probatória da autoria', d:'Ausência de flagrante, de apreensão da res ou de reconhecimento válido impõe a absolvição (art. 386, V e VII, CPP).'}],
+  provas:['Avaliação/laudo do valor da res','Imagens de câmeras do local','Comprovação de aquisição lícita (notas, conversas, testemunhas)'],
+  pedidos:['A absolvição sumária (art. 397, III, CPP) pela atipicidade material','Subsidiariamente, a absolvição ao final (art. 386 CPP) ou o reconhecimento do privilégio (art. 155, §2º / Súmula 511 STJ)']},
+
+ {id:'crim-roubo', area:'Criminal', nome:'Roubo (art. 157, CP)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['roubo',8],['grave ameaca',5],['emprego de arma',5],['reconhecimento fotografico',6],['reconhecimento pessoal',5],['simulacro',4]],
+  juris:[
+   {ref:'STJ, HC 598.886/SC, Rel. Min. Rogerio Schietti Cruz, 6ª Turma', tese:'O reconhecimento de pessoas deve observar o art. 226 do CPP; reconhecimento (inclusive fotográfico) em desacordo é inválido e não sustenta condenação.'},
+   {ref:'Súmula 443 do STJ', tese:'O aumento acima do mínimo no roubo circunstanciado exige fundamentação concreta — não basta o número de majorantes.'},
+   {ref:'STJ, Súmula 582', tese:'O roubo consuma-se com a inversão da posse mediante violência/grave ameaça, ainda que por breve tempo e com recuperação da coisa — limite a considerar: a tese de tentativa por falta de posse tranquila não prospera.'},
+   {ref:'STF, Súmula 610', tese:'Há latrocínio consumado quando o homicídio se consuma, ainda que não haja subtração dos bens — limite a considerar: atacar o nexo entre a morte e o intuito patrimonial.'},
+   {ref:'STJ, Terceira Seção — majorante do emprego de arma de fogo (Tema afetado no REsp 2.222.524, 2026, pendente)', tese:'A exigência de apreensão e perícia da arma para a majorante do art. 157, §2º-A, I, foi afetada como repetitivo (pendente de tese) — a defesa pode suscitar a necessidade de perícia e questionar a idoneidade da prova enquanto não pacificado.'}],
+  teses:[
+   {t:'Nulidade do reconhecimento', d:'Reconhecimento pessoal/fotográfico sem observância do art. 226 do CPP é inválido (STJ, HC 598.886/SC) — não pode fundamentar a condenação, isolado.'},
+   {t:'Ausência de prova da grave ameaça/violência', d:'Não comprovada a elementar, impõe-se a desclassificação para furto.'},
+   {t:'Afastamento de majorantes', d:'Arma não apreendida/não periciada e majorantes sem prova concreta devem ser afastadas; aumento exige fundamentação concreta (Súmula 443/STJ).'},
+   {t:'Negativa de autoria e álibi', d:'A dúvida sobre a autoria resolve-se pela absolvição (art. 386, V e VII, CPP).'}],
+  provas:['Renovação do reconhecimento em juízo na forma do art. 226 CPP','Imagens de câmeras','ERB/geolocalização do aparelho do acusado','Perícia na arma eventualmente apreendida'],
+  pedidos:['A absolvição sumária (art. 397 CPP) ou, ao final, a absolvição (art. 386, V e VII, CPP)','Subsidiariamente, desclassificação para furto e afastamento das majorantes (Súmula 443/STJ)']},
+
+ {id:'crim-homicidio', area:'Criminal', nome:'Homicídio (art. 121, CP) — Tribunal do Júri',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 406 e 408 do CPP — rito do Júri)', fundamento:'arts. 406 a 408 do CPP', prazo:'10 dias',
+  kw:[['homicidio',8],['animus necandi',6],['tribunal do juri',7],['pronuncia',5],['qualificadora',4],['vitima fatal',4],['laudo necroscopico',6]],
+  juris:[
+   {ref:'STF, ARE 1.067.392/CE, Rel. Min. Gilmar Mendes, 2ª Turma', tese:'A pronúncia não pode se fundamentar exclusivamente em elementos colhidos no inquérito policial.'},
+   {ref:'STF, Súmula 156', tese:'É absoluta a nulidade do julgamento pelo Júri por falta de quesito obrigatório (notadamente o quesito genérico de absolvição — art. 483, III, CPP), reconhecível de ofício.'},
+   {ref:'STF/STJ — jurisprudência consolidada (excesso de linguagem na pronúncia)', tese:'A pronúncia exige linguagem sóbria; adjetivação e juízo de certeza sobre autoria/prova configuram excesso de linguagem e geram nulidade absoluta, impondo nova decisão.'},
+   {ref:'STF, Tema 1.087 (ARE 1.225.185, Rel. Min. Gilmar Mendes, j. 03/10/2024)', tese:'Havendo tese de clemência registrada em ata e acolhida pelos jurados, o tribunal não pode determinar novo júri por decisão contrária à prova — preserva-se a soberania dos veredictos na absolvição.'},
+   {ref:'STF, Informativo 214 — homicídio privilegiado-qualificado', tese:'Admite-se o homicídio privilegiado-qualificado quando a qualificadora é objetiva (modo/meio de execução); qualificadoras subjetivas (motivo torpe/fútil) são incompatíveis com o privilégio e devem ser afastadas.'}],
+  teses:[
+   {t:'Absolvição sumária (art. 415 CPP)', d:'Legítima defesa ou negativa de autoria demonstradas de plano impõem a absolvição sumária.'},
+   {t:'Impronúncia (art. 414 CPP)', d:'Ausentes indícios suficientes de autoria — a pronúncia não pode se apoiar apenas no inquérito (STF, ARE 1.067.392/CE).'},
+   {t:'Desclassificação', d:'Ausente o animus necandi: lesão corporal seguida de morte ou modalidade culposa.'},
+   {t:'Exclusão de qualificadoras', d:'Qualificadoras manifestamente improcedentes devem ser decotadas da pronúncia.'}],
+  provas:['Laudo necroscópico e de local','Reconstituição','Testemunhas presenciais','Quebra de sigilo de imagens da via'],
+  pedidos:['A absolvição sumária (art. 415 CPP)','Subsidiariamente, a impronúncia (art. 414 CPP), a desclassificação ou a exclusão das qualificadoras']},
+
+ {id:'crim-estelionato', area:'Criminal', nome:'Estelionato / Fraudes (art. 171, CP)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['estelionato',9],['vantagem ilicita',5],['meio fraudulento',5],['ardil',4],['golpe',3],['transferencia pix',3]],
+  juris:[
+   {ref:'Art. 171, §5º, do CP (Lei 13.964/2019)', tese:'A ação penal depende de representação da vítima (salvo exceções legais) — condição de procedibilidade.'},
+   {ref:'STJ, Súmula 17', tese:'Quando o falso se exaure no estelionato, sem potencialidade lesiva autônoma, é por este absorvido (consunção) — responde-se só pelo art. 171 do CP.'},
+   {ref:'STF, Súmula Vinculante 24', tese:'Não se tipifica crime material contra a ordem tributária antes do lançamento definitivo do tributo — sem constituição definitiva do crédito não há justa causa nem prescrição.'},
+   {ref:'STJ, Súmula 48', tese:'No estelionato mediante falsificação/cheque, a competência é do juízo do local da obtenção da vantagem ilícita (lugar da consumação) — base para arguir incompetência.'},
+   {ref:'STJ, HC 610.201/SP, 3ª Seção, Rel. Min. Ribeiro Dantas (2021)', tese:'A exigência de representação do art. 171, §5º, do CP não retroage para extinguir a punibilidade quando a denúncia já havia sido oferecida antes da Lei 13.964/2019.'}],
+  teses:[
+   {t:'Ausência de representação da vítima', d:'Sem a representação exigida pelo art. 171, §5º, do CP, falta condição de procedibilidade — extinção/rejeição.'},
+   {t:'Ausência de dolo antecedente', d:'Mero inadimplemento contratual é ilícito civil, não estelionato; o dolo deve ser anterior à obtenção da vantagem.'},
+   {t:'ANPP e reparação do dano', d:'Cabimento do acordo de não persecução penal (art. 28-A CPP) e do arrependimento posterior (art. 16 CP) com reparação.'}],
+  provas:['Extratos e rastreamento das transações','Comunicações entre as partes (contexto negocial)','Testemunhas do negócio'],
+  pedidos:['A rejeição da denúncia por ausência de condição de procedibilidade (art. 171, §5º, CP) ou de justa causa','Subsidiariamente, a absolvição (art. 386 CPP) ou o encaminhamento a ANPP (art. 28-A CPP)']},
+
+ {id:'crim-armas', area:'Criminal', nome:'Armas de fogo (Lei 10.826/03)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['10.826',10],['estatuto do desarmamento',8],['arma de fogo',6],['municao',5],['porte ilegal',6],['uso restrito',5],['numeracao suprimida',5]],
+  juris:[
+   {ref:'STJ, RHC 158.580/BA, Rel. Min. Rogerio Schietti Cruz, 6ª Turma', tese:'Busca pessoal exige fundada suspeita objetiva (art. 244 CPP).'},
+   {ref:'STJ, HC 598.051/SP, Rel. Min. Rogerio Schietti Cruz, 6ª Turma', tese:'Ingresso em domicílio exige consentimento comprovado pelo Estado ou fundadas razões prévias, sob pena de ilicitude da prova.'}],
+  teses:[
+   {t:'Nulidade da busca (pessoal ou domiciliar)', d:'Abordagem sem fundada suspeita (RHC 158.580/BA) ou ingresso domiciliar sem consentimento válido (HC 598.051/SP) contamina a apreensão (art. 157 CPP).'},
+   {t:'Ausência/insuficiência do laudo pericial', d:'A potencialidade lesiva deve ser comprovada por perícia; a dúvida favorece o réu.'},
+   {t:'Desclassificação/atipicidade', d:'Posse no interior da residência com registro vencido configura mera irregularidade administrativa, segundo entendimento consolidado do STJ; desclassificação do art. 14/16 para o art. 12 conforme o local da apreensão.'}],
+  provas:['Laudo pericial da arma e munições','Imagens/registros da diligência','Comprovação de registro/propriedade'],
+  pedidos:['A absolvição sumária ou o reconhecimento da ilicitude das provas (art. 157 CPP)','Subsidiariamente, a desclassificação para o tipo menos gravoso e o ANPP quando cabível']},
+
+ {id:'crim-vd', area:'Criminal', nome:'Violência doméstica (Lei 11.340/06 — Maria da Penha)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['maria da penha',10],['11.340',10],['violencia domestica',8],['medida protetiva',6],['companheira',2],['relacao intima de afeto',6]],
+  juris:[
+   {ref:'Súmula 536 do STJ', tese:'Suspensão condicional do processo e transação penal não se aplicam aos crimes da Lei Maria da Penha (limite a considerar na estratégia).'},
+   {ref:'Súmula 542 do STJ', tese:'Ação penal por lesão corporal em contexto doméstico é pública incondicionada (a retratação não extingue, nesses casos).'},
+   {ref:'Súmula 588 do STJ', tese:'Vedada a substituição por restritivas de direitos em crime com violência/grave ameaça no âmbito doméstico (limite a considerar).'}],
+  teses:[
+   {t:'Ausência do contexto de gênero', d:'A incidência da Lei 11.340/06 exige violência baseada no gênero (art. 5º); ausente esse vetor, afasta-se o rito e seus gravames.'},
+   {t:'Fragilidade probatória', d:'A palavra da vítima tem relevo especial em contexto doméstico, mas exige coerência e harmonia com os demais elementos; contradições relevantes impõem a dúvida em favor do réu.'},
+   {t:'Retratação nos crimes condicionados', d:'Para os delitos de ação condicionada (ex.: ameaça), a retratação até o recebimento (art. 16 da Lei 11.340/06) extingue a punibilidade.'},
+   {t:'Proporcionalidade das medidas protetivas', d:'Medidas protetivas devem ser necessárias e proporcionais, com revisão periódica.'}],
+  provas:['Oitiva da vítima em juízo','Testemunhas do convívio','Mensagens/registros do período','Laudo de lesões (ECD)'],
+  pedidos:['A absolvição sumária (art. 397 CPP) ou a absolvição ao final (art. 386 CPP)','O afastamento do rito da Lei 11.340/06 quando ausente o contexto de gênero','A revisão/adequação das medidas protetivas']},
+
+ {id:'crim-ctb', area:'Criminal', nome:'Crimes de trânsito (Lei 9.503/97 — CTB)',
+  peca:'RESPOSTA À ACUSAÇÃO (arts. 396 e 396-A do CPP)', fundamento:'arts. 396 e 396-A do CPP', prazo:'10 dias',
+  kw:[['9.503',8],['codigo de transito',7],['embriaguez',6],['etilometro',7],['bafometro',6],['alcool por litro',5],['direcao de veiculo automotor',6],['cnh',3]],
+  juris:[
+   {ref:'Princípio nemo tenetur se detegere (art. 5º, LXIII, CF)', tese:'Ninguém é obrigado a produzir prova contra si — a recusa ao etilômetro não configura crime nem presume a embriaguez penal.'},
+   {ref:'Art. 89 da Lei 9.099/95 e art. 28-A do CPP', tese:'Cabimento de suspensão condicional do processo e de ANPP conforme a pena mínima e os requisitos legais.'},
+   {ref:'STF, Súmula 720', tese:'O art. 309 do CTB (dirigir sem habilitação) exige perigo concreto de dano; a mera condução sem CNH, sem risco demonstrado, é atípica.'},
+   {ref:'STJ — jurisprudência consolidada (dolo eventual no trânsito)', tese:'Embriaguez somada a excesso de velocidade, por si só, não caracteriza dolo eventual; sem circunstâncias concretas adicionais a conduta é culposa — base para desclassificar do homicídio doloso para o art. 302 do CTB.'},
+   {ref:'STJ, Súmula 575', tese:'O art. 310 do CTB (permitir/entregar a direção a inabilitado ou embriagado) é crime de perigo abstrato — limite a considerar: a defesa deve atacar a autoria e as condições, não a exigência de dano concreto.'}],
+  teses:[
+   {t:'Ausência de prova técnica válida', d:'O art. 306, §1º, do CTB exige concentração comprovada (etilômetro/sangue) ou sinais de capacidade psicomotora alterada demonstrados; teste irregular (calibração/procedimento CONTRAN) é imprestável.'},
+   {t:'Culpa exclusiva de terceiro/vítima', d:'Nos delitos culposos (arts. 302/303), o laudo do local e a dinâmica do acidente podem excluir a previsibilidade e o nexo causal.'},
+   {t:'Benefícios despenalizadores', d:'Suspensão condicional do processo (art. 89, Lei 9.099/95) e ANPP (art. 28-A CPP) quando preenchidos os requisitos.'}],
+  provas:['Laudo do etilômetro e certificado de calibração/verificação INMETRO','Laudo pericial do local do acidente','Imagens e testemunhas do sinistro'],
+  pedidos:['A absolvição sumária ou a absolvição ao final (art. 386 CPP)','Subsidiariamente, a proposta de suspensão condicional do processo ou ANPP']},
+
+ {id:'civ-consumidor', area:'Cível', nome:'Direito do Consumidor (CDC)',
+  peca:'CONTESTAÇÃO (arts. 335 e 336 do CPC)', fundamento:'arts. 335 e 336 do CPC', prazo:'15 dias úteis',
+  kw:[['codigo de defesa do consumidor',9],['consumidor',5],['fornecedor',4],['negativacao',6],['serasa',5],['spc',4],['inversao do onus',6],['vicio do produto',6],['falha na prestacao',6],['relacao de consumo',7]],
+  juris:[
+   {ref:'Súmula 297 do STJ', tese:'O CDC é aplicável às instituições financeiras.'},
+   {ref:'Súmula 385 do STJ', tese:'Anotação irregular não gera dano moral quando preexiste inscrição legítima (cabível apenas o cancelamento).'},
+   {ref:'Súmula 479 do STJ', tese:'Instituições financeiras respondem objetivamente por fortuito interno (fraudes de terceiros) — relevante para calibrar a estratégia de cada polo.'},
+   {ref:'Súmulas 54 e 362 do STJ', tese:'Juros desde o evento danoso (extracontratual) e correção do dano moral desde o arbitramento.'}],
+  teses:[
+   {t:'Inexistência de defeito/falha do serviço', d:'Comprovada a regularidade da prestação ou a culpa exclusiva do consumidor/terceiro (art. 14, §3º, CDC), rompe-se o nexo causal.'},
+   {t:'Súmula 385/STJ — inscrição preexistente', d:'Havendo negativação legítima anterior, não há dano moral indenizável.'},
+   {t:'Mero aborrecimento', d:'Dissabores cotidianos sem ofensa a direito da personalidade não configuram dano moral, conforme jurisprudência consolidada do STJ.'},
+   {t:'Quantum e encargos', d:'Eventual condenação deve observar proporcionalidade (art. 944 CC), correção desde o arbitramento (Súmula 362/STJ) e juros conforme a natureza da relação.'}],
+  provas:['Contratos, logs, gravações e telas do sistema','Histórico de negativações do autor (Súmula 385)','Perícia técnica quando necessária'],
+  pedidos:['A improcedência dos pedidos','Subsidiariamente, a fixação de eventual indenização com proporcionalidade (art. 944 CC; Súmulas 362 e 54 do STJ)','A não inversão do ônus da prova quando ausentes verossimilhança/hipossuficiência (art. 6º, VIII, CDC)']},
+
+ {id:'civ-cobranca', area:'Cível', nome:'Cobrança / Monitória / Contratos',
+  peca:'CONTESTAÇÃO (arts. 335 e 336 do CPC) / EMBARGOS MONITÓRIOS (art. 702 CPC)', fundamento:'arts. 335/336 ou 702 do CPC', prazo:'15 dias úteis',
+  kw:[['acao de cobranca',8],['monitoria',8],['inadimplemento',5],['duplicata',5],['confissao de divida',5],['contrato de prestacao',4],['notas promissorias',5]],
+  juris:[
+   {ref:'Art. 206 do Código Civil', tese:'Prazos prescricionais específicos (3 anos para enriquecimento sem causa e reparação civil; 5 anos para dívidas líquidas de instrumento particular).'},
+   {ref:'STJ, Súmula 233', tese:'O contrato de abertura de crédito, mesmo com extrato, não é título executivo (documento unilateral quanto ao saldo) — cabe, no máximo, ação monitória.'},
+   {ref:'STJ, Súmula 379', tese:'Nos contratos bancários não regidos por lei específica, os juros moratórios podem ser convencionados até o limite de 1% ao mês.'},
+   {ref:'STJ, Súmula 472', tese:'A comissão de permanência não pode ultrapassar a soma dos encargos do contrato e exclui a cobrança de juros remuneratórios, moratórios e multa (vedada a cumulação).'}],
+  teses:[
+   {t:'Prescrição', d:'Verificação do prazo aplicável (art. 206 CC) — a pretensão prescrita impõe a extinção com resolução de mérito (art. 487, II, CPC).'},
+   {t:'Iliquidez/inexigibilidade do título', d:'Documento sem os requisitos legais não sustenta a monitória nem a cobrança.'},
+   {t:'Pagamento/compensação/excesso', d:'Comprovação de pagamento parcial ou total, compensação e impugnação específica dos cálculos.'},
+   {t:'Revisão de encargos abusivos', d:'Capitalização e encargos não pactuados devem ser decotados.'}],
+  provas:['Comprovantes de pagamento','Perícia contábil','Contratos e aditivos'],
+  pedidos:['O acolhimento da prescrição ou a improcedência','Subsidiariamente, a redução do débito ao efetivamente devido, com recálculo dos encargos']},
+
+ {id:'civ-familia', area:'Cível', nome:'Família — Alimentos / Divórcio / Guarda',
+  peca:'CONTESTAÇÃO (art. 335 do CPC) / JUSTIFICATIVA (art. 528 do CPC)', fundamento:'art. 335 do CPC; art. 528 do CPC (execução de alimentos)', prazo:'15 dias úteis (3 dias na execução de alimentos)',
+  kw:[['alimentos',7],['alimentante',7],['alimentando',6],['pensao alimenticia',8],['divorcio',6],['guarda',4],['prisao civil',6],['binomio',5]],
+  juris:[
+   {ref:'Súmula 309 do STJ', tese:'A prisão civil alcança as 3 prestações anteriores ao ajuizamento e as vincendas no curso do processo.'},
+   {ref:'Súmula 596 do STJ', tese:'A obrigação alimentar dos avós é subsidiária e complementar — não substitui a dos pais.'},
+   {ref:'STJ, Súmula 358', tese:'O cancelamento de pensão alimentícia ao filho que atingiu a maioridade exige decisão judicial com contraditório — a maioridade encerra o poder familiar, mas não revoga automaticamente o dever alimentar.'},
+   {ref:'STJ, Súmula 301', tese:'Em investigação de paternidade, a recusa do suposto pai ao exame de DNA gera presunção relativa (juris tantum) de paternidade, apreciada com o conjunto probatório (reforçada pelo art. 2º-A, p.ú., da Lei 8.560/92).'},
+   {ref:'STJ, Súmula 621', tese:'Os efeitos da sentença que reduz, majora ou exonera alimentos retroagem à data da citação, vedadas a compensação e a repetição — o débito até a citação subsiste.'},
+   {ref:'Art. 1.584, §2º, do Código Civil (Lei 13.058/2014)', tese:'Sem acordo entre genitores aptos, a guarda compartilhada é a regra, aplicável de ofício e independente de consenso; a unilateral é exceção.'}],
+  teses:[
+   {t:'Binômio necessidade x possibilidade', d:'Os alimentos devem ser fixados na proporção das necessidades do alimentando e dos recursos do alimentante (art. 1.694, §1º, CC); alteração de capacidade autoriza revisão (art. 1.699 CC).'},
+   {t:'Limites da prisão civil', d:'Somente o débito atual (Súmula 309/STJ) autoriza o rito da prisão; parcelas pretéritas seguem o rito da penhora (art. 528, §7º, CPC).'},
+   {t:'Justificativa de impossibilidade', d:'Desemprego involuntário e incapacidade comprovada afastam a voluntariedade do inadimplemento.'},
+   {t:'Melhor interesse do menor', d:'Guarda e convivência orientam-se pelo melhor interesse da criança (art. 1.583 e ss. CC; ECA).'}],
+  provas:['Comprovantes de renda e despesas','CTPS/extratos e prova do desemprego','Estudo psicossocial'],
+  pedidos:['A fixação/revisão dos alimentos conforme o binômio legal','O afastamento da prisão civil quanto às parcelas pretéritas (Súmula 309/STJ)','A observância do melhor interesse do menor']},
+
+ {id:'civ-locacao', area:'Cível', nome:'Locação / Despejo (Lei 8.245/91)',
+  peca:'CONTESTAÇÃO (art. 335 do CPC c/c Lei 8.245/91)', fundamento:'art. 335 do CPC; Lei 8.245/91', prazo:'15 dias úteis',
+  kw:[['8.245',9],['despejo',9],['locacao',6],['locador',6],['locatario',6],['aluguel',5],['fiador',4],['purga da mora',7]],
+  juris:[
+   {ref:'Art. 62, II, da Lei 8.245/91', tese:'Direito de purgar a mora no prazo de 15 dias, pagando o débito atualizado (aluguéis, encargos, custas e honorários), evitando a rescisão.'},
+   {ref:'STJ, Súmula 214', tese:'O fiador na locação não responde por obrigações resultantes de aditamento a que não anuiu — a fiança interpreta-se restritivamente.'},
+   {ref:'STJ, Súmula 335', tese:'É válida, na locação, a cláusula de renúncia à indenização das benfeitorias e ao direito de retenção.'},
+   {ref:'STJ, Súmula 268', tese:'O fiador que não integrou a ação de despejo (fase de conhecimento) não responde pela execução do julgado.'},
+   {ref:'STJ, Súmula 549', tese:'É válida a penhora do bem de família do fiador de locação (art. 3º, VII, da Lei 8.009/90) — limite a considerar na estratégia do fiador.'}],
+  teses:[
+   {t:'Purga da mora', d:'O locatário pode emendar a mora no prazo legal (art. 62, II), elidindo o despejo.'},
+   {t:'Impugnação do débito', d:'Cobrança de encargos indevidos ou já pagos; compensação com benfeitorias necessárias (art. 35) e direito de retenção quando pactuado.'},
+   {t:'Vícios do imóvel', d:'Descumprimento dos deveres do locador (art. 22) — exceção de contrato não cumprido.'},
+   {t:'Responsabilidade do fiador', d:'Limites da fiança e exoneração na forma da lei (arts. 39/40).'}],
+  provas:['Recibos e comprovantes de pagamento','Laudo/registro fotográfico do imóvel','Contrato e aditivos'],
+  pedidos:['O recebimento da emenda da mora (art. 62, II, da Lei 8.245/91), se conveniente ao réu','A improcedência do despejo e a revisão do débito cobrado']},
+
+ {id:'civ-execucao', area:'Cível', nome:'Execução / Cumprimento de sentença',
+  peca:'EMBARGOS À EXECUÇÃO (art. 914 do CPC) / IMPUGNAÇÃO (art. 525 do CPC)', fundamento:'arts. 914/917 ou 525 do CPC', prazo:'15 dias úteis',
+  kw:[['execucao de titulo',7],['cumprimento de sentenca',7],['penhora',7],['impenhorab',9],['bem de familia',8],['embargos a execucao',9],['excesso de execucao',9]],
+  juris:[
+   {ref:'Súmula 364 do STJ', tese:'A impenhorabilidade do bem de família abrange o imóvel de pessoas solteiras, separadas e viúvas.'},
+   {ref:'Art. 833 do CPC e Lei 8.009/90', tese:'Rol de impenhorabilidades: salários, bem de família, instrumentos de trabalho, entre outros.'},
+   {ref:'STJ, Súmula 375', tese:'O reconhecimento da fraude à execução exige registro da penhora do bem alienado ou prova de má-fé do terceiro adquirente — sem registro, o ônus da prova é do credor e presume-se a boa-fé.'},
+   {ref:'STJ, Súmula 486', tese:'É impenhorável o único imóvel residencial do devedor que esteja locado, se a renda do aluguel se destina à subsistência ou moradia da família (bem de família indireto).'},
+   {ref:'STJ, Súmula 319', tese:'O encargo de depositário de bens penhorados pode ser recusado, sem condicionamento — ninguém é obrigado a assumir o múnus.'}],
+  teses:[
+   {t:'Impenhorabilidade', d:'Bem de família (Lei 8.009/90; Súmula 364/STJ), salários e instrumentos de trabalho (art. 833 CPC) não podem ser constritos.'},
+   {t:'Excesso de execução', d:'Impugnação específica com demonstrativo do valor correto (art. 917, §§2º e 3º, CPC).'},
+   {t:'Inexigibilidade/iliquidez do título', d:'Título sem certeza, liquidez e exigibilidade não autoriza a execução (art. 783 CPC).'},
+   {t:'Menor onerosidade', d:'A execução deve seguir o meio menos gravoso ao devedor (art. 805 CPC).'}],
+  provas:['Demonstrativo de cálculo divergente/perícia contábil','Matrícula do imóvel e prova de residência familiar','Comprovantes da natureza salarial dos valores'],
+  pedidos:['O acolhimento dos embargos/impugnação, com extinção ou redução da execução','O levantamento das penhoras sobre bens impenhoráveis (art. 833 CPC; Lei 8.009/90; Súmula 364/STJ)','A observância da menor onerosidade (art. 805 CPC)']},
+
+ {id:'civ-danos', area:'Cível', nome:'Responsabilidade civil / Danos morais e materiais',
+  peca:'CONTESTAÇÃO (arts. 335 e 336 do CPC)', fundamento:'arts. 335 e 336 do CPC', prazo:'15 dias úteis',
+  kw:[['danos morais',7],['dano moral',7],['indenizacao',5],['dano estetico',6],['responsabilidade civil',6],['abalo',3],['acidente',3],['lucros cessantes',5]],
+  juris:[
+   {ref:'Súmula 385 do STJ', tese:'Inscrição preexistente legítima afasta o dano moral por anotação irregular.'},
+   {ref:'Súmula 387 do STJ', tese:'Dano estético é cumulável com dano moral (atenção ao pedido da parte adversa).'},
+   {ref:'Súmulas 54 e 362 do STJ', tese:'Juros desde o evento danoso (extracontratual); correção do dano moral desde o arbitramento.'}],
+  teses:[
+   {t:'Ausência dos pressupostos da responsabilidade', d:'Sem conduta ilícita, dano ou nexo causal (arts. 186 e 927 CC), não há dever de indenizar; culpa exclusiva da vítima ou fato de terceiro rompem o nexo.'},
+   {t:'Mero aborrecimento', d:'Contrariedades cotidianas não configuram dano moral — jurisprudência consolidada do STJ.'},
+   {t:'Quantum indenizatório', d:'Eventual condenação deve ser proporcional (art. 944 CC), com termos corretos de juros e correção (Súmulas 54 e 362 do STJ).'},
+   {t:'Dano material não comprovado', d:'Danos emergentes e lucros cessantes exigem prova efetiva — não se presumem.'}],
+  provas:['Documentos e perícias sobre o evento','Testemunhas','Prova da inexistência/extensão do dano'],
+  pedidos:['A improcedência dos pedidos indenizatórios','Subsidiariamente, o arbitramento proporcional (art. 944 CC) com juros e correção nos termos das Súmulas 54 e 362 do STJ']}
+];
+
+var AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:null, paginas:0, modo:'novo', minutaArquivada:null };
+var analiseSeq = 0; /* token de geração: invalida análises em andamento quando outra começa ou um arquivo é aberto */
+
+function normTexto(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' '); }
+function contar(hay, needle){ if(!needle) return 0; var c=0,i=0; while((i=hay.indexOf(needle,i))!==-1){c++;i+=needle.length;if(c>=8)break;} return c; }
+
+function nomeMaisFrequente(t){
+  var m = t.match(/\b[A-ZÀ-Ú]{2,}(?:\s+(?:D[AEO]S?\s+|E\s+)?[A-ZÀ-Ú]{2,}){1,6}\b/g) || [];
+  var stop = /POLICIA|POL[IÍ]CIA|ESTADO|SAO PAULO|S[ÃA]O PAULO|TRIBUNAL|JUSTI[ÇC]A|MINIST[ÉE]RIO|P[ÚU]BLICO|DELEGACIA|SECRETARIA|SEGURAN[ÇC]A|BOLETIM|OCORR[ÊE]NCIA|COMARCA|VARA|CRIMINAL|C[ÓO]DIGO|PROCESSO|PENAL|CIVIL|FEDERAL|NACIONAL|DELEGADO|ESCRIV|AUTO DE|PRIS[ÃA]O|FLAGRANTE|DELITO|DEFESA|ARTIGO|EXCELENT|SENHOR|DOUTOR|JUIZ|DIREITO|PODER|JUDICI[ÁA]RIO|TERMO|DEPOIMENTO|NOTA DE|CULPA|GUARDA|INSTITUTO|IDENTIFICA|REGI[ÃA]O|ADMINISTRATIVA|GARANTIAS|OUTLOOK|DIGITALMENTE|DOCUMENTO/;
+  var freq = {};
+  m.forEach(function(nm){
+    nm = nm.replace(/\s+/g,' ').trim();
+    if(nm.split(' ').length < 2 || nm.length < 10 || nm.length > 55) return;
+    if(stop.test(nm)) return;
+    freq[nm] = (freq[nm]||0) + 1;
+  });
+  var best = '', bc = 0;
+  for(var k in freq){ if(freq[k] > bc){ bc = freq[k]; best = k; } }
+  return bc >= 2 ? best : '';
+}
+
+function iniciarAnalise(input){
+  if(!input.files || !input.files[0]) return;
+  var f = input.files[0];
+  var gen = ++analiseSeq; /* qualquer análise anterior em andamento é invalidada */
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:f.name, paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  ['anNome','anNum','anJuizo'].forEach(function(id){ document.getElementById(id).value=''; });
+  var el = document.getElementById('saveStatus'); el.style.display='none';
+  var prog = document.getElementById('progresso');
+  var barra = document.getElementById('progBarra');
+  var ptxt = document.getElementById('progTexto');
+  document.getElementById('chooser').style.display='none'; /* sai da tela de escolha; volta via "Novo processo" */
+  prog.style.display='block'; barra.style.width='4%';
+  ptxt.textContent = 'Abrindo "'+f.name+'"…';
+  document.getElementById('resultadoAnalise').style.display='none';
+  document.getElementById('bigdropTitulo').textContent = '📄 '+f.name;
+  document.getElementById('bigdropSub').textContent = 'Aguarde a conclusão desta análise antes de subir outro processo';
+  prog.scrollIntoView({behavior:'smooth', block:'center'});
+
+  function vivo(){ return gen === analiseSeq; }
+
+  var reader = new FileReader();
+  reader.onerror = reader.onabort = function(){
+    if(vivo()) ptxt.textContent = 'Erro ao ler o arquivo do disco. Tente selecioná-lo novamente.';
+  };
+  reader.onload = function(e){
+    if(!vivo()) return;
+    if(!window.pdfjsLib){ ptxt.textContent='Erro: biblioteca de leitura de PDF não carregou. Verifique a conexão e recarregue a página.'; return; }
+    var buf = e.target.result;
+    /* hash do arquivo ANTES de entregar o buffer ao pdf.js (que o transfere ao worker e o esvazia) —
+       usado como chave de cache para nunca pagar duas vezes a análise por IA do mesmo documento */
+    var hashPronto = (window.crypto && crypto.subtle)
+      ? crypto.subtle.digest('SHA-256', buf.slice(0)).then(function(h){
+          return Array.prototype.map.call(new Uint8Array(h), function(b){ return ('0'+b.toString(16)).slice(-2); }).join('');
+        }).catch(function(){ return ''; })
+      : Promise.resolve('');
+    hashPronto.then(function(hx){
+      if(!vivo()) return;
+      AN.fileHash = hx;
+    pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise.then(function(pdf){
+      if(!vivo()) return;
+      AN.paginas = pdf.numPages;
+      var max = Math.min(pdf.numPages, 80);
+      var texto = '';
+      var cadeia = Promise.resolve();
+      for(let p=1; p<=max; p++){
+        cadeia = cadeia.then(function(){
+          if(!vivo()) throw {cancelada:true};
+          return pdf.getPage(p).then(function(pg){ return pg.getTextContent(); }).then(function(tc){
+            if(!vivo()) throw {cancelada:true};
+            texto += tc.items.map(function(it){return it.str;}).join(' ') + '\n';
+            var pct = Math.round(4 + (p/max)*76);
+            barra.style.width = pct+'%';
+            ptxt.textContent = 'Lendo página '+p+' de '+max+'…';
+          });
+        });
+      }
+      cadeia.then(function(){
+        if(!vivo()) throw {cancelada:true};
+        if(texto.replace(/\s/g,'').length < 400){
+          ptxt.textContent = 'PDF sem camada de texto (escaneado) — carregando OCR…';
+          return ocrPdf(pdf, max, barra, ptxt, vivo).then(function(t2){ texto = texto + '\n' + t2; });
+        }
+      }).then(function(){
+        if(!vivo()) return;
+        AN.texto = texto; AN.norm = normTexto(texto);
+        barra.style.width='96%'; ptxt.textContent='Classificando e extraindo informações…';
+        setTimeout(function(){
+          if(!vivo()) return;
+          classificarEExibir();
+          barra.style.width='100%';
+          setTimeout(function(){ if(vivo()) prog.style.display='none'; }, 500);
+        }, 60);
+      }).catch(function(err){
+        if(err && err.cancelada) return;
+        if(vivo()) ptxt.textContent = 'Erro ao ler o PDF: '+(err && err.message ? err.message : err);
+      });
+    }).catch(function(err){ if(vivo()) ptxt.textContent='Erro ao abrir o PDF: '+err.message; });
+    });
+  };
+  reader.readAsArrayBuffer(f);
+}
+
+function classificar(){
+  var scores = KB.map(function(cat){
+    var s = 0;
+    cat.kw.forEach(function(par){ s += par[1] * Math.min(contar(AN.norm, par[0]), 5); });
+    return {cat:cat, score:s};
+  }).sort(function(a,b){ return b.score-a.score; });
+  return scores;
+}
+
+function extrairDados(){
+  var t = AN.texto, n = AN.norm, d = {};
+  var cnj = t.match(/\d{7}\s*-\s*\d{2}\s*\.\s*\d{4}\s*\.\s*\d{1,2}\s*\.\s*\d{2}\s*\.\s*\d{4}/g);
+  d.processos = cnj ? Array.from(new Set(cnj.map(function(x){return x.replace(/\s+/g,'');}))).slice(0,3) : [];
+  var comarca = t.match(/[Cc]omarca\s+(?:de|do|da)\s+([A-ZÀ-Ú][A-Za-zÀ-ú´`^~\s]{2,30}?)(?:\s*[-–\/,;.\n]|\s{2}|\sEstado)/);
+  d.comarca = comarca ? comarca[1].trim() : '';
+  var vara = t.match(/(\d{1,2}\s*ª?\s*Vara[A-Za-zÀ-ú\s]{0,45})/);
+  d.vara = vara ? vara[1].replace(/\s+/g,' ').trim() : '';
+  var ROTULOS_REU = '(?:[Ii]ndiciado|INDICIADO|[Dd]enunciado|DENUNCIADO|[Aa]cusado|ACUSADO|[Aa]utuado|AUTUADO|[Ii]nvestigado|INVESTIGADO|[Rr]eclamado|RECLAMADO|[Ee]mbargante|EMBARGANTE|[Rr]equerido|REQUERIDO|[Ee]xecutado|EXECUTADO|[Aa]gravado|AGRAVADO|[Rr]ecorrido|RECORRIDO|[Aa]pelado|APELADO|[Ii]mpetrado|IMPETRADO|[Ll]ocat[áa]rio|LOCAT[ÁA]RIO)';
+  var ROTULOS_AUTOR = '(?:[Aa]utor|AUTOR|[Rr]equerente|REQUERENTE|[Ee]xequente|EXEQUENTE|[Ee]mbargado|EMBARGADO|[Aa]gravante|AGRAVANTE|[Rr]ecorrente|RECORRENTE|[Aa]pelante|APELANTE|[Ii]mpetrante|IMPETRANTE|[Rr]eclamante|RECLAMANTE|[Ll]ocador|LOCADOR)';
+  /* todos os rótulos de partes conhecidos — usados para CORTAR um nome capturado assim que outro rótulo aparece colado em seguida
+     (comum em texto extraído de PDF, onde não há quebra de linha entre "AUTOR: Fulano REQUERIDO: Beltrano") */
+  /* corte por rótulo NÃO exige ":" em seguida — a captura do nome já para antes de alcançar
+     o ":" (não faz parte da classe de caracteres do nome), então exigir o ":" aqui nunca bateria */
+  var TODOS_ROTULOS = '(?:Indiciado|Denunciado|Acusado|Autuado|Investigado|Reclamado|Reclamante|Embargante|Embargado|Requerido|Requerente|Executado|Exequente|Agravado|Agravante|Recorrido|Recorrente|Apelado|Apelante|Impetrado|Impetrante|Autor|R[ée]u|R[ée]|Locador|Locat[áa]rio|Fiador)\\s*\\(?[AaOo]?\\)?\\b';
+  /* também corta ao fim de frase: um ponto seguido de espaço e palavra minúscula indica que
+     o nome próprio (sempre capitalizado) terminou e começou uma nova sentença */
+  var CORTE_NOME = new RegExp('\\s'+TODOS_ROTULOS+'|,|\\.\\.|\\.\\s+[a-zà-ú]|\\squalificad|\\scomo\\s|\\sRG\\b|\\sCPF\\b|\\sbrasileir|\\snascid|\\sfilh[oa]\\b|\\sportador|\\sj[áa]\\s|\\s[Cc]omarca\\b|\\sresidente\\b|\\sinscrit', 'i');
+  function limparNome(bruto){
+    return bruto.split(CORTE_NOME)[0].replace(/\s+/g,' ').replace(/[.,;:\s]+$/,'').trim();
+  }
+  var padroesParte = [
+    /em desfavor de\s+([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\s.']{5,58})/,
+    /denuncio[\s\S]{0,60}?([A-ZÀ-Ú]{2}[A-ZÀ-Úa-zà-ú\s.']{6,58})/,
+    /em\s+face\s+de\s+([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\s.']{5,58})/,
+    /interrogat[óo]rio\s+de\s+([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\s.']{6,58})/,
+    new RegExp(ROTULOS_REU+'\\s*\\(?[AaOo]?\\)?\\s*[:\\-–]?\\s*(?:[Nn]ome\\s*[:\\-]?\\s*)?([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\\s.\']{6,58})'),
+    /(?:[Rr][eé]u|R[ÉE]U)\s*[:\-–]\s*([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\s.']{5,58})/,
+    /[Nn]ome da [Pp]essoa\s*[:\-]\s*([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\s.']{6,58})/,
+    new RegExp(ROTULOS_AUTOR+'\\s*\\(?[AaOo]?\\)?\\s*[:\\-–]\\s*([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\\s.\']{5,58})')
+  ];
+  d.parte = '';
+  d.parteAdversa = '';
+  for(var i=0;i<padroesParte.length && !d.parte;i++){
+    var m = t.match(padroesParte[i]);
+    if(m){
+      var cand = limparNome(m[1]);
+      if(cand.split(' ').length >= 2 && cand.length >= 8) d.parte = cand;
+    }
+  }
+  if(!d.parte) d.parte = nomeMaisFrequente(t);
+  /* nos casos cíveis tenta também identificar a parte contrária, útil para a minuta */
+  var mAdv = t.match(new RegExp(ROTULOS_AUTOR+'\\s*\\(?[AaOo]?\\)?\\s*[:\\-–]\\s*([A-ZÀ-Ú][A-ZÀ-Úa-zà-ú\\s.\']{5,58})'));
+  if(mAdv){
+    var candAdv = limparNome(mAdv[1]);
+    if(candAdv.split(' ').length >= 2 && candAdv.length >= 8 && candAdv !== d.parte) d.parteAdversa = candAdv;
+  }
+  var dataFato = t.match(/(?:em|no dia|data d[oa] fato[s]?\s*[:\-]?)\s*(\d{1,2}\s*(?:de)?\s*[\/.]?\s*(?:janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro|\d{1,2})\s*(?:de|[\/.])?\s*\d{4})/i);
+  d.dataFato = dataFato ? dataFato[1].replace(/\s+/g,' ').trim() : '';
+  var artigo = t.match(/[Aa]rtigo\s+(\d{1,4}[º°ºA-Za-z\-,§\s]{0,20}?)(?:\s+d[aeo]\s+(?:C[oó]digo|Lei))/);
+  d.artigo = artigo ? ('art. '+artigo[1].replace(/\s+/g,' ').trim()) : '';
+  var leis = n.match(/lei\s+(?:federal\s+)?n?\s*[o°º.]*\s*[\d.]{4,9}\/?\d{0,4}/g);
+  d.leis = leis ? Array.from(new Set(leis.map(function(x){return x.replace(/lei\s+(federal\s+)?n?\s*[o°º.]*\s*/,'Lei ');}))).slice(0,5) : [];
+  var qtd = n.match(/(\d+(?:[.,]\d+)?)\s*(?:gramas?|g\b|kg|quilos?)/);
+  d.drogaQtd = qtd ? qtd[0] : '';
+  d.drogaTipo = /maconha/.test(n) ? 'maconha' : (/cocaina/.test(n) ? 'cocaína' : (/crack/.test(n) ? 'crack' : ''));
+  var vals = t.match(/R\$\s?[\d.]{1,12},\d{2}/g);
+  d.valores = vals ? Array.from(new Set(vals)).slice(0,4) : [];
+  d.flags = {
+    primario: /\bprimari/.test(n) && !/nao\s+(?:e\s+)?primari/.test(n),
+    semAntecedentes: /nenhum registro para exibir|sem antecedentes criminais|nada consta/.test(n),
+    reincidente: /reincident/.test(n),
+    bodycamNao: /usou bodycam\s*[:.]?\s*nao|bodycam\s*[:.]?\s*nao|sem\s+(?:uso\s+de\s+)?camera(?:s)?\s+corpora(?:l|is)|sem\s+bodycam/.test(n),
+    flagrante: /flagrante/.test(n),
+    preventiva: /prisao preventiva|converto a prisao|preventiva decretada/.test(n),
+    confissao: /confessou|confissao/.test(n),
+    negativa: /nega(?:ndo|ram|)\s+(?:a\s+)?autoria|negou\s+(?:a\s+)?autoria|nega peremptoriamente|rebate/.test(n),
+    algemas: /algemas/.test(n),
+    laudoPreliminar: /constatacao preliminar/.test(n),
+    laudoDefinitivo: /laudo\s+(?:toxicologico\s+)?definitivo\s+(?:juntado|acostado|anexo)/.test(n),
+    revelia: /\brevelia\b|\brevel\b/.test(n),
+    liminar: /tutela de urgencia|tutela antecipada|liminar deferida/.test(n),
+    gratuidade: /justica gratuita|gratuidade da justica/.test(n),
+    protetiva: /medida protetiva/.test(n)
+  };
+  return d;
+}
+
+function gerarAchados(cat, d){
+  var A = [], f = d.flags;
+  function add(nivel, ico, txt){ A.push({nivel:nivel, ico:ico, txt:txt}); }
+  if(cat.area==='Criminal'){
+    if(f.preventiva) add('critico','🔒','<b>Réu preso preventivamente.</b> Prioridade máxima: pedido de revogação/substituição por cautelares (art. 319 CPP) e controle da revisão nonagesimal (art. 316, parágrafo único, CPP).');
+    else if(f.flagrante) add('atencao','🚨','<b>Origem em prisão em flagrante.</b> Verificar a legalidade da abordagem (art. 244 CPP — STJ, RHC 158.580/BA) e a audiência de custódia.');
+    if(f.primario || f.semAntecedentes) add('forte','✅','<b>Primariedade / ausência de antecedentes detectada.</b> Sustenta cautelares alternativas, pena-base mínima'+(cat.id==='crim-trafico'?' e o tráfico privilegiado (art. 33, §4º — STF, HC 118.533/MS)':'')+'.');
+    if(f.reincidente) add('atencao','⚠️','<b>Menção a reincidência.</b> Conferir certidões: a reincidência exige trânsito em julgado anterior ao novo fato (art. 63 CP).');
+    if(f.bodycamNao) add('forte','📷','<b>Sem registro de câmera corporal.</b> A prova de autoria tende a repousar só na palavra dos agentes — exigir corroboração objetiva (art. 155 CPP; presunção de inocência).');
+    else if(f.flagrante) add('atencao','📷','<b>Verificar registro audiovisual da abordagem</b> (body-cam, câmeras veiculares/da via). A ausência de filmagem deixa a autoria apoiada apenas na palavra dos agentes (art. 155 CPP) — requisitar imagens antes do descarte.');
+    if(f.negativa) add('forte','🗣️','<b>Negativa de autoria registrada nos autos.</b> Explorar a versão defensiva e requerer as diligências que possam confirmá-la (câmeras, registros, testemunhas).');
+    if(f.confissao) add('atencao','📝','<b>Menção a confissão.</b> Verificar voluntariedade e assistência; se aproveitada na sentença, incide a atenuante (art. 65, III, "d", CP — Súmula 545/STJ).');
+    if(f.algemas) add('atencao','⛓️','<b>Uso de algemas registrado.</b> Conferir a justificativa por escrito exigida pela Súmula Vinculante 11 do STF.');
+    if(cat.id==='crim-trafico'){
+      if(d.drogaQtd) add('atencao','⚖️','<b>Quantidade apreendida: '+d.drogaQtd+(d.drogaTipo?' de '+d.drogaTipo:'')+'.</b> Avaliar desclassificação (art. 28 — RE 635.659: presunção de usuário até 40 g de maconha) ou, se inviável, o privilégio do §4º.');
+      if(f.laudoPreliminar && !f.laudoDefinitivo) add('atencao','🧪','<b>Apenas laudo de constatação preliminar localizado.</b> A condenação exige laudo toxicológico definitivo — cobrar a juntada.');
+    }
+    if(f.protetiva) add('atencao','🛡️','<b>Medidas protetivas mencionadas.</b> Avaliar necessidade, proporcionalidade e pedido de revisão.');
+  } else {
+    if(f.revelia) add('critico','⏰','<b>Menção a revelia.</b> Conferir imediatamente a tempestividade da contestação (art. 335 CPC) e eventual nulidade de citação (art. 280 CPC).');
+    if(f.liminar) add('atencao','⚡','<b>Tutela de urgência/liminar mencionada.</b> Avaliar agravo de instrumento (art. 1.015, I, CPC) e pedido de reconsideração.');
+    if(d.valores.length) add('atencao','💰','<b>Valores identificados: '+d.valores.join(' • ')+'.</b> Impugnar especificamente os cálculos e a extensão do dano alegado.');
+    if(f.gratuidade) add('atencao','📄','<b>Gratuidade da justiça em pauta.</b> Avaliar impugnação (art. 100 CPC) conforme a capacidade da parte adversa.');
+  }
+  if(!A.length) add('atencao','🔎','Nenhum marcador automático de destaque foi localizado no texto — a leitura integral pelo advogado definirá os pontos da defesa.');
+  return A;
+}
+
+function preencherCatSelect(){
+  var sel = document.getElementById('catManual');
+  sel.innerHTML='';
+  KB.forEach(function(c){ var o=document.createElement('option'); o.value=c.id; o.textContent='['+c.area+'] '+c.nome; if(AN.cat && c.id===AN.cat.id)o.selected=true; sel.appendChild(o); });
+}
+
+function classificarEExibir(){
+  if(AN.texto.replace(/\s/g,'').length < 400){
+    alert('Não foi possível extrair texto legível deste PDF (mesmo após OCR). Selecione a categoria manualmente e preencha os dados da minuta — a análise usará a base de teses da categoria.');
+  }
+  var ranking = classificar();
+  AN.cat = ranking[0].cat;
+  var conf = 'baixa';
+  if(ranking[0].score >= 30 && ranking[0].score >= (ranking[1].score*1.6)) conf = 'alta';
+  else if(ranking[0].score >= 14) conf = 'média';
+  AN.conf = conf;
+  AN.dados = extrairDados();
+  AN.docRecusado = false;
+  preencherCatSelect();
+  renderAnalise();
+  /* NÃO salva ainda — só arquiva depois que a IA confirmar que é um processo (guardrail),
+     evitando gravar nota fiscal/documento avulso no banco. A IA roda sozinha a seguir. */
+  dispararAnaliseIA(); /* a IA roda após todo upload novo (cache por hash evita custo repetido) */
+}
+
+function reclassificar(){
+  var id = document.getElementById('catManual').value;
+  if(AN.modo === 'arquivo' && AN.minutaArquivada){
+    if(!confirm('Este processo foi carregado do arquivo. Trocar a categoria irá REGENERAR a minuta e sobrescrever a versão arquivada. Continuar?')){
+      document.getElementById('catManual').value = AN.cat.id; /* desfaz a seleção */
+      return;
+    }
+    AN.minutaArquivada = null;
+  }
+  AN.cat = KB.find(function(c){return c.id===id;});
+  AN.conf = 'manual';
+  AN.analiseIA = null; /* a análise anterior valia para a outra categoria */
+  renderAnalise();
+  salvarProcesso();
+  if(AN.texto) dispararAnaliseIA();
+}
+
+function renderAnalise(){
+  var cat = AN.cat, d = AN.dados;
+  document.getElementById('catDetectada').textContent = '['+cat.area+'] '+cat.nome;
+  document.getElementById('catConfianca').textContent = AN.conf==='manual' ? 'seleção manual' : 'confiança '+AN.conf;
+
+  var cards = '';
+  cards += '<div class="card"><div class="k">Arquivo analisado</div><div class="v">'+esc(AN.arquivo)+'<small>'+AN.paginas+' página(s) lidas localmente</small></div></div>';
+  cards += '<div class="card"><div class="k">Nº do processo</div><div class="v">'+(d.processos[0]?esc(d.processos[0]):'não localizado')+(d.processos[1]?'<small>também: '+esc(d.processos.slice(1).join(' • '))+'</small>':'')+'</div></div>';
+  cards += '<div class="card"><div class="k">Parte defendida (provável)</div><div class="v">'+(d.parte?esc(d.parte):'não localizada — preencha abaixo')+'</div></div>';
+  cards += '<div class="card"><div class="k">Juízo</div><div class="v">'+(d.vara?esc(d.vara):'—')+(d.comarca?'<small>Comarca de '+esc(d.comarca)+'</small>':'')+'</div></div>';
+  cards += '<div class="card"><div class="k">Peça adequada</div><div class="v">'+esc(cat.peca.split('(')[0].trim())+'<small>'+esc(cat.fundamento)+' — prazo: '+esc(cat.prazo)+'</small></div></div>';
+  if(d.leis.length) cards += '<div class="card"><div class="k">Legislação citada no processo</div><div class="v" style="font-size:.85rem">'+d.leis.map(esc).join('<br>')+'</div></div>';
+  document.getElementById('cardsAnalise').innerHTML = cards;
+
+  var achados = gerarAchados(cat, d);
+  document.getElementById('achados').innerHTML = achados.map(function(a){
+    return '<div class="achado '+a.nivel+'"><div class="ico">'+a.ico+'</div><div class="tx">'+a.txt+'</div></div>';
+  }).join('');
+
+  document.getElementById('jurisCategoria').innerHTML = cat.juris.map(function(j){
+    return '<div class="juris"><div class="ref">'+esc(j.ref)+'</div><div class="txt">'+esc(j.tese)+'</div></div>';
+  }).join('');
+
+  document.getElementById('anNome').value = d.parte || '';
+  document.getElementById('anNum').value = (d.processos && d.processos[0]) || '';
+  document.getElementById('anJuizo').value = d.juizo || ((d.vara? d.vara : '') + (d.comarca ? (d.vara?' — ':'') + 'Comarca de '+d.comarca : ''));
+  if(document.getElementById('anTestemunhas')) document.getElementById('anTestemunhas').value = d.testemunhas || '';
+  document.getElementById('swNome').textContent = (d.parte || (d.processos && d.processos[0]) || AN.arquivo || 'Processo');
+  atualizarMinuta();
+  if(!AN.analiseIA){
+    document.getElementById('painelIA').style.display='none';
+    document.getElementById('nulidadesIA').innerHTML='';
+    document.getElementById('statusIA').innerHTML='';
+  }
+  mostrarChooser(false); /* entra no estado "trabalhando": esconde o seletor grande, mostra a barra compacta */
+  document.getElementById('resultadoAnalise').style.display='block';
+  scrollParaResultado();
+}
+
+/* ── estados da seção: escolha (chooser) × trabalhando (resultado) ── */
+function mostrarChooser(mostrar){
+  document.getElementById('chooser').style.display = mostrar ? '' : 'none';
+  if(mostrar){
+    document.getElementById('resultadoAnalise').style.display = 'none';
+    document.getElementById('progresso').style.display = 'none';
+  }
+}
+function novoProcesso(){
+  ++analiseSeq; /* invalida qualquer processamento em andamento */
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:'', paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  document.getElementById('pdfProcesso').value = '';
+  document.getElementById('selProcessos').value = '';
+  document.getElementById('bigdropTitulo').textContent = 'Arraste o PDF aqui ou clique para selecionar';
+  document.getElementById('bigdropSub').textContent = 'Extração e OCR rodam no seu navegador; o texto segue com segurança para a análise por IA (sigilo profissional preservado).';
+  mostrarChooser(true);
+  document.getElementById('analisador').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function trocarProcesso(){ novoProcesso(); } /* mesma ação: volta para a tela de escolha */
+
+function scrollParaResultado(){
+  /* rola até o topo do resultado descontando a altura da nav fixa (senão o conteúdo fica cortado sob ela) */
+  var alvo = document.getElementById('resultadoAnalise');
+  var nav = document.querySelector('nav');
+  var offset = (nav ? nav.offsetHeight : 0) + 16;
+  requestAnimationFrame(function(){
+    var y = alvo.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+  });
+}
+
+/* ═══════════ Defesa prévia quase pronta — análise específica por IA ═══════════ */
+function setStatusIA(html, cor){
+  document.getElementById('painelIA').style.display = 'block';
+  document.getElementById('statusIA').innerHTML = html ? '<span style="color:'+(cor||'var(--navy)')+';font-weight:600">'+html+'</span>' : '';
+}
+
+function dispararAnaliseIA(){
+  /* roda após um upload novo: tenta o cache na nuvem pelo hash do arquivo; senão chama a IA */
+  var gen = analiseSeq;
+  if(AN.analiseIA){ renderIA(); return; }
+  var pronto = Promise.resolve(null);
+  if(supaOn() && AN.fileHash){
+    pronto = supaFetch('processos?dados->>file_hash=eq.'+encodeURIComponent(AN.fileHash)+'&select=dados&limit=1')
+      .then(function(rows){
+        var d = rows && rows[0] && rows[0].dados;
+        return (d && d.analiseIA && d.analiseIA._cat === AN.cat.id) ? d.analiseIA : null;
+      }).catch(function(){ return null; });
+  }
+  pronto.then(function(cache){
+    if(gen !== analiseSeq) return;
+    if(cache){
+      AN.analiseIA = cache;
+      renderIA();
+      atualizarMinuta();
+      setStatusIA('♻️ Este documento já havia sido analisado — análise recuperada do arquivo, sem custo de IA.');
+      salvarProcesso();
+      return;
+    }
+    analisarComIA(false);
+  });
+}
+
+function analisarComIA(manual){
+  if(!AN.cat || !AN.texto){ if(manual) alert('Nenhuma análise em andamento. Envie um PDF primeiro.'); return; }
+  if(AN.texto.replace(/\s/g,'').length < 400){
+    setStatusIA('⚠️ Texto extraído insuficiente para a análise minuciosa por IA — a minuta segue no modo padrão.', '#a15c00');
+    return;
+  }
+  var gen = analiseSeq;
+  var btn = document.getElementById('btnAnaliseIA');
+  var btnLabel = btn.textContent;
+  btn.disabled = true; btn.textContent = '⏳ Analisando…';
+  document.getElementById('painelIA').style.display = 'block';
+  if(manual) document.getElementById('painelIA').scrollIntoView({behavior:'smooth', block:'start'});
+  setStatusIA('⏳ A IA está lendo o processo, varrendo o checklist de nulidades e redigindo a peça — leva de 20 a 50 segundos…');
+
+  fetch('/api/analisar', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer '+((SESSION && SESSION.access_token)||'')},
+    body: JSON.stringify({ texto: AN.texto.slice(0, 60000), categoriaId: AN.cat.id, dados: AN.dados })
+  }).then(function(r){
+    return r.json().catch(function(){ throw new Error('HTTP '+r.status); })
+      .then(function(j){ if(!r.ok || !j.sucesso) throw new Error(j.erro || ('HTTP '+r.status)); return j; });
+  }).then(function(result){
+    btn.disabled = false; btn.textContent = btnLabel;
+    if(gen !== analiseSeq) return; /* usuário já trocou de processo — descarta */
+    if(result.naoEhProcesso){ recusarDocumento(result); return; } /* guardrail: não é processo judicial */
+    delete result.sucesso;
+    var corr = result.categoriaCorrigida; delete result.categoriaCorrigida;
+    /* a IA leu o documento e pode ter corrigido a área (ex.: caiu em tráfico mas é família) */
+    if(corr && corr.id){
+      var nc = KB.find(function(c){ return c.id === corr.id; });
+      if(nc && nc.id !== AN.cat.id){ AN.cat = nc; AN.conf = 'ajustada pela IA'; }
+    }
+    result._cat = AN.cat.id; /* a análise vale para ESTA categoria — invalida o cache se reclassificar */
+    AN.analiseIA = result;
+    AN.minutaArquivada = null;
+    /* completa dados vazios com o que a IA extraiu do texto (renderAnalise reflete nos campos) */
+    var est = result.estrutura || {};
+    if(est.parte_defendida && !AN.dados.parte) AN.dados.parte = est.parte_defendida;
+    if(est.num_processo){ if(!Array.isArray(AN.dados.processos)) AN.dados.processos = []; if(!AN.dados.processos[0]) AN.dados.processos[0] = est.num_processo; }
+    if(est.juizo && !AN.dados.juizo) AN.dados.juizo = est.juizo;
+    preencherCatSelect();
+    renderAnalise(); /* re-render completo com a categoria (possivelmente corrigida) + minuta da IA */
+    renderIA();      /* painel de nulidades */
+    salvarProcesso();
+  }).catch(function(err){
+    btn.disabled = false; btn.textContent = btnLabel;
+    if(gen !== analiseSeq) return;
+    console.error(err);
+    setStatusIA('⚠️ A análise por IA falhou ('+esc(err.message||String(err))+'). Clique em <b>↻ Reanalisar com IA</b> (acima) para tentar novamente.', '#e0938c');
+  });
+}
+
+function recusarDocumento(result){
+  /* guardrail de tipo de documento: o arquivo não é um processo judicial — não gera defesa */
+  AN.analiseIA = null;
+  AN.docRecusado = true;
+  document.getElementById('painelIA').style.display = 'block';
+  document.getElementById('nulidadesIA').innerHTML =
+    '<div class="achado critico"><div class="ico">⛔</div><div class="tx"><b>Este arquivo não é um processo judicial.</b> '
+    + 'Foi identificado como: <em>'+esc(result.tipoDocumento||'documento não jurídico')+'</em>. '
+    + 'Nenhuma defesa foi gerada. Envie a <b>denúncia</b>, a <b>petição inicial</b>, o <b>inquérito</b> ou os <b>autos do processo</b> — não uma nota fiscal, recibo ou documento avulso.</div></div>';
+  document.getElementById('statusIA').innerHTML = '';
+  /* esconde a peça/minuta e os painéis que só fazem sentido para um processo real */
+  document.getElementById('documento-analise').innerHTML =
+    '<p class="ni" style="text-align:center;color:#8a2b2b"><strong>⛔ Documento não é um processo judicial — nenhuma peça de defesa foi gerada.</strong></p>'
+    + '<p class="ni" style="text-align:center">Envie a denúncia, a petição inicial, o inquérito ou os autos do processo.</p>';
+  var jc = document.getElementById('jurisCategoria'); if(jc) jc.innerHTML = '';
+  var ac = document.getElementById('achados'); if(ac) ac.innerHTML = '';
+  /* não arquiva lixo no banco */
+}
+
+function renderIA(){
+  var r = AN.analiseIA;
+  if(!r){ document.getElementById('painelIA').style.display='none'; document.getElementById('nulidadesIA').innerHTML=''; return; }
+  var html = '';
+  (r.preliminares||[]).forEach(function(n){
+    var cls = n.gravidade==='alta' ? 'critico' : (n.gravidade==='baixa' ? 'forte' : 'atencao');
+    var tag = n.gravidade==='alta' ? '<span class="tag red">GRAVIDADE ALTA</span>' : (n.gravidade==='baixa' ? '<span class="tag green">GRAVIDADE BAIXA</span>' : '<span class="tag amber">GRAVIDADE MÉDIA</span>');
+    html += '<div class="achado '+cls+'"><div class="ico">🚨</div><div class="tx"><b>'+esc(n.titulo)+'</b> '+tag
+         + (n.lei_seca?'<br><em>'+esc(n.lei_seca)+'</em>':'')
+         + (n.trecho_base?'<br><small>📌 Base nos autos: “'+esc(n.trecho_base)+'”</small>':'')
+         + '</div></div>';
+  });
+  (r.merito||[]).forEach(function(t){
+    html += '<div class="achado forte"><div class="ico">⚖️</div><div class="tx"><b>Mérito: '+esc(t.titulo)+'</b>'+(t.lei_seca?' — <em>'+esc(t.lei_seca)+'</em>':'')+'</div></div>';
+  });
+  (r.verificar_nos_autos||[]).forEach(function(v){
+    html += '<div class="achado atencao"><div class="ico">🔎</div><div class="tx"><b>Conferir nos autos:</b> '+esc(v)+'</div></div>';
+  });
+  (r.avisos||[]).forEach(function(a){
+    html += '<div class="achado critico"><div class="ico">⚠️</div><div class="tx">'+esc(a)+'</div></div>';
+  });
+  if(!html) html = '<div class="achado atencao"><div class="ico">🔎</div><div class="tx">A IA não apontou nulidades com base concreta neste documento — leitura integral pelo advogado segue indispensável.</div></div>';
+  document.getElementById('nulidadesIA').innerHTML = html;
+  var nPrel = (r.preliminares||[]).length;
+  setStatusIA('✅ Análise minuciosa concluída: <b>'+nPrel+' preliminar(es)/nulidade(s)</b> com base concreta no documento. A peça abaixo já está montada — revisar antes de protocolar.', 'var(--ok)');
+}
+
+function rolTestemunhas(){
+  /* lê o campo editável; se vazio, NÃO imprime colchetes — usa linhas para preencher à mão */
+  var raw = (document.getElementById('anTestemunhas') && document.getElementById('anTestemunhas').value || '').trim();
+  var linhas = raw.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+  var itens = linhas.length
+    ? linhas.map(function(l){ return '<li>'+esc(l)+';</li>'; }).join('')
+    : '<li>_______________________________________________________ (nome, qualificação e endereço);</li>'
+     +'<li>_______________________________________________________ (nome, qualificação e endereço).</li>';
+  return '<p class="ni"><strong>Rol de testemunhas:</strong></p><ol>'+itens+'</ol>';
+}
+
+function paragrafosIA(t){
+  return String(t||'').split(/\n{2,}|\n/).map(function(s){return s.trim();}).filter(Boolean)
+    .map(function(s){return '<p>'+esc(s)+'</p>';}).join('');
+}
+
+function atualizarMinuta(){
+  if(AN.analiseIA) montarPecaIA(); else montarMinutaAnalise();
+}
+
+function montarPecaIA(){
+  var r = AN.analiseIA;
+  if(!r){ montarMinutaAnalise(); return; }
+  var cat = AN.cat, d = AN.dados || {};
+  var nome = document.getElementById('anNome').value || '[NOME DA PARTE]';
+  var num = document.getElementById('anNum').value || '[Nº DO PROCESSO]';
+  var juizo = document.getElementById('anJuizo').value || '[JUÍZO / COMARCA]';
+  var adv = document.getElementById('anAdv').value || '[ADVOGADO(A) — OAB/UF 000.000]';
+  var preso = d.flags && d.flags.preventiva && cat.area==='Criminal';
+
+  function teseJuris(ref){
+    var j = (cat.juris||[]).find(function(x){ return x.ref===ref; });
+    return j ? j.tese : '';
+  }
+  var jurisUsadas = {}; /* trava anti-repetição também no cliente (cobre análises salvas antes do dedup do servidor) */
+  function topico(pfx, i, t){
+    var h = '<h3>'+pfx+'.'+(i+1)+' — '+esc(t.titulo)+(t.lei_seca?' ('+esc(t.lei_seca)+')':'')+'</h3>';
+    h += paragrafosIA(t.desenvolvimento);
+    if(t.jurisprudencia && !jurisUsadas[t.jurisprudencia]){
+      jurisUsadas[t.jurisprudencia] = true;
+      var tese = teseJuris(t.jurisprudencia);
+      h += '<blockquote>'+(tese?esc(tese)+' ':'')+'('+esc(t.jurisprudencia)+')</blockquote>';
+    }
+    return h;
+  }
+  function lista(itens){ return '<ol>'+itens.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+'</ol>'; }
+
+  var html =
+    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito — '+esc(juizo)+'</p>'
+    +'<p class="ni"><strong>Autos nº '+esc(num)+'</strong>'+(preso?'<br><strong>Réu preso — tramitação prioritária</strong>':'')+'</p>'
+    +'<p><strong>'+esc(nome).toUpperCase()+'</strong>, já qualificado(a) nos autos, vem, respeitosamente, por seu(sua) advogado(a) que esta subscreve, com fundamento no(s) '+esc(cat.fundamento)+', apresentar</p>'
+    +'<h1>'+esc(r.tipo_peca || cat.peca)+'</h1>'
+    +'<p>pelas razões de fato e de direito a seguir expostas.</p>';
+
+  var rom = ['I','II','III','IV','V','VI','VII','VIII'], si = 0;
+  function sec(titulo, inner){ html += '<h2>'+rom[si]+' — '+titulo+'</h2>'+inner; si++; }
+
+  sec('Da tempestividade', '<p>A presente defesa é apresentada no prazo legal de '+esc(cat.prazo)+' ('+esc(cat.fundamento)+'), sendo tempestiva.</p>');
+  sec('Síntese dos fatos', paragrafosIA(r.sintese) || '<p>[Síntese dos fatos]</p>');
+  if(r.preliminares && r.preliminares.length){
+    var p1 = rom[si];
+    sec('Das preliminares e nulidades', r.preliminares.map(function(t,i){ return topico(p1,i,t); }).join(''));
+  }
+  if(r.merito && r.merito.length){
+    var p2 = rom[si];
+    sec('Do mérito', r.merito.map(function(t,i){ return topico(p2,i,t); }).join(''));
+  }
+  if(r.provas && r.provas.length) sec('Das provas requeridas', lista(r.provas));
+  if(r.pedidos && r.pedidos.length) sec('Dos pedidos', lista(r.pedidos));
+
+  html += rolTestemunhas()
+    +'<p class="center">Termos em que,<br>pede deferimento.</p>'
+    +'<p class="right">'+(d.comarca?esc(d.comarca):'[Local]')+', ____ de ____________ de 20___.</p>'
+    +'<p class="sign">_______________________________________<br><strong>'+esc(adv)+'</strong></p>';
+
+  document.getElementById('documento-analise').innerHTML = html;
+}
+
+function baixarPdf(){
+  if(AN.docRecusado){ alert('Este documento não é um processo judicial — não há peça de defesa para gerar em PDF.'); return; }
+  var conteudo = document.getElementById('documento-analise').innerHTML;
+  var estilos =
+     '@page{size:A4;margin:2.5cm 2cm 2cm 3cm}'
+    +'*{box-sizing:border-box}'
+    +'html,body{margin:0;background:#d9d9dc}'
+    +'body{font-family:"Times New Roman",Georgia,serif;font-size:12pt;line-height:1.5;color:#000}'
+    +'.folha{background:#fff;width:21cm;max-width:100%;min-height:29.7cm;margin:1.2cm auto;padding:2.5cm 2cm 2.5cm 3cm;text-align:justify;box-shadow:0 3px 18px rgba(0,0,0,.28)}'
+    +'.folha p{margin:0 0 10pt;text-indent:35pt}'
+    +'.folha h1{font-size:12pt;text-align:center;text-transform:uppercase;margin:18pt 0;letter-spacing:.5px}'
+    +'.folha h2{font-size:12pt;margin:16pt 0 8pt;text-transform:uppercase}'
+    +'.folha h3{font-size:12pt;margin:12pt 0 6pt}'
+    +'.folha blockquote{margin:6pt 0 10pt 120pt;font-size:10pt;font-style:italic;text-indent:0}'
+    +'.folha ol{margin:0 0 10pt 24pt}.folha li{margin-bottom:5pt}'
+    +'.folha .addr{text-indent:0;font-weight:bold;margin-bottom:40pt}'
+    +'.folha .ni{text-indent:0}.folha .center{text-align:center;text-indent:0;margin-top:24pt}'
+    +'.folha .right{text-align:right;text-indent:0}.folha .sign{text-align:center;text-indent:0;margin-top:40pt}'
+    +'.barra{position:fixed;top:0;left:0;right:0;background:#0e1f3d;color:#fff;padding:10px;text-align:center;font-family:system-ui,sans-serif;font-size:14px;z-index:9}'
+    +'.barra button{background:#c9a96a;color:#0a0a0b;border:0;border-radius:4px;padding:8px 18px;font-weight:600;cursor:pointer;margin-left:10px;font-family:inherit}'
+    +'@media print{html,body{background:#fff}.folha{width:auto;margin:0;padding:0;box-shadow:none;min-height:0}.barra{display:none}}';
+  var doc = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Defesa — '
+    + esc((document.getElementById('anNome').value||'processo')) + '</title><style>'+estilos+'</style></head><body>'
+    + '<div class="barra">📄 Confira a peça abaixo e clique para gerar o PDF <button onclick="window.print()">Salvar como PDF / Imprimir</button></div>'
+    + '<div class="folha">'+conteudo+'</div></body></html>';
+  var w = window.open('', '_blank');
+  if(!w){ alert('O navegador bloqueou a janela do PDF — permita pop-ups para este site e tente de novo.'); return; }
+  w.document.open(); w.document.write(doc); w.document.close();
+  w.focus();
+}
+
+function montarSinteseFatos(d, cat, nome){
+  /* Compõe a síntese com os dados REALMENTE extraídos do PDF (em vez de um placeholder genérico).
+     Cada fato só entra na frase se foi de fato localizado no texto — nada é inventado. */
+  var partes = [];
+  if(cat.area === 'Criminal'){
+    var abre = 'Consta dos autos';
+    if(d.dataFato) abre += ', em '+esc(d.dataFato)+',';
+    if(d.comarca) abre += ' na Comarca de '+esc(d.comarca)+',';
+    abre += ' a imputação em desfavor de <strong>'+esc(nome).toUpperCase()+'</strong>';
+    if(d.artigo || cat.nome) abre += ' pela suposta prática de conduta tipificada no '+esc(d.artigo || cat.fundamento)+' ('+esc(cat.nome)+')';
+    abre += '.';
+    partes.push(abre);
+    if(d.drogaQtd) partes.push('Registra-se a apreensão descrita de '+esc(d.drogaQtd)+(d.drogaTipo?' de '+esc(d.drogaTipo):'')+', cujas circunstâncias de apreensão devem ser cotejadas com as provas dos autos.');
+    if(d.flags && d.flags.flagrante) partes.push('A prisão/autuação decorreu de flagrante, cuja legalidade da abordagem deve ser objeto de exame específico.');
+    if(d.flags && d.flags.preventiva) partes.push('Há notícia de prisão preventiva decretada, o que impõe a análise prioritária dos requisitos do art. 312 do CPP.');
+    if(d.flags && d.flags.negativa) partes.push(esc(nome)+' nega a autoria dos fatos, o que deve orientar a estratégia probatória da defesa.');
+  } else {
+    var abre2 = 'Trata-se de demanda';
+    if(d.comarca) abre2 += ' distribuída na Comarca de '+esc(d.comarca);
+    if(d.dataFato) abre2 += ', tendo os fatos alegados ocorrido em '+esc(d.dataFato);
+    abre2 += (d.parteAdversa ? (', promovida por '+esc(d.parteAdversa)+' em face de <strong>'+esc(nome).toUpperCase()+'</strong>') : (' em face de <strong>'+esc(nome).toUpperCase()+'</strong>'))+'.';
+    partes.push(abre2);
+    if(d.valores && d.valores.length) partes.push('Os valores mencionados nos autos são: '+d.valores.map(esc).join(', ')+', os quais devem ser especificamente impugnados, se indevidos.');
+    if(d.flags && d.flags.liminar) partes.push('Há notícia de tutela de urgência/liminar deferida, cuja adequação deve ser reexaminada.');
+  }
+  partes.push('[Complementar com a narrativa detalhada dos autos e a versão fática da parte patrocinada, destacando as fragilidades da tese adversa.]');
+  return '<p>'+partes.join(' ')+'</p>';
+}
+
+function montarMinutaAnalise(){
+  var cat = AN.cat, d = AN.dados;
+  var nome = document.getElementById('anNome').value || '[NOME DA PARTE]';
+  var num = document.getElementById('anNum').value || '[Nº DO PROCESSO]';
+  var juizo = document.getElementById('anJuizo').value || '[JUÍZO / COMARCA]';
+  var adv = document.getElementById('anAdv').value || '[ADVOGADO(A) — OAB/UF 000.000]';
+  var preso = d.flags && d.flags.preventiva && cat.area==='Criminal';
+
+  var teses = cat.teses.map(function(ts,i){
+    return '<h3>III.'+(i+1)+' — '+esc(ts.t)+'</h3><p>'+esc(ts.d)+' [Adequar aos elementos concretos dos autos.]</p>';
+  }).join('');
+  var jurisBloco = cat.juris.map(function(j){
+    return '<blockquote>'+esc(j.tese)+' ('+esc(j.ref)+')</blockquote>';
+  }).join('');
+  var provas = '<ol>'+cat.provas.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+'<li>Oitiva das testemunhas arroladas ao final e demais provas admitidas em direito.</li></ol>';
+  var pedidos = '<ol>'+cat.pedidos.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+(preso?'<li>A revogação da prisão preventiva ou sua substituição pelas medidas do art. 319 do CPP;</li>':'')+'<li>A produção de todas as provas especificadas.</li></ol>';
+
+  var html =
+    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito — '+esc(juizo)+'</p>'
+    +'<p class="ni"><strong>Autos nº '+esc(num)+'</strong>'+(preso?'<br><strong>Réu preso — tramitação prioritária</strong>':'')+'</p>'
+    +'<p><strong>'+esc(nome).toUpperCase()+'</strong>, já qualificado(a) nos autos, vem, respeitosamente, por seu(sua) advogado(a) que esta subscreve, com fundamento no(s) '+esc(cat.fundamento)+', apresentar</p>'
+    +'<h1>'+esc(cat.peca)+'</h1>'
+    +'<p>com relação à demanda em epígrafe — matéria identificada: <strong>'+esc(cat.nome)+'</strong> —, pelas razões de fato e de direito a seguir expostas.</p>'
+    +'<p class="ni"><em>Documento analisado: '+esc(AN.arquivo)+' ('+AN.paginas+' páginas).</em></p>'
+    +'<h2>I — Da tempestividade</h2>'
+    +'<p>A presente peça é apresentada no prazo legal de '+esc(cat.prazo)+' ('+esc(cat.fundamento)+'), sendo tempestiva.</p>'
+    +'<h2>II — Síntese dos fatos</h2>'
+    + montarSinteseFatos(d, cat, nome)
+    +'<h2>III — Do direito</h2>'
+    + teses
+    +'<h2>IV — Da jurisprudência aplicável</h2>'
+    +'<p>Colhem-se dos Tribunais Superiores os seguintes entendimentos, plenamente aplicáveis à espécie:</p>'
+    + jurisBloco
+    +'<h2>V — Das provas requeridas</h2>'
+    + provas
+    +'<h2>VI — Dos pedidos</h2>'
+    + pedidos
+    + rolTestemunhas()
+    +'<p class="center">Termos em que,<br>pede deferimento.</p>'
+    +'<p class="right">'+(AN.dados.comarca?esc(AN.dados.comarca):'[Local]')+', ____ de ____________ de 20___.</p>'
+    +'<p class="sign">_______________________________________<br><strong>'+esc(adv)+'</strong></p>';
+
+  document.getElementById('documento-analise').innerHTML = html;
+}
+
+/* ═══════════ OCR para PDFs escaneados (tesseract.js sob demanda) ═══════════ */
+var tessPronto = null;
+function carregarTesseract(){
+  if(tessPronto) return tessPronto;
+  tessPronto = new Promise(function(res, rej){
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload = res;
+    s.onerror = function(){
+      tessPronto = null; /* não cacheia a falha — próxima tentativa recarrega o script */
+      s.remove();
+      rej(new Error('Falha ao carregar a biblioteca de OCR — verifique a conexão e tente novamente.'));
+    };
+    document.head.appendChild(s);
+  });
+  return tessPronto;
+}
+function ocrPdf(pdf, totalPgs, barra, ptxt, vivo){
+  vivo = vivo || function(){ return true; };
+  var mx = Math.min(totalPgs, 15);
+  return carregarTesseract().then(function(){
+    return Tesseract.createWorker('por');
+  }).then(function(worker){
+    var texto = '';
+    var cadeia = Promise.resolve();
+    for(let p=1; p<=mx; p++){
+      cadeia = cadeia.then(function(){
+        if(!vivo()) throw {cancelada:true};
+        return pdf.getPage(p).then(function(pg){
+          var vp = pg.getViewport({scale:1.7});
+          var cv = document.createElement('canvas');
+          cv.width = vp.width; cv.height = vp.height;
+          return pg.render({canvasContext:cv.getContext('2d'), viewport:vp}).promise.then(function(){
+            if(!vivo()) throw {cancelada:true};
+            ptxt.textContent = 'OCR (reconhecimento de texto) na página '+p+' de '+mx+'… isso pode levar alguns minutos';
+            barra.style.width = Math.round(80 + (p/mx)*15)+'%';
+            return worker.recognize(cv);
+          }).then(function(res){ texto += res.data.text + '\n'; });
+        });
+      });
+    }
+    return cadeia.then(
+      function(){ worker.terminate(); return texto; },
+      function(err){ worker.terminate(); throw err; } /* sem vazamento do worker WASM em erro */
+    );
+  });
+}
+
+/* ═══════════ PERSISTÊNCIA — SUPABASE (infra fixa, acesso por usuário logado) ═══════════ */
+var SUPA = {
+  url: 'https://kxiwvwbqnmqlaldqsaod.supabase.co',
+  key: 'sb_publishable_wEgwVgL23ImxCFoUNUUf8Q_1LQANyMX' /* publishable — os dados exigem JWT do usuário (RLS) */
+};
+var sbClient = window.supabase ? window.supabase.createClient(SUPA.url, SUPA.key) : null;
+var SESSION = null;
+function supaOn(){ return !!(sbClient && SESSION); }
+function supaUrlBase(){ return SUPA.url; }
+function supaFetch(path, opts){
+  opts = opts || {};
+  var tok = SESSION && SESSION.access_token;
+  opts.headers = Object.assign({apikey:SUPA.key, 'Authorization':'Bearer '+(tok||SUPA.key), 'Content-Type':'application/json'}, opts.headers||{});
+  return fetch(supaUrlBase()+'/rest/v1/'+path, opts).then(function(r){
+    if(!r.ok) return r.text().then(function(tx){ throw new Error('Supabase HTTP '+r.status+': '+tx.slice(0,200)); });
+    return (r.status===204 || opts.method==='PATCH') ? null : r.json().catch(function(){ return null; });
+  });
+}
+
+/* ═══════════ LOGIN (e-mail + senha — Supabase Auth) ═══════════ */
+function mostrarLogin(mostrar){
+  document.getElementById('loginGate').style.display = mostrar ? 'flex' : 'none';
+  document.body.style.overflow = mostrar ? 'hidden' : '';
+}
+function entrarComSenha(ev){
+  if(ev) ev.preventDefault();
+  var email = (document.getElementById('loginEmail').value||'').trim();
+  var senha = document.getElementById('loginSenha').value||'';
+  var msg = document.getElementById('loginMsg');
+  if(!email || !senha){ msg.textContent = 'Informe e-mail e senha.'; return; }
+  msg.style.color = 'var(--navy)';
+  msg.textContent = '⏳ Entrando…';
+  sbClient.auth.signInWithPassword({email: email, password: senha})
+    .then(function(res){
+      if(res.error){
+        msg.style.color = '#b00020';
+        msg.textContent = '⚠️ ' + (/invalid login|credentials/i.test(res.error.message) ? 'E-mail ou senha incorretos.' : res.error.message);
+      }
+      /* sucesso: onAuthStateChange fecha o portão automaticamente */
+    });
+}
+function sairConta(ev){
+  if(ev) ev.preventDefault();
+  sbClient.auth.signOut().then(function(){ location.reload(); });
+}
+function trocarSenha(ev){
+  if(ev) ev.preventDefault();
+  var nova = prompt('Digite a nova senha (mínimo 6 caracteres):');
+  if(nova === null) return;
+  if((nova||'').length < 6){ alert('A senha precisa ter pelo menos 6 caracteres.'); return; }
+  sbClient.auth.updateUser({password: nova}).then(function(res){
+    alert(res.error ? ('Não foi possível trocar a senha: '+res.error.message) : '✅ Senha atualizada. Ela vale a partir do próximo login.');
+  });
+}
+if(sbClient){
+  sbClient.auth.onAuthStateChange(function(evento, session){
+    var tinha = !!SESSION;
+    SESSION = session;
+    if(session){
+      mostrarLogin(false);
+      atualizarStatusStorage();
+      if(!tinha) carregarBiblioteca();
+    } else {
+      mostrarLogin(true);
+      atualizarStatusStorage();
+    }
+  });
+} else {
+  /* CDN do supabase-js falhou — sem nuvem, mas o analisador local continua de pé */
+  document.getElementById('loginGate').style.display = 'none';
+}
+
+function atualizarStatusStorage(){
+  var el = document.getElementById('storageStatus');
+  el.innerHTML = supaOn()
+    ? '☁️ Conectado como&nbsp;<b>'+esc((SESSION.user&&SESSION.user.email)||'')+'</b>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="#" onclick="trocarSenha(event)">Trocar senha</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="#" onclick="sairConta(event)">Sair</a>'
+    : '🔒 Faça login para acessar o arquivo na nuvem — enquanto isso, salvando apenas neste navegador.';
+}
+function setSaveStatus(txt){
+  var el = document.getElementById('saveStatus');
+  el.textContent = txt; el.style.display = 'inline-block';
+}
+
+function montarRegistro(){
+  var d = AN.dados || {}, cat = AN.cat;
+  /* sincroniza os campos editados pelo advogado de volta ao estado antes de arquivar */
+  var nomeInp = (document.getElementById('anNome').value||'').trim();
+  var numInp = (document.getElementById('anNum').value||'').trim();
+  var juizoInp = (document.getElementById('anJuizo').value||'').trim();
+  if(nomeInp) d.parte = nomeInp;
+  if(numInp){ d.processos = Array.isArray(d.processos)? d.processos.slice() : []; d.processos[0] = numInp; }
+  if(juizoInp) d.juizo = juizoInp;
+  var testInp = (document.getElementById('anTestemunhas') && document.getElementById('anTestemunhas').value || '').trim();
+  d.testemunhas = testInp;
+  if(AN.fileHash) d.file_hash = AN.fileHash;
+  d.analiseIA = AN.analiseIA || null; /* a análise por IA viaja dentro do jsonb — reabrir nunca reprocessa */
+  AN.dados = d;
+  return {
+    nome_arquivo: AN.arquivo || 'documento.pdf',
+    num_processo: (d.processos && d.processos[0]) || '',
+    parte: d.parte || '', comarca: d.comarca || '', vara: d.juizo || d.vara || '',
+    area: cat.area, categoria_id: cat.id, categoria_nome: cat.nome,
+    confianca: AN.conf || '', paginas: AN.paginas || 0, chars: (AN.texto||'').length,
+    dados: d,
+    minuta_html: document.getElementById('documento-analise').innerHTML,
+    texto_extraido: (AN.texto||'').slice(0,150000)
+  };
+}
+function salvarProcesso(){
+  if(!AN.cat) return;
+  var reg = montarRegistro();
+  if(supaOn()){
+    var filtro = reg.num_processo
+      ? 'num_processo=eq.'+encodeURIComponent(reg.num_processo)
+      : 'nome_arquivo=eq.'+encodeURIComponent(reg.nome_arquivo);
+    supaFetch('processos?'+filtro+'&select=id&limit=1').then(function(rows){
+      if(rows && rows.length){
+        return supaFetch('processos?id=eq.'+rows[0].id, {method:'PATCH', headers:{Prefer:'return=minimal'}, body:JSON.stringify(reg)});
+      }
+      return supaFetch('processos', {method:'POST', headers:{Prefer:'return=minimal'}, body:JSON.stringify(reg)})
+        .catch(function(e){
+          /* corrida entre abas/cliques: o índice único devolve 409 — atualiza em vez de duplicar */
+          if(/409|23505|duplicate/i.test(e.message)){
+            return supaFetch('processos?'+filtro, {method:'PATCH', headers:{Prefer:'return=minimal'}, body:JSON.stringify(reg)});
+          }
+          throw e;
+        });
+    }).then(function(){
+      setSaveStatus('☁️ arquivado no Supabase');
+      carregarBiblioteca();
+    }).catch(function(e){
+      console.warn('Supabase falhou, salvando local:', e.message);
+      var ok = salvarLocal(reg);
+      setSaveStatus(ok ? '💾 salvo localmente (nuvem indisponível)' : '⚠️ falha ao salvar (nuvem indisponível e memória local cheia)');
+      carregarBiblioteca();
+    });
+  } else {
+    var ok = salvarLocal(reg);
+    setSaveStatus(ok ? '💾 salvo neste navegador' : '⚠️ não foi possível salvar (memória local cheia)');
+    carregarBiblioteca();
+  }
+}
+function lerLocal(){
+  try{
+    var l = JSON.parse(localStorage.getItem('processos_local')||'[]');
+    if(!Array.isArray(l)) throw new Error('formato');
+    var mudou = false;
+    l.forEach(function(r){ if(r && !r.lid){ r.lid = 'L'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); mudou = true; } });
+    if(mudou){ try{ localStorage.setItem('processos_local', JSON.stringify(l)); }catch(e){} }
+    return l;
+  }catch(e){
+    try{ localStorage.removeItem('processos_local'); }catch(e2){}
+    return [];
+  }
+}
+function salvarLocal(reg){
+  var lista = lerLocal().filter(function(r){
+    return !((reg.num_processo && r.num_processo===reg.num_processo) || (!reg.num_processo && r.nome_arquivo===reg.nome_arquivo));
+  });
+  var slim = Object.assign({}, reg, {
+    lid: 'L'+Date.now().toString(36)+Math.random().toString(36).slice(2,8),
+    texto_extraido: (reg.texto_extraido||'').slice(0,20000),
+    created_at: new Date().toISOString()
+  });
+  lista.unshift(slim);
+  lista = lista.slice(0,10);
+  try{
+    localStorage.setItem('processos_local', JSON.stringify(lista));
+    return true;
+  }catch(e){
+    /* quota: tenta versão enxuta SEM perder o registro novo */
+    var lite = Object.assign({}, slim, {texto_extraido:'', minuta_html:(slim.minuta_html||'').slice(0,15000)});
+    var l2 = [lite].concat(lista.slice(1,4).map(function(r){ return Object.assign({}, r, {texto_extraido:'', minuta_html:''}); }));
+    try{ localStorage.setItem('processos_local', JSON.stringify(l2)); return true; }
+    catch(e2){ return false; }
+  }
+}
+function rotuloRegistro(r){
+  var dt = r.created_at ? new Date(r.created_at).toLocaleDateString('pt-BR') : '';
+  return (r.num_processo || r.nome_arquivo || 'processo') + ' — ' + (r.parte || 'parte não identificada') + '  [' + (r.area||'?') + '] ' + dt;
+}
+function carregarBiblioteca(){
+  var sel = document.getElementById('selProcessos');
+  atualizarStatusStorage();
+  function preencher(lista, origem){
+    var atual = sel.value;
+    sel.innerHTML = '';
+    /* a barra "Reabrir processo" só aparece quando há algo salvo — senão o upload ocupa a seção inteira */
+    var temItens = !!(lista && lista.length);
+    document.getElementById('colAbrir').style.display = temItens ? '' : 'none';
+    document.getElementById('chooserDiv').style.display = temItens ? '' : 'none';
+    if(!temItens){
+      sel.innerHTML = '<option value="">— nenhum processo arquivado ainda —</option>';
+      return;
+    }
+    var ph = document.createElement('option');
+    ph.value = ''; ph.textContent = '— selecione um processo para abrir na hora —';
+    sel.appendChild(ph);
+    lista.forEach(function(r){
+      var o = document.createElement('option');
+      o.value = origem + ':' + (origem==='cloud' ? r.id : r.lid);
+      o.textContent = rotuloRegistro(r);
+      sel.appendChild(o);
+    });
+    if(atual) sel.value = atual; /* recarregar a lista não muda a seleção visível */
+  }
+  if(supaOn()){
+    supaFetch('processos?select=id,created_at,nome_arquivo,num_processo,parte,area,categoria_nome&order=created_at.desc&limit=100')
+      .then(function(rows){ preencher(rows||[], 'cloud'); })
+      .catch(function(e){
+        console.warn(e.message);
+        preencher(lerLocal(), 'local');
+      });
+  } else {
+    preencher(lerLocal(), 'local');
+  }
+}
+function abrirProcessoSalvo(){
+  var v = document.getElementById('selProcessos').value;
+  if(!v) return; /* placeholder selecionado — nada a abrir */
+  var partes = v.split(':'), origem = partes[0], chave = partes.slice(1).join(':');
+  if(origem === 'cloud'){
+    supaFetch('processos?id=eq.'+encodeURIComponent(chave)+'&select=*')
+      .then(function(rows){
+        if(rows && rows.length) restaurarProcesso(rows[0]);
+        else { alert('Registro não encontrado na nuvem — a lista será recarregada.'); carregarBiblioteca(); }
+      })
+      .catch(function(e){ alert('Erro ao carregar da nuvem: '+e.message); });
+  } else {
+    var reg = lerLocal().find(function(r){ return r.lid === chave; });
+    if(reg) restaurarProcesso(reg); else { alert('Registro local não encontrado — a lista será recarregada.'); carregarBiblioteca(); }
+  }
+}
+function restaurarProcesso(reg){
+  ++analiseSeq; /* invalida qualquer upload em processamento — nada do cliente anterior vaza para esta visão */
+  var d = reg.dados || {};
+  if(!d.flags) d.flags = {};
+  if(!Array.isArray(d.processos) || !d.processos.length) d.processos = reg.num_processo ? [reg.num_processo] : [];
+  if(!d.parte && reg.parte) d.parte = reg.parte;
+  if(!d.comarca && reg.comarca) d.comarca = reg.comarca;
+  if(!d.vara && reg.vara) d.vara = reg.vara;
+  if(!Array.isArray(d.leis)) d.leis = [];
+  if(!Array.isArray(d.valores)) d.valores = [];
+  AN = {
+    texto: reg.texto_extraido || '',
+    norm: normTexto(reg.texto_extraido || ''),
+    cat: KB.find(function(c){ return c.id === reg.categoria_id; }) || KB[0],
+    dados: d,
+    arquivo: reg.nome_arquivo || 'documento.pdf',
+    paginas: reg.paginas || 0,
+    conf: 'arquivada',
+    modo: 'arquivo',
+    minutaArquivada: reg.minuta_html || null,
+    analiseIA: d.analiseIA || null,
+    fileHash: d.file_hash || ''
+  };
+  /* limpa vestígios do cliente/upload anterior na interface */
+  document.getElementById('progresso').style.display = 'none';
+  document.getElementById('pdfProcesso').value = '';
+  document.getElementById('bigdropTitulo').textContent = 'Arraste o PDF do processo aqui ou clique para selecionar';
+  document.getElementById('bigdropSub').textContent = 'Extração e OCR rodam no seu navegador; o texto segue com segurança para a análise por IA do sistema (sigilo profissional preservado). A defesa sai quase pronta, com as nulidades apontadas.';
+  preencherCatSelect();
+  renderAnalise();
+  if(AN.minutaArquivada) document.getElementById('documento-analise').innerHTML = AN.minutaArquivada;
+  if(AN.analiseIA){
+    renderIA();
+    setStatusIA('📂 Análise por IA recuperada do arquivo — nenhum reprocessamento ou custo. Clique em <b>🧠 Reanalisar com IA</b> se quiser refazê-la.');
+  }
+  setSaveStatus('📂 carregado do arquivo — sem reprocessamento');
+}
+
+/* drag & drop no dropzone grande */
+(function(){
+  var dz = document.getElementById('bigdrop');
+  ['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('over'); }); });
+  ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove('over'); }); });
+  dz.addEventListener('drop', function(e){
+    if(e.dataTransfer.files.length){
+      var inp = document.getElementById('pdfProcesso');
+      inp.files = e.dataTransfer.files;
+      iniciarAnalise(inp);
+    }
+  });
+})();
+
+/* advogado padrão para o bloco de assinatura — persiste entre sessões */
+(function(){
+  var adv = document.getElementById('anAdv');
+  try{ adv.value = localStorage.getItem('adv_padrao') || 'Leonardo Fontes Rodrigues — OAB/SP 361.141'; }catch(e){}
+  adv.addEventListener('change', function(){ try{ localStorage.setItem('adv_padrao', adv.value); }catch(e){} });
+})();
+
+if(!sbClient) carregarBiblioteca(); /* sem CDN de auth, resta o acervo local deste navegador */
+</script>
+</body>
+</html>
