@@ -179,6 +179,39 @@ async function usuarioAutorizado(req){
   return user;
 }
 
+/* ── RAG: embedding da consulta + busca semântica de súmulas (pgvector/match_sumulas) ──
+   Complementa o KB curado com súmulas STF/STJ recuperadas por similaridade para o caso.
+   Tolerante a falha: qualquer erro devolve [] e a análise segue só com o KB. */
+async function gerarEmbedding(apiKey, texto){
+  const r = await fetch('https://api.openai.com/v1/embeddings', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
+    body: JSON.stringify({model: 'text-embedding-3-small', input: String(texto || '').slice(0, 8000)})
+  });
+  if (!r.ok) throw new Error('embedding (' + r.status + ')');
+  const d = await r.json();
+  return d.data?.[0]?.embedding || null;
+}
+
+async function buscarSumulas(apiKey, consulta, opts){
+  const {matchCount = 12, minSim = 0.38, limite = 6} = opts || {};
+  try {
+    const emb = await gerarEmbedding(apiKey, consulta);
+    if (!emb) return [];
+    const r = await fetch(`${SUPA_URL}/rest/v1/rpc/match_sumulas`, {
+      method: 'POST',
+      headers: {apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json'},
+      body: JSON.stringify({query_embedding: emb, match_count: matchCount})
+    });
+    if (!r.ok) return [];
+    const linhas = await r.json();
+    return (Array.isArray(linhas) ? linhas : [])
+      .filter(s => (s.similaridade || 0) >= minSim)
+      .slice(0, limite)
+      .map(s => ({ref: `${s.tribunal}, Súmula ${s.numero}`, tese: s.texto, sim: Number((s.similaridade || 0).toFixed(3))}));
+  } catch (e) { return []; }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({sucesso: false, erro: 'Método não permitido'});
 
@@ -243,9 +276,19 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
     /* ── ÁREA: a IA (que leu o documento) manda na categoria; corrige o palpite do classificador local ── */
     const catSugerida = estrutura && KB.find(c => c.id === estrutura.categoriaSugerida);
     const cat = catSugerida || catCliente;
-    const jurisPermitidas = cat.juris.map(j => j.ref);
     const criminal = cat.area === 'Criminal';
     const categoriaCorrigida = (cat.id !== categoriaId) ? {id: cat.id, nome: NOMES[cat.id] || cat.id, area: cat.area, peca: cat.peca} : null;
+
+    /* ── RAG: recupera súmulas por similaridade semântica ao caso (complementa o KB curado) ── */
+    const consultaRag = `${cat.area}. ${[
+      estrutura?.tipificacao_ou_pedido,
+      estrutura?.conduta_narrada,
+      Array.isArray(estrutura?.observacoes) ? estrutura.observacoes.join('; ') : ''
+    ].filter(Boolean).join('. ')}`.slice(0, 3000);
+    const sumulasRag = await buscarSumulas(apiKey, consultaRag, {minSim: 0.38, limite: 6});
+
+    /* base de jurisprudência auditada para ESTE pedido = KB curado + súmulas recuperadas */
+    const jurisPermitidas = new Set([...cat.juris.map(j => j.ref), ...sumulasRag.map(s => s.ref)]);
 
     /* ── PASSE B: nulidades + peça completa (modelo forte) ─────────────────── */
     const promptB = `Você é um advogado ${criminal ? 'criminalista' : 'civilista'} experiente redigindo uma ${cat.peca}. Seu cliente é a parte defendida. Trabalhe SOMENTE com o que consta do texto do processo — nada de fatos inventados.
@@ -259,8 +302,9 @@ ${JSON.stringify(estrutura, null, 1).slice(0, 6000)}
 CHECKLIST OBRIGATÓRIO DE NULIDADES/IRREGULARIDADES — examine item por item:
 ${criminal ? CHECKLIST_CRIMINAL : CHECKLIST_CIVEL}
 
-JURISPRUDÊNCIA PERMITIDA (você SÓ pode citar estes precedentes, copiando a referência EXATAMENTE como está — qualquer outro será descartado):
+JURISPRUDÊNCIA PERMITIDA (você SÓ pode citar estes precedentes/súmulas, copiando a referência EXATAMENTE como está — qualquer outro será descartado):
 ${cat.juris.map((j, i) => `${i+1}. ${j.ref} — ${j.tese}`).join('\n')}
+${sumulasRag.length ? `\nSÚMULAS RECUPERADAS PARA ESTE CASO (por similaridade semântica — use SOMENTE as que realmente se aplicam ao fato concreto dos autos; copie a referência EXATAMENTE):\n${sumulasRag.map((s, i) => `${cat.juris.length + i + 1}. ${s.ref} — ${s.tese}`).join('\n')}\n` : ''}
 
 ${cat.id === 'crim-trafico' ? `ESTRATÉGIA ESPECÍFICA PARA TRÁFICO (obrigatória):
 - Pedido principal: rejeição da denúncia/absolvição por falta de provas (conforme as nulidades encontradas).
@@ -293,7 +337,7 @@ Responda APENAS neste formato JSON:
     ['preliminares', 'merito'].forEach(campo => {
       if (Array.isArray(peca[campo])) peca[campo].forEach(t => {
         if (!t.jurisprudencia) return;
-        if (!jurisPermitidas.includes(t.jurisprudencia)) {
+        if (!jurisPermitidas.has(t.jurisprudencia)) {
           avisos.push(`⚠️ Jurisprudência fora da base auditada removida do tópico "${t.titulo}": ${t.jurisprudencia}`);
           t.jurisprudencia = null;
         } else if (jurisUsadas.has(t.jurisprudencia)) {
@@ -305,7 +349,7 @@ Responda APENAS neste formato JSON:
     });
     peca.avisos = avisos;
 
-    return res.status(200).json({sucesso: true, estrutura, categoriaCorrigida, ...peca});
+    return res.status(200).json({sucesso: true, estrutura, categoriaCorrigida, sumulas_rag: sumulasRag, ...peca});
   } catch (err) {
     console.error('Erro na análise:', err);
     return res.status(err.status === 429 ? 429 : 500).json({sucesso: false, erro: err.message});
