@@ -59,7 +59,7 @@ Havia um harness que carrega o handler real interceptando só a auth. Reconstru�
 `{texto, categoriaId, dados}` de um processo (pegue `texto_extraido` da tabela `processos`).
 
 ## Pendências / próximas frentes
-- [ ] **Aposentar o projeto Vercel `resultadospedro`** (dashboard Vercel → Settings → Delete).
+- [x] ~~Aposentar o projeto Vercel `resultadospedro`~~ — FEITO pelo Gustavo.
 - [ ] Front `/defesaprevia` ainda **não exibe** `sumulas_rag` (mostrar as súmulas recuperadas na UI).
 - [ ] **Enriquecer o corpus**: Súmulas Vinculantes do STF + taggear `area` das súmulas.
 - [ ] **Redesign visual direção 1a** (editorial escuro) — referência em

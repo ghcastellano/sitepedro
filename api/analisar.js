@@ -251,6 +251,25 @@ async function buscarAprendizados(token, categoriaId){
   } catch (e) { return []; }
 }
 
+/* rate limit: nº máximo de análises por usuário por hora (contra abuso e custo OpenAI).
+   Conta os usos da última hora (RLS escopa ao próprio usuário) e registra o uso atual.
+   Fail-open: se o Supabase falhar, não bloqueia (não travar o advogado por infra). */
+const RATE_LIMIT_HORA = parseInt(process.env.RATE_LIMIT_HORA || '40', 10);
+async function checarLimite(token){
+  if (!token) return { ok: true };
+  try {
+    const desde = new Date(Date.now() - 3600 * 1000).toISOString();
+    const r = await fetch(`${SUPA_URL}/rest/v1/uso_ia?select=id&criado_em=gte.${encodeURIComponent(desde)}`,
+      { headers: { apikey: SUPA_KEY, Authorization: `Bearer ${token}`, Prefer: 'count=exact', Range: '0-0' } });
+    const total = parseInt(((r.headers.get('content-range') || '0/0').split('/')[1]) || '0', 10) || 0;
+    if (total >= RATE_LIMIT_HORA) return { ok: false, total };
+    await fetch(`${SUPA_URL}/rest/v1/uso_ia`, { method: 'POST',
+      headers: { apikey: SUPA_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: '{}' });
+    return { ok: true, total };
+  } catch (e) { return { ok: true }; }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({sucesso: false, erro: 'Método não permitido'});
 
@@ -262,7 +281,12 @@ module.exports = async (req, res) => {
   const user = await usuarioAutorizado(req).catch(() => null);
   if (!user) return res.status(401).json({sucesso: false, erro: 'Acesso restrito — faça login para usar a análise por IA'});
 
+  const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+  const limite = await checarLimite(token);
+  if (!limite.ok) return res.status(429).json({sucesso: false, erro: `Limite de uso atingido (${RATE_LIMIT_HORA} análises por hora). Aguarde alguns minutos e tente novamente.`});
+
   if (!texto || !categoriaId) return res.status(400).json({sucesso: false, erro: 'Campos obrigatórios ausentes'});
+  if (String(texto).length > 800000) return res.status(413).json({sucesso: false, erro: 'Documento grande demais para uma única análise. Reduza o PDF ou envie em partes.'});
 
   const catCliente = KB.find(c => c.id === categoriaId);
   if (!catCliente) return res.status(400).json({sucesso: false, erro: 'Categoria não reconhecida'});
@@ -327,8 +351,7 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
     const sumulasRag = await buscarSumulas(apiKey, consultaRag, {minSim: 0.38, limite: 6});
 
     /* aprendizado: correções que o advogado ensinou para esta categoria (viram regras no prompt) */
-    const tokenUser = (req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
-    const aprendizados = await buscarAprendizados(tokenUser, cat.id);
+    const aprendizados = await buscarAprendizados(token, cat.id);
     const blocoAprendizados = aprendizados.length
       ? `CORREÇÕES E PREFERÊNCIAS QUE O ADVOGADO TE ENSINOU para esta categoria (regras dele — têm PRIORIDADE, siga à risca):\n${aprendizados.map((a, i) => `${i+1}. ${a}`).join('\n')}\n\n`
       : '';

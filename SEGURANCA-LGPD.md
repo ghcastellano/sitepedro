@@ -23,10 +23,13 @@ criminais, com nomes/CPF de clientes e terceiros), então isto importa de verdad
    indefinidamente. Definir: por quanto tempo guardar, rotina de expurgo, e avaliar guardar só o
    necessário (metadados + minuta) ou cifrar. Posso implementar quando você decidir a política.
 
+## ✅ Também já corrigido (parte 3)
+- **Rate limit na API de IA — FEITO.** Máximo de 40 análises/hora por usuário (tabela
+  `uso_ia` com RLS; configurável por `RATE_LIMIT_HORA`). Protege contra abuso e custo OpenAI.
+  Fail-open: se o banco falhar, não trava o advogado.
+- **Guardrail de tamanho de payload** (rejeita documento > 800 mil caracteres).
+
 ## 🔧 Melhorias técnicas recomendadas (posso fazer quando quiser)
-- **Limite de uso (rate limit) na API de IA.** Hoje uma conta válida pode disparar chamadas
-  ilimitadas ao gpt-4o (custo). Sugiro N análises/hora por usuário. (Precisa de um contador —
-  Vercel KV/Upstash.)
 - **CSP + integridade dos scripts (SRI).** O app carrega bibliotecas de CDNs externos sem trava.
   Adicionar Content-Security-Policy e `integrity` nos scripts, ou auto-hospedar.
 - **Sanitizar a minuta ao reabrir** (DOMPurify) — higiene contra HTML malicioso salvo (o risco
