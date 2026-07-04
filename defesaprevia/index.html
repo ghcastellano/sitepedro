@@ -8,23 +8,26 @@
 <meta name="googlebot" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Design system Pedro Henrik — dark cinematográfico editorial */
-    --black:#0a0a0b; --coal:#101012; --panel:#141416; --panel2:#191a1d;
-    --line:rgba(226,202,148,.12); --line-strong:rgba(226,202,148,.28);
-    --gold:#c9a96a; --gold-bright:#e3c888; --cream:#f2ede3;
-    --muted:#c2bcb1; --dim:#938d82; --soft:#d6d0c5;
-    --ok:#8fce9f; --ok-bg:rgba(143,206,159,.10); --ok-line:rgba(143,206,159,.5);
-    --warn:#e0b673; --warn-bg:rgba(224,182,115,.10); --warn-line:rgba(224,182,115,.5);
-    --danger:#e0938c; --danger-bg:rgba(224,147,140,.10); --danger-line:rgba(224,147,140,.5);
+    /* Design system Pedro Henrik — direção 1a: editorial escuro (quente) */
+    --black:#14120d; --coal:#17150f; --panel:#1a1712; --panel2:#211d16;
+    --line:#2b271f; --line-strong:#3a3428;
+    --gold:#c9a76a; --gold-bright:#e0b46a; --cream:#ece6d8;
+    --muted:#ada492; --dim:#8f887a; --soft:#c3bcac;
+    --ok:#7fae7a; --ok-bg:rgba(127,174,122,.10); --ok-line:rgba(127,174,122,.45);
+    --warn:#e0b46a; --warn-bg:rgba(201,167,106,.10); --warn-line:rgba(201,167,106,.45);
+    --danger:#d1544b; --danger-bg:rgba(209,84,75,.10); --danger-line:rgba(209,84,75,.45);
     /* aliases legados usados em estilos inline */
     --navy:var(--cream); --navy2:var(--gold-bright);
-    --font-display:"Cormorant Garamond",Georgia,serif;
-    --font-body:"Inter",-apple-system,system-ui,sans-serif;
+    --font-display:"Newsreader",Georgia,serif;
+    --font-body:"Public Sans",-apple-system,system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
     --ease:cubic-bezier(.22,1,.36,1);
   }
+  /* labels/eyebrows/badges/refs em mono — assinatura da direção 1a */
+  .overline,header .over,.card .k,.switcher label,.tag,.juris .ref,label,nav a{font-family:var(--font-mono)}
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:var(--font-body);font-weight:400;background:var(--black);color:var(--cream);line-height:1.65;letter-spacing:.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -1045,6 +1048,15 @@ function renderIA(){
     html += '<div class="achado critico"><div class="ico">⚠️</div><div class="tx">'+esc(a)+'</div></div>';
   });
   if(!html) html = '<div class="achado atencao"><div class="ico">🔎</div><div class="tx">A IA não apontou nulidades com base concreta neste documento — leitura integral pelo advogado segue indispensável.</div></div>';
+  /* súmulas recuperadas por busca semântica (RAG/pgvector) — transparência da base usada na peça */
+  var sr = r.sumulas_rag || [];
+  if(sr.length){
+    html += '<div style="font-family:var(--font-mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:1.8rem 0 .8rem">Súmulas recuperadas para o caso · busca semântica</div>'
+         +  '<div style="font-size:.82rem;color:var(--dim);margin-bottom:.9rem">Súmulas STF/STJ mais próximas dos fatos, recuperadas do banco vetorial para complementar a base curada. A IA cita apenas as que realmente se aplicam.</div>';
+    sr.forEach(function(s){
+      html += '<div class="juris"><div class="ref">'+esc(s.ref)+' · '+Math.round((s.sim||0)*100)+'% de similaridade</div><div class="txt">'+esc(s.tese||'')+'</div></div>';
+    });
+  }
   document.getElementById('nulidadesIA').innerHTML = html;
   var nPrel = (r.preliminares||[]).length;
   setStatusIA('✅ Análise minuciosa concluída: <b>'+nPrel+' preliminar(es)/nulidade(s)</b> com base concreta no documento. A peça abaixo já está montada — revisar antes de protocolar.', 'var(--ok)');
