@@ -98,10 +98,11 @@
   .switcher{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem}
   .switcher label{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.3rem}
   .switcher .sw-open{flex:1;min-width:220px}
-  .switcher strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--cream);display:block;line-height:1.3}
+  .switcher strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--cream);display:block;line-height:1.3;overflow-wrap:anywhere}
   .switcher .sw-actions{display:flex;gap:.6rem;flex-wrap:wrap}
 
-  select,input[type=text],input[type=email],input[type=password]{width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);transition:border-color .3s}
+  select,input[type=text],input[type=email],input[type=password]{width:100%;max-width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);transition:border-color .3s}
+  select{text-overflow:ellipsis}
   select:focus,input:focus,textarea:focus{outline:none;border-color:var(--gold)}
   select option{background:var(--panel2);color:var(--cream)}
 
@@ -111,13 +112,15 @@
   .progresso .bar>div{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .3s}
 
   .confbox{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;background:rgba(201,169,106,.05);border:1px solid var(--line-strong);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem;font-size:.92rem}
-  .confbox select{width:auto;min-width:230px}
+  .confbox>span{min-width:0;max-width:100%}
+  .confbox .ajustar{display:flex;align-items:center;gap:.5rem;margin-left:auto;min-width:0;max-width:100%}
+  .confbox select{width:auto;min-width:0;max-width:100%;flex:0 1 260px}
 
   /* flex-wrap que faz cada linha PREENCHER a largura — sem coluna vazia ao lado do último card */
   .cards{display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:1.8rem}
   .card{background:var(--panel);padding:1.15rem 1.3rem;flex:1 1 220px;min-width:200px}
   .card .k{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.45rem;opacity:.85}
-  .card .v{font-weight:500;color:var(--cream);font-size:.98rem;line-height:1.4}
+  .card .v{font-weight:500;color:var(--cream);font-size:.98rem;line-height:1.4;overflow-wrap:anywhere}
   .card .v small{font-weight:400;color:var(--muted);display:block;font-size:.82rem;margin-top:.25rem;line-height:1.45}
 
   .tag{display:inline-block;padding:.15rem .7rem;border:1px solid var(--line-strong);border-radius:2px;font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
@@ -177,7 +180,16 @@
     .chooser__div{flex-direction:row;padding:.4rem 0}
     .chooser__div::before,.chooser__div::after{width:auto;height:1px;flex:1}
   }
-  @media(max-width:640px){.paper{padding:34px 24px}.grid2{grid-template-columns:1fr}}
+  @media(max-width:640px){
+    .paper{padding:34px 24px}.grid2{grid-template-columns:1fr}
+    /* combobox e barras não podem estourar a largura no mobile */
+    .confbox{flex-direction:column;align-items:stretch}
+    .confbox .ajustar{margin-left:0;flex-wrap:wrap}
+    .confbox select,.confbox .ajustar{flex:1 1 100%;width:100%}
+    .abrir-bar select{flex:1 1 100%;min-width:0}
+    .switcher .sw-actions{width:100%}
+    .switcher .sw-actions button{flex:1 1 auto;justify-content:center}
+  }
   @media print{
     header,nav,.toolbar,.confbox,.conta-bar,.chooser,.switcher,#painelIA,#achados,#jurisCategoria,.note,footer,#loginGate{display:none!important}
     .panel,.cards{display:none!important}
@@ -260,12 +272,13 @@
         </div>
         <div class="sw-actions">
           <button class="btn-gold" onclick="novoProcesso()">＋ Analisar outro processo</button>
+          <button class="btn-ghost" id="btnExcluir" onclick="excluirProcessoAberto()" style="display:none">🗑️ Excluir do arquivo</button>
         </div>
       </div>
 
       <div class="confbox">
         <span>Categoria identificada: <strong id="catDetectada" style="color:var(--gold-bright)"></strong> <span id="catConfianca" class="tag blue"></span> <span id="saveStatus" class="tag green" style="display:none"></span></span>
-        <span style="margin-left:auto">Ajustar: <select id="catManual" onchange="reclassificar()"></select></span>
+        <span class="ajustar">Ajustar: <select id="catManual" onchange="reclassificar()"></select></span>
       </div>
 
       <div class="cards" id="cardsAnalise"></div>
@@ -310,7 +323,7 @@
         <button class="btn-gold" onclick="baixarPdf()">⬇ Baixar PDF (pronto para protocolo)</button>
         <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (Word)</button>
         <button class="btn-ghost" onclick="copiarTexto('documento-analise')">📋 Copiar texto</button>
-        <button class="btn-navy" onclick="salvarProcesso()">💾 Arquivar análise</button>
+        <button class="btn-navy" onclick="salvarProcesso(true)">💾 Arquivar análise</button>
       </div>
       <div class="note">⚠️ Análise e minuta geradas automaticamente a partir do texto extraído do PDF. <strong>Revisão obrigatória pelo advogado responsável antes do protocolo.</strong></div>
       <div class="paper" id="documento-analise"></div>
@@ -615,7 +628,7 @@ function iniciarAnalise(input){
   if(!input.files || !input.files[0]) return;
   var f = input.files[0];
   var gen = ++analiseSeq; /* qualquer análise anterior em andamento é invalidada */
-  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:f.name, paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:f.name, paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'', savedRef:null };
   ['anNome','anNum','anJuizo'].forEach(function(id){ document.getElementById(id).value=''; });
   var el = document.getElementById('saveStatus'); el.style.display='none';
   var prog = document.getElementById('progresso');
@@ -878,6 +891,8 @@ function renderAnalise(){
   document.getElementById('anJuizo').value = d.juizo || ((d.vara? d.vara : '') + (d.comarca ? (d.vara?' — ':'') + 'Comarca de '+d.comarca : ''));
   if(document.getElementById('anTestemunhas')) document.getElementById('anTestemunhas').value = d.testemunhas || '';
   document.getElementById('swNome').textContent = (d.parte || (d.processos && d.processos[0]) || AN.arquivo || 'Processo');
+  var btnEx = document.getElementById('btnExcluir');
+  if(btnEx) btnEx.style.display = AN.savedRef ? 'inline-flex' : 'none';
   atualizarMinuta();
   if(!AN.analiseIA){
     document.getElementById('painelIA').style.display='none';
@@ -899,7 +914,7 @@ function mostrarChooser(mostrar){
 }
 function novoProcesso(){
   ++analiseSeq; /* invalida qualquer processamento em andamento */
-  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:'', paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:'', paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'', savedRef:null };
   document.getElementById('pdfProcesso').value = '';
   document.getElementById('selProcessos').value = '';
   document.getElementById('bigdropTitulo').textContent = 'Arraste o PDF aqui ou clique para selecionar';
@@ -1389,8 +1404,13 @@ function montarRegistro(){
     texto_extraido: (AN.texto||'').slice(0,150000)
   };
 }
-function salvarProcesso(){
+function salvarProcesso(manual){
   if(!AN.cat) return;
+  /* guardrail: não arquiva documento que a IA reprovou (nota fiscal, recibo, doc avulso) */
+  if(AN.docRecusado){
+    if(manual) alert('Este arquivo não é um processo judicial e não pode ser arquivado. Envie a denúncia, a petição inicial, o inquérito ou os autos do processo.');
+    return;
+  }
   var reg = montarRegistro();
   if(supaOn()){
     var filtro = reg.num_processo
@@ -1535,7 +1555,8 @@ function restaurarProcesso(reg){
     modo: 'arquivo',
     minutaArquivada: reg.minuta_html || null,
     analiseIA: d.analiseIA || null,
-    fileHash: d.file_hash || ''
+    fileHash: d.file_hash || '',
+    savedRef: reg.id ? {origem:'cloud', chave:reg.id} : (reg.lid ? {origem:'local', chave:reg.lid} : null)
   };
   /* limpa vestígios do cliente/upload anterior na interface */
   document.getElementById('progresso').style.display = 'none';
@@ -1550,6 +1571,39 @@ function restaurarProcesso(reg){
     setStatusIA('📂 Análise por IA recuperada do arquivo — nenhum reprocessamento ou custo. Clique em <b>🧠 Reanalisar com IA</b> se quiser refazê-la.');
   }
   setSaveStatus('📂 carregado do arquivo — sem reprocessamento');
+}
+
+/* ═══════════ EXCLUIR registro do arquivo (nuvem ou local) ═══════════ */
+function excluirProcessoAberto(){
+  var ref = AN.savedRef;
+  if(!ref || !ref.chave){ alert('Este processo ainda não está arquivado — nada a excluir.'); return; }
+  var rotulo = (document.getElementById('swNome').textContent || '').trim() || (AN.arquivo || 'este registro');
+  if(!confirm('Excluir definitivamente "'+rotulo+'" do arquivo?\n\nEsta ação não pode ser desfeita.')) return;
+  var btn = document.getElementById('btnExcluir');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ Excluindo…'; }
+  function restaurarBotao(){ if(btn){ btn.disabled = false; btn.textContent = '🗑️ Excluir do arquivo'; } }
+  if(ref.origem === 'cloud'){
+    supaFetch('processos?id=eq.'+encodeURIComponent(ref.chave), {method:'DELETE', headers:{Prefer:'return=minimal'}})
+      .then(function(){ excluiuOk(rotulo); })
+      .catch(function(e){
+        restaurarBotao();
+        alert('Não foi possível excluir da nuvem: '+e.message+'\n\nSe o erro persistir, exclua o registro pelo painel do Supabase (tabela "processos").');
+      });
+  } else {
+    try{
+      var lista = lerLocal().filter(function(r){ return r.lid !== ref.chave; });
+      localStorage.setItem('processos_local', JSON.stringify(lista));
+      excluiuOk(rotulo);
+    }catch(e){ restaurarBotao(); alert('Não foi possível excluir localmente: '+e.message); }
+  }
+}
+function excluiuOk(rotulo){
+  AN.savedRef = null;
+  var btn = document.getElementById('btnExcluir');
+  if(btn){ btn.disabled = false; btn.textContent = '🗑️ Excluir do arquivo'; }
+  carregarBiblioteca();
+  novoProcesso();
+  alert('✅ Registro excluído do arquivo: '+(rotulo||''));
 }
 
 /* drag & drop no dropzone grande */
