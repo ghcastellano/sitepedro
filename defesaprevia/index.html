@@ -107,10 +107,11 @@
   .switcher{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem}
   .switcher label{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.3rem}
   .switcher .sw-open{flex:1;min-width:220px}
-  .switcher strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--cream);display:block;line-height:1.3}
+  .switcher strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--cream);display:block;line-height:1.3;overflow-wrap:anywhere}
   .switcher .sw-actions{display:flex;gap:.6rem;flex-wrap:wrap}
 
-  select,input[type=text],input[type=email],input[type=password]{width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);transition:border-color .3s}
+  select,input[type=text],input[type=email],input[type=password]{width:100%;max-width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);transition:border-color .3s}
+  select{text-overflow:ellipsis}
   select:focus,input:focus,textarea:focus{outline:none;border-color:var(--gold)}
   select option{background:var(--panel2);color:var(--cream)}
 
@@ -119,14 +120,38 @@
   .progresso .bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:.8rem}
   .progresso .bar>div{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));transition:width .3s}
 
+  /* ---------- verificação do documento (antes de exibir qualquer campo) ---------- */
+  .validando{display:none;gap:1.1rem;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1.5rem 1.5rem;margin:1.4rem 0}
+  .validando .spinner{flex:none;width:28px;height:28px;margin-top:2px;border-radius:50%;border:3px solid var(--line-strong);border-top-color:var(--gold);animation:spin .9s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .validando .vd-text{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+  .validando .vd-text strong{color:var(--gold-bright);font-weight:500;font-size:1rem}
+  .validando .vd-text span{color:var(--muted);font-size:.9rem;line-height:1.55}
+
+  /* ---------- documento recusado: não é processo (nenhum campo preenchido) ---------- */
+  .rejeitado{display:none;flex-direction:column;align-items:center;text-align:center;gap:.55rem;
+    background:radial-gradient(ellipse 90% 75% at 50% 0%,rgba(224,147,140,.12),transparent 62%),var(--panel);
+    border:1px solid var(--danger-line);border-radius:8px;padding:2.8rem 1.5rem 2.4rem;margin:1.4rem 0}
+  .rejeitado .rj-icon{font-size:2.8rem;line-height:1}
+  .rejeitado .rj-title{font-family:var(--font-display);font-weight:600;font-size:clamp(1.45rem,5vw,2rem);color:var(--cream);line-height:1.15;margin:0;max-width:22ch}
+  .rejeitado .rj-tipo{color:var(--danger);font-size:1rem;margin:.1rem 0;line-height:1.5}
+  .rejeitado .rj-tipo strong{color:var(--gold-bright)}
+  .rejeitado .rj-desc{color:var(--muted);font-size:.92rem;line-height:1.65;max-width:36rem;margin:.3rem auto 1.3rem}
+  .rejeitado .rj-desc strong{color:var(--soft)}
+  .rejeitado .rj-acoes{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+  .rejeitado .rj-acoes .btn-gold{padding:.9rem 1.9rem}
+  @media(max-width:640px){.rejeitado .rj-acoes{flex-direction:column;align-items:stretch;width:100%;max-width:22rem}}
+
   .confbox{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;background:rgba(201,169,106,.05);border:1px solid var(--line-strong);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.6rem;font-size:.92rem}
-  .confbox select{width:auto;min-width:230px}
+  .confbox>span{min-width:0;max-width:100%}
+  .confbox .ajustar{display:flex;align-items:center;gap:.5rem;margin-left:auto;min-width:0;max-width:100%}
+  .confbox select{width:auto;min-width:0;max-width:100%;flex:0 1 260px}
 
   /* flex-wrap que faz cada linha PREENCHER a largura — sem coluna vazia ao lado do último card */
   .cards{display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:1.8rem}
   .card{background:var(--panel);padding:1.15rem 1.3rem;flex:1 1 220px;min-width:200px}
   .card .k{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.45rem;opacity:.85}
-  .card .v{font-weight:500;color:var(--cream);font-size:.98rem;line-height:1.4}
+  .card .v{font-weight:500;color:var(--cream);font-size:.98rem;line-height:1.4;overflow-wrap:anywhere}
   .card .v small{font-weight:400;color:var(--muted);display:block;font-size:.82rem;margin-top:.25rem;line-height:1.45}
 
   .tag{display:inline-block;padding:.15rem .7rem;border:1px solid var(--line-strong);border-radius:2px;font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
@@ -186,7 +211,16 @@
     .chooser__div{flex-direction:row;padding:.4rem 0}
     .chooser__div::before,.chooser__div::after{width:auto;height:1px;flex:1}
   }
-  @media(max-width:640px){.paper{padding:34px 24px}.grid2{grid-template-columns:1fr}}
+  @media(max-width:640px){
+    .paper{padding:34px 24px}.grid2{grid-template-columns:1fr}
+    /* combobox e barras não podem estourar a largura no mobile */
+    .confbox{flex-direction:column;align-items:stretch}
+    .confbox .ajustar{margin-left:0;flex-wrap:wrap}
+    .confbox select,.confbox .ajustar{flex:1 1 100%;width:100%}
+    .abrir-bar select{flex:1 1 100%;min-width:0}
+    .switcher .sw-actions{width:100%}
+    .switcher .sw-actions button{flex:1 1 auto;justify-content:center}
+  }
   @media print{
     header,nav,.toolbar,.confbox,.conta-bar,.chooser,.switcher,#painelIA,#achados,#jurisCategoria,.note,footer,#loginGate{display:none!important}
     .panel,.cards{display:none!important}
@@ -260,6 +294,31 @@
       <div class="bar"><div id="progBarra"></div></div>
     </div>
 
+    <!-- VERIFICAÇÃO: valida se é processo antes de exibir qualquer campo -->
+    <div class="validando" id="validando">
+      <div class="spinner" id="validandoSpin"></div>
+      <div class="vd-text">
+        <strong id="validandoTitulo">Analisando o documento…</strong>
+        <span id="validandoSub">Estamos lendo os autos e confirmando que se trata de um processo judicial antes de gerar qualquer análise. Isso pode levar até um minuto.</span>
+        <div id="validandoAcoes" style="display:none;margin-top:.8rem">
+          <button class="btn-navy" onclick="revalidar()">↻ Tentar novamente</button>
+          <button class="btn-ghost" onclick="novoProcesso()">Enviar outro arquivo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECUSA: documento não é um processo judicial — nenhum campo é preenchido -->
+    <div class="rejeitado" id="docRejeitado">
+      <div class="rj-icon">⛔</div>
+      <h3 class="rj-title">Este arquivo não é um processo judicial</h3>
+      <p class="rj-tipo">Identificamos o documento como <strong id="rjTipo">documento avulso</strong>.</p>
+      <p class="rj-desc">Nenhuma análise foi gerada e nenhum campo foi preenchido. Para produzir a defesa, envie a <strong>denúncia</strong>, a <strong>petição inicial</strong>, o <strong>inquérito</strong> ou os <strong>autos do processo</strong> — não uma nota fiscal, recibo, ingresso ou documento avulso.</p>
+      <div class="rj-acoes">
+        <button class="btn-gold" onclick="novoProcesso()">＋ Enviar outro arquivo</button>
+        <button class="btn-ghost" id="rjForcar" onclick="forcarAnalise()" style="display:none">Mesmo assim, analisar com IA</button>
+      </div>
+    </div>
+
     <div id="resultadoAnalise" style="display:none">
       <!-- BARRA COMPACTA: processo aberto + trocar/novo -->
       <div class="switcher">
@@ -269,12 +328,13 @@
         </div>
         <div class="sw-actions">
           <button class="btn-gold" onclick="novoProcesso()">＋ Analisar outro processo</button>
+          <button class="btn-ghost" id="btnExcluir" onclick="excluirProcessoAberto()" style="display:none">🗑️ Excluir do arquivo</button>
         </div>
       </div>
 
       <div class="confbox">
         <span>Categoria identificada: <strong id="catDetectada" style="color:var(--gold-bright)"></strong> <span id="catConfianca" class="tag blue"></span> <span id="saveStatus" class="tag green" style="display:none"></span></span>
-        <span style="margin-left:auto">Ajustar: <select id="catManual" onchange="reclassificar()"></select></span>
+        <span class="ajustar">Ajustar: <select id="catManual" onchange="reclassificar()"></select></span>
       </div>
 
       <div class="cards" id="cardsAnalise"></div>
@@ -331,7 +391,7 @@
         <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (Word)</button>
         <button class="btn-ghost" id="btnEditarPeca" onclick="toggleEditarPeca()">✏️ Editar peça</button>
         <button class="btn-ghost" onclick="copiarTexto('documento-analise')">📋 Copiar texto</button>
-        <button class="btn-navy" onclick="salvarProcesso()">💾 Arquivar análise</button>
+        <button class="btn-navy" onclick="salvarProcesso(true)">💾 Arquivar análise</button>
       </div>
       <div class="note">⚠️ Análise e minuta geradas automaticamente a partir do texto extraído do PDF. <strong>Revisão obrigatória pelo advogado responsável antes do protocolo.</strong></div>
       <div class="paper" id="documento-analise"></div>
@@ -636,13 +696,15 @@ function iniciarAnalise(input){
   if(!input.files || !input.files[0]) return;
   var f = input.files[0];
   var gen = ++analiseSeq; /* qualquer análise anterior em andamento é invalidada */
-  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:f.name, paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:f.name, paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'', savedRef:null };
   ['anNome','anNum','anJuizo'].forEach(function(id){ document.getElementById(id).value=''; });
   var el = document.getElementById('saveStatus'); el.style.display='none';
   var prog = document.getElementById('progresso');
   var barra = document.getElementById('progBarra');
   var ptxt = document.getElementById('progTexto');
   document.getElementById('chooser').style.display='none'; /* sai da tela de escolha; volta via "Novo processo" */
+  document.getElementById('validando').style.display='none';
+  document.getElementById('docRejeitado').style.display='none';
   prog.style.display='block'; barra.style.width='4%';
   ptxt.textContent = 'Abrindo "'+f.name+'"…';
   document.getElementById('resultadoAnalise').style.display='none';
@@ -835,10 +897,34 @@ function preencherCatSelect(){
   KB.forEach(function(c){ var o=document.createElement('option'); o.value=c.id; o.textContent='['+c.area+'] '+c.nome; if(AN.cat && c.id===AN.cat.id)o.selected=true; sel.appendChild(o); });
 }
 
+/* ═══════════ FILTRO POR CÓDIGO: é um processo judicial? (sem gastar IA) ═══════════
+   Rejeita documentos avulsos (nota fiscal, ingresso, recibo…) ANTES de chamar a IA.
+   É deliberadamente LENIENTE: na dúvida, deixa passar para a IA decidir (que tem a
+   própria triagem). Só barra o que claramente não tem cara de processo. */
+var TERMOS_PROCESSO = ['autos','vara ','comarca','juízo','juiz de direito','juiz(a)','meritíssimo','mm.','ministério público','promotor','denúncia','queixa-crime','petição inicial','inquérito','flagrante',' réu',' ré ','requerente','requerido','exequente','executado','contestação','audiência','sentença','despacho','citação','intimação','procurador','oab','recorrente','apelação','habeas corpus','processo penal','processo civil','ação penal','ação de','poder judiciário','tribunal de justiça','tribunal','foro ','vara cível','vara criminal','delegacia','boletim de ocorrência','distribuição','autor da ação','em face de','nos autos','art.','artigo','§','lei nº','lei n°','cpp','cpc','código penal'];
+var TERMOS_NAO_PROCESSO = [
+  {re:/nota fiscal|nfs-?e|\bnfe\b|danfe|cupom fiscal|iss(qn)?\b|prestador de servi|tomador de servi|discrimina[çc][ãa]o dos servi|c[óo]digo de verifica/, tipo:'nota fiscal / documento fiscal'},
+  {re:/ingresso|\bticket\b|admission|mus[ée]e|museum|bilhete de entrada|entrada para/, tipo:'ingresso / bilhete de entrada'},
+  {re:/boarding pass|cart[ãa]o de embarque|localizador de reserva/, tipo:'cartão de embarque / reserva'},
+  {re:/\bboleto\b|linha digit[áa]vel|c[óo]digo de barras|fatura\b/, tipo:'boleto / fatura'},
+  {re:/curr[íi]culo|curriculum vitae|\bcv\b/, tipo:'currículo'}
+];
+function avaliarDocumento(texto){
+  var t = (texto||'').toLowerCase();
+  var temCNJ = /\d{7}[-\s]?\d{2}\.?\s?\d{4}\.?\s?\d\.?\s?\d{2}\.?\s?\d{4}/.test(texto||'');
+  var scoreProc = 0;
+  TERMOS_PROCESSO.forEach(function(k){ if(t.indexOf(k) >= 0) scoreProc++; });
+  var naoMatch = null;
+  for(var i=0;i<TERMOS_NAO_PROCESSO.length;i++){ if(TERMOS_NAO_PROCESSO[i].re.test(t)){ naoMatch = TERMOS_NAO_PROCESSO[i]; break; } }
+  /* Processo se: tem número CNJ, OU vocabulário forense suficiente (≥4 termos distintos).
+     Um marcador claro de não-processo derruba o palpite quando o vocabulário forense é fraco. */
+  var parece = temCNJ || scoreProc >= 4;
+  if(parece && naoMatch && !temCNJ && scoreProc < 6) parece = false; /* ex.: nota fiscal com 4-5 termos genéricos */
+  var tipo = naoMatch ? naoMatch.tipo : 'documento sem características de processo judicial';
+  return {parece:parece, tipo:tipo, temCNJ:temCNJ, score:scoreProc};
+}
+
 function classificarEExibir(){
-  if(AN.texto.replace(/\s/g,'').length < 400){
-    alert('Não foi possível extrair texto legível deste PDF (mesmo após OCR). Selecione a categoria manualmente e preencha os dados da minuta — a análise usará a base de teses da categoria.');
-  }
   var ranking = classificar();
   AN.cat = ranking[0].cat;
   var conf = 'baixa';
@@ -848,10 +934,26 @@ function classificarEExibir(){
   AN.dados = extrairDados();
   AN.docRecusado = false;
   preencherCatSelect();
-  renderAnalise();
-  /* NÃO salva ainda — só arquiva depois que a IA confirmar que é um processo (guardrail),
-     evitando gravar nota fiscal/documento avulso no banco. A IA roda sozinha a seguir. */
-  dispararAnaliseIA(); /* a IA roda após todo upload novo (cache por hash evita custo repetido) */
+
+  if(AN.texto.replace(/\s/g,'').length < 400){
+    /* PDF sem texto legível (mesmo após OCR): a IA não consegue validar — segue no modo manual
+       para o advogado escolher a categoria e preencher os dados à mão. */
+    alert('Não foi possível extrair texto legível deste PDF (mesmo após OCR). Selecione a categoria manualmente e preencha os dados da minuta — a análise usará a base de teses da categoria.');
+    renderAnalise();
+    return;
+  }
+
+  /* GUARDRAIL POR CÓDIGO (grátis): barra documentos que claramente não são processo
+     ANTES de gastar uma chamada de IA. Só o que passa segue para a IA. */
+  var aval = avaliarDocumento(AN.texto);
+  if(!aval.parece){
+    recusarDocumento({tipoDocumento: aval.tipo}, true); /* true = recusa por heurística → oferece "Analisar mesmo assim" */
+    return;
+  }
+
+  /* passou no filtro: valida/gera com a IA — nada é exibido até ela confirmar (rede de segurança). */
+  mostrarValidando(true);
+  dispararAnaliseIA();
 }
 
 function reclassificar(){
@@ -899,6 +1001,8 @@ function renderAnalise(){
   document.getElementById('anJuizo').value = d.juizo || ((d.vara? d.vara : '') + (d.comarca ? (d.vara?' — ':'') + 'Comarca de '+d.comarca : ''));
   if(document.getElementById('anTestemunhas')) document.getElementById('anTestemunhas').value = d.testemunhas || '';
   document.getElementById('swNome').textContent = (d.parte || (d.processos && d.processos[0]) || AN.arquivo || 'Processo');
+  var btnEx = document.getElementById('btnExcluir');
+  if(btnEx) btnEx.style.display = AN.savedRef ? 'inline-flex' : 'none';
   atualizarMinuta();
   if(!AN.analiseIA){
     document.getElementById('painelIA').style.display='none';
@@ -906,6 +1010,8 @@ function renderAnalise(){
     document.getElementById('statusIA').innerHTML='';
   }
   mostrarChooser(false); /* entra no estado "trabalhando": esconde o seletor grande, mostra a barra compacta */
+  document.getElementById('validando').style.display='none';   /* confirmado como processo: some o loading */
+  document.getElementById('docRejeitado').style.display='none';
   document.getElementById('resultadoAnalise').style.display='block';
   scrollParaResultado();
 }
@@ -916,11 +1022,13 @@ function mostrarChooser(mostrar){
   if(mostrar){
     document.getElementById('resultadoAnalise').style.display = 'none';
     document.getElementById('progresso').style.display = 'none';
+    document.getElementById('validando').style.display = 'none';
+    document.getElementById('docRejeitado').style.display = 'none';
   }
 }
 function novoProcesso(){
   ++analiseSeq; /* invalida qualquer processamento em andamento */
-  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:'', paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'' };
+  AN = { texto:'', norm:'', cat:null, dados:{}, arquivo:'', paginas:0, modo:'novo', minutaArquivada:null, analiseIA:null, fileHash:'', savedRef:null };
   document.getElementById('pdfProcesso').value = '';
   document.getElementById('selProcessos').value = '';
   document.getElementById('bigdropTitulo').textContent = 'Arraste o PDF aqui ou clique para selecionar';
@@ -950,7 +1058,7 @@ function setStatusIA(html, cor){
 function dispararAnaliseIA(){
   /* roda após um upload novo: tenta o cache na nuvem pelo hash do arquivo; senão chama a IA */
   var gen = analiseSeq;
-  if(AN.analiseIA){ renderIA(); return; }
+  if(AN.analiseIA){ renderAnalise(); renderIA(); return; }
   var pronto = Promise.resolve(null);
   if(supaOn() && AN.fileHash){
     pronto = supaFetch('processos?dados->>file_hash=eq.'+encodeURIComponent(AN.fileHash)+'&select=dados&limit=1')
@@ -963,6 +1071,7 @@ function dispararAnaliseIA(){
     if(gen !== analiseSeq) return;
     if(cache){
       AN.analiseIA = cache;
+      renderAnalise(); /* cache é sempre de um processo já confirmado — pode exibir */
       renderIA();
       atualizarMinuta();
       setStatusIA('♻️ Este documento já havia sido analisado — análise recuperada do arquivo, sem custo de IA.');
@@ -1043,7 +1152,7 @@ function analisarComIA(manual){
   var btnLabel = btn.textContent;
   btn.disabled = true; btn.textContent = '⏳ Analisando…';
   document.getElementById('painelIA').style.display = 'block';
-  if(manual) document.getElementById('painelIA').scrollIntoView({behavior:'smooth', block:'start'});
+  if(manual && document.getElementById('resultadoAnalise').style.display !== 'none') document.getElementById('painelIA').scrollIntoView({behavior:'smooth', block:'start'});
   setStatusIA('⏳ A IA está lendo o processo, varrendo o checklist de nulidades e redigindo a peça — leva de 20 a 50 segundos…');
 
   var streamChars = 0;
@@ -1078,27 +1187,77 @@ function analisarComIA(manual){
     btn.disabled = false; btn.textContent = btnLabel;
     if(gen !== analiseSeq) return;
     console.error(err);
-    setStatusIA('⚠️ A análise por IA falhou ('+esc(err.message||String(err))+'). Clique em <b>↻ Reanalisar com IA</b> (acima) para tentar novamente.', '#e0938c');
+    var validando = document.getElementById('validando').style.display !== 'none';
+    if(validando){
+      /* ainda estávamos verificando (nada exibido): mostra erro com opção de repetir —
+         NÃO exibe a análise local para não preencher campos de um documento não confirmado. */
+      validandoErro(err.message||String(err));
+    } else {
+      setStatusIA('⚠️ A análise por IA falhou ('+esc(err.message||String(err))+'). Clique em <b>↻ Reanalisar com IA</b> (acima) para tentar novamente.', '#e0938c');
+    }
   });
 }
 
-function recusarDocumento(result){
-  /* guardrail de tipo de documento: o arquivo não é um processo judicial — não gera defesa */
+/* ── estados de verificação do documento ─────────────────────────────── */
+function mostrarValidando(mostrar){
+  var v = document.getElementById('validando');
+  v.style.display = mostrar ? 'flex' : 'none';
+  if(mostrar){
+    document.getElementById('progresso').style.display = 'none';
+    document.getElementById('resultadoAnalise').style.display = 'none';
+    document.getElementById('docRejeitado').style.display = 'none';
+    document.getElementById('validandoSpin').style.display = 'block';
+    document.getElementById('validandoTitulo').textContent = 'Analisando o documento…';
+    document.getElementById('validandoSub').textContent = 'Estamos lendo os autos e confirmando que se trata de um processo judicial antes de gerar qualquer análise. Isso pode levar até um minuto.';
+    document.getElementById('validandoAcoes').style.display = 'none';
+  }
+}
+function validandoErro(msg){
+  var v = document.getElementById('validando');
+  v.style.display = 'flex';
+  document.getElementById('validandoSpin').style.display = 'none';
+  document.getElementById('validandoTitulo').textContent = 'Não foi possível concluir a análise';
+  document.getElementById('validandoSub').innerHTML = esc(msg || 'Falha na comunicação com a IA.') + ' Verifique a conexão e tente novamente.';
+  document.getElementById('validandoAcoes').style.display = 'block';
+}
+function revalidar(){
+  if(!AN.cat || !AN.texto){ novoProcesso(); return; }
+  mostrarValidando(true);
+  analisarComIA(true);
+}
+
+function recusarDocumento(result, viaHeuristica){
+  /* guardrail de tipo de documento: o arquivo NÃO é um processo judicial.
+     Nenhum campo é preenchido e nada é arquivado — só a tela de recusa limpa.
+     viaHeuristica = recusa feita pelo filtro por código (sem IA) → oferece "analisar mesmo assim". */
   AN.analiseIA = null;
   AN.docRecusado = true;
-  document.getElementById('painelIA').style.display = 'block';
-  document.getElementById('nulidadesIA').innerHTML =
-    '<div class="achado critico"><div class="ico">⛔</div><div class="tx"><b>Este arquivo não é um processo judicial.</b> '
-    + 'Foi identificado como: <em>'+esc(result.tipoDocumento||'documento não jurídico')+'</em>. '
-    + 'Nenhuma defesa foi gerada. Envie a <b>denúncia</b>, a <b>petição inicial</b>, o <b>inquérito</b> ou os <b>autos do processo</b> — não uma nota fiscal, recibo ou documento avulso.</div></div>';
-  document.getElementById('statusIA').innerHTML = '';
-  /* esconde a peça/minuta e os painéis que só fazem sentido para um processo real */
-  document.getElementById('documento-analise').innerHTML =
-    '<p class="ni" style="text-align:center;color:#8a2b2b"><strong>⛔ Documento não é um processo judicial — nenhuma peça de defesa foi gerada.</strong></p>'
-    + '<p class="ni" style="text-align:center">Envie a denúncia, a petição inicial, o inquérito ou os autos do processo.</p>';
-  var jc = document.getElementById('jurisCategoria'); if(jc) jc.innerHTML = '';
-  var ac = document.getElementById('achados'); if(ac) ac.innerHTML = '';
-  /* não arquiva lixo no banco */
+  document.getElementById('progresso').style.display = 'none';
+  document.getElementById('validando').style.display = 'none';
+  document.getElementById('resultadoAnalise').style.display = 'none';
+  var tipo = (result && result.tipoDocumento) || 'documento avulso';
+  document.getElementById('rjTipo').textContent = tipo;
+  /* botão "analisar mesmo assim" só faz sentido quando quem barrou foi o código;
+     se a própria IA já recusou, insistir não muda o resultado. */
+  var forcar = document.getElementById('rjForcar');
+  if(forcar) forcar.style.display = viaHeuristica ? 'inline-flex' : 'none';
+  var box = document.getElementById('docRejeitado');
+  box.style.display = 'flex';
+  var nav = document.querySelector('nav');
+  var offset = (nav ? nav.offsetHeight : 0) + 16;
+  requestAnimationFrame(function(){
+    var y = box.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+  });
+}
+function forcarAnalise(){
+  /* o advogado insiste: talvez seja um processo atípico que o filtro por código não reconheceu.
+     Manda para a IA (que ainda tem a própria triagem) — nada é exibido até ela confirmar. */
+  if(!AN.cat || !AN.texto){ novoProcesso(); return; }
+  AN.docRecusado = false;
+  document.getElementById('docRejeitado').style.display = 'none';
+  mostrarValidando(true);
+  dispararAnaliseIA();
 }
 
 function renderIA(){
@@ -1555,8 +1714,13 @@ function montarRegistro(){
     texto_extraido: (AN.texto||'').slice(0,150000)
   };
 }
-function salvarProcesso(){
+function salvarProcesso(manual){
   if(!AN.cat) return;
+  /* guardrail: não arquiva documento que a IA reprovou (nota fiscal, recibo, doc avulso) */
+  if(AN.docRecusado){
+    if(manual) alert('Este arquivo não é um processo judicial e não pode ser arquivado. Envie a denúncia, a petição inicial, o inquérito ou os autos do processo.');
+    return;
+  }
   var reg = montarRegistro();
   if(supaOn()){
     var filtro = reg.num_processo
@@ -1701,7 +1865,8 @@ function restaurarProcesso(reg){
     modo: 'arquivo',
     minutaArquivada: reg.minuta_html || null,
     analiseIA: d.analiseIA || null,
-    fileHash: d.file_hash || ''
+    fileHash: d.file_hash || '',
+    savedRef: reg.id ? {origem:'cloud', chave:reg.id} : (reg.lid ? {origem:'local', chave:reg.lid} : null)
   };
   /* limpa vestígios do cliente/upload anterior na interface */
   document.getElementById('progresso').style.display = 'none';
@@ -1716,6 +1881,39 @@ function restaurarProcesso(reg){
     setStatusIA('📂 Análise por IA recuperada do arquivo — nenhum reprocessamento ou custo. Clique em <b>🧠 Reanalisar com IA</b> se quiser refazê-la.');
   }
   setSaveStatus('📂 carregado do arquivo — sem reprocessamento');
+}
+
+/* ═══════════ EXCLUIR registro do arquivo (nuvem ou local) ═══════════ */
+function excluirProcessoAberto(){
+  var ref = AN.savedRef;
+  if(!ref || !ref.chave){ alert('Este processo ainda não está arquivado — nada a excluir.'); return; }
+  var rotulo = (document.getElementById('swNome').textContent || '').trim() || (AN.arquivo || 'este registro');
+  if(!confirm('Excluir definitivamente "'+rotulo+'" do arquivo?\n\nEsta ação não pode ser desfeita.')) return;
+  var btn = document.getElementById('btnExcluir');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ Excluindo…'; }
+  function restaurarBotao(){ if(btn){ btn.disabled = false; btn.textContent = '🗑️ Excluir do arquivo'; } }
+  if(ref.origem === 'cloud'){
+    supaFetch('processos?id=eq.'+encodeURIComponent(ref.chave), {method:'DELETE', headers:{Prefer:'return=minimal'}})
+      .then(function(){ excluiuOk(rotulo); })
+      .catch(function(e){
+        restaurarBotao();
+        alert('Não foi possível excluir da nuvem: '+e.message+'\n\nSe o erro persistir, exclua o registro pelo painel do Supabase (tabela "processos").');
+      });
+  } else {
+    try{
+      var lista = lerLocal().filter(function(r){ return r.lid !== ref.chave; });
+      localStorage.setItem('processos_local', JSON.stringify(lista));
+      excluiuOk(rotulo);
+    }catch(e){ restaurarBotao(); alert('Não foi possível excluir localmente: '+e.message); }
+  }
+}
+function excluiuOk(rotulo){
+  AN.savedRef = null;
+  var btn = document.getElementById('btnExcluir');
+  if(btn){ btn.disabled = false; btn.textContent = '🗑️ Excluir do arquivo'; }
+  carregarBiblioteca();
+  novoProcesso();
+  alert('✅ Registro excluído do arquivo: '+(rotulo||''));
 }
 
 /* drag & drop no dropzone grande */
