@@ -379,6 +379,10 @@
           <div><label>Juízo (Vara / Comarca)</label><input type="text" id="anJuizo" placeholder="ex.: 3ª Vara Criminal da Comarca de Guarujá/SP"></div>
           <div><label>Advogado(a) — OAB</label><input type="text" id="anAdv" placeholder="ex.: Nome — OAB/SP 000.000"></div>
         </div>
+        <div class="grid2">
+          <div><label>Data da intimação/citação (para o prazo)</label><input type="date" id="anIntimacao" onchange="atualizarPrazo()" style="color-scheme:dark"></div>
+          <div><label>Prazo processual</label><div id="prazoInfo" style="font-size:.88rem;color:var(--dim);padding-top:.5rem;line-height:1.45">Informe a data para calcular o vencimento.</div></div>
+        </div>
         <div style="margin-top:.6rem">
           <label>Rol de testemunhas (uma por linha — Nome, qualificação, endereço)</label>
           <textarea id="anTestemunhas" rows="3" placeholder="Deixe em branco se não for arrolar agora. Ex.:&#10;João da Silva, RG 00.000.000-0, Rua X, 100 — Guarujá/SP&#10;Maria Souza, CPF 000.000.000-00, Rua Y, 200 — Santos/SP" style="width:100%;padding:.7rem .85rem;border:1px solid var(--line-strong);border-radius:2px;font-family:inherit;font-size:.9rem;background:var(--panel2);color:var(--cream);resize:vertical"></textarea>
@@ -388,7 +392,8 @@
 
       <div class="toolbar">
         <button class="btn-gold" onclick="baixarPdf()">⬇ Baixar PDF (pronto para protocolo)</button>
-        <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (Word)</button>
+        <button class="btn-ghost" onclick="baixarDocx('documento-analise','Defesa_Previa.docx')">⬇ Baixar .docx (Word)</button>
+        <button class="btn-ghost" onclick="baixarDoc('documento-analise','Defesa_Previa.doc')">⬇ Baixar .doc (compatível)</button>
         <button class="btn-ghost" id="btnEditarPeca" onclick="toggleEditarPeca()">✏️ Editar peça</button>
         <button class="btn-ghost" onclick="copiarTexto('documento-analise')">📋 Copiar texto</button>
         <button class="btn-navy" onclick="salvarProcesso(true)">💾 Arquivar análise</button>
@@ -413,6 +418,203 @@ function baixarDoc(idEl, nomeArq){
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = nomeArq;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+/* ══════════ util: download .docx REAL (OOXML) — vanilla, sem CDN, CSP-safe ══════════ */
+/* Gera um .docx válido (zip STORE + CRC32) a partir do HTML de #documento-analise.
+   Times New Roman 12pt, justificado, headings em caixa alta. Todo o código é self-contained. */
+function baixarDocx(idEl, nomeArq){
+  if (typeof AN !== 'undefined' && AN.docRecusado){
+    alert('Este documento não é um processo judicial — não há peça de defesa para gerar em .docx.');
+    return;
+  }
+  var src = document.getElementById(idEl);
+  if(!src){ alert('Peça não encontrada.'); return; }
+
+  /* ---------- helpers XML ---------- */
+  function ext(a,b){ var o={},k; for(k in a) o[k]=a[k]; for(k in b) o[k]=b[k]; return o; }
+  function xmlEsc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function rPr(fmt){
+    fmt = fmt||{};
+    var sz = fmt.sz || 24; /* half-points: 24 = 12pt */
+    var s = '<w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>';
+    if(fmt.bold)   s += '<w:b/><w:bCs/>';
+    if(fmt.italic) s += '<w:i/><w:iCs/>';
+    if(fmt.caps)   s += '<w:caps/>';
+    s += '<w:sz w:val="'+sz+'"/><w:szCs w:val="'+sz+'"/></w:rPr>';
+    return s;
+  }
+  function runXml(text, fmt){
+    text = String(text).replace(/\s+/g,' ');
+    if(text==='') return '';
+    return '<w:r>'+rPr(fmt)+'<w:t xml:space="preserve">'+xmlEsc(text)+'</w:t></w:r>';
+  }
+  /* percorre os nós inline de um bloco, propagando negrito/itálico e tratando <br> */
+  function collectRuns(node, fmt){
+    var s='', i, ch, tag, f;
+    for(i=0;i<node.childNodes.length;i++){
+      ch = node.childNodes[i];
+      if(ch.nodeType===3){                       /* texto */
+        s += runXml(ch.nodeValue, fmt);
+      } else if(ch.nodeType===1){                /* elemento */
+        tag = ch.tagName.toUpperCase();
+        if(tag==='BR'){ s += '<w:r>'+rPr(fmt)+'<w:br/></w:r>'; }
+        else {
+          f = ext(fmt,{});
+          if(tag==='STRONG'||tag==='B') f.bold=true;
+          if(tag==='EM'||tag==='I')     f.italic=true;
+          s += collectRuns(ch, f);
+        }
+      }
+    }
+    return s;
+  }
+  function para(align, indent, runsXml, sp){
+    sp = sp||{};
+    var after  = (sp.after  == null) ? 200 : sp.after;   /* twips: 200 = 10pt */
+    var before = (sp.before == null) ? 0   : sp.before;
+    var pPr = '<w:pPr><w:spacing'
+            + (before?(' w:before="'+before+'"'):'')
+            + ' w:after="'+after+'" w:line="360" w:lineRule="auto"/>'  /* 360 = 1,5 linha */
+            + (indent||'')
+            + '<w:jc w:val="'+align+'"/></w:pPr>';
+    return '<w:p>'+pPr+(runsXml||'')+'</w:p>';
+  }
+  /* ---------- bloco HTML -> parágrafo(s) OOXML ---------- */
+  function blockToXml(el){
+    var tag = el.tagName ? el.tagName.toUpperCase() : '';
+    var cls = ' '+(el.className||'')+' ';
+    if(tag==='P'){
+      var align='both', indent='<w:ind w:firstLine="700"/>', after=200, before=0, fmt={sz:24};
+      if(/ addr /.test(cls))        { align='left';   indent=''; after=800; fmt.bold=true; }
+      else if(/ ni /.test(cls))     { align='both';   indent=''; }
+      else if(/ center /.test(cls)) { align='center'; indent=''; before=480; }
+      else if(/ right /.test(cls))  { align='right';  indent=''; }
+      else if(/ sign /.test(cls))   { align='center'; indent=''; before=800; }
+      return para(align, indent, collectRuns(el,fmt), {after:after, before:before});
+    }
+    if(tag==='H1') return para('center','', collectRuns(el,{sz:24,bold:true,caps:true}), {before:360,after:360});
+    if(tag==='H2') return para('left','',   collectRuns(el,{sz:24,bold:true,caps:true}), {before:200,after:160});
+    if(tag==='H3') return para('left','',   collectRuns(el,{sz:24,bold:true}),           {before:160,after:120});
+    if(tag==='BLOCKQUOTE') return para('both','<w:ind w:left="2400"/>',
+                                       collectRuns(el,{sz:20,italic:true}), {after:200});
+    if(tag==='OL'||tag==='UL'){
+      var s='', n=1, i, li, marker;
+      for(i=0;i<el.children.length;i++){
+        li = el.children[i];
+        if(li.tagName.toUpperCase()!=='LI') continue;
+        marker = (tag==='OL') ? (n+'. ') : '• ';
+        s += para('both','<w:ind w:left="480" w:hanging="480"/>',
+                  runXml(marker,{sz:24})+collectRuns(li,{sz:24}), {after:100});
+        n++;
+      }
+      return s;
+    }
+    /* fallback: qualquer outro bloco vira parágrafo justificado */
+    return para('both','<w:ind w:firstLine="700"/>', collectRuns(el,{sz:24}), {after:200});
+  }
+
+  /* ---------- monta o corpo ---------- */
+  var bodyXml='', i, child;
+  for(i=0;i<src.childNodes.length;i++){
+    child = src.childNodes[i];
+    if(child.nodeType===1) bodyXml += blockToXml(child);
+    else if(child.nodeType===3 && child.nodeValue.trim())
+      bodyXml += para('both','<w:ind w:firstLine="700"/>', runXml(child.nodeValue,{sz:24}), {after:200});
+  }
+  /* A4 (11906x16838 twips); margens 2,5/2/2,5/3 cm (top/right/bottom/left) */
+  var sectPr = '<w:sectPr>'
+    + '<w:pgSz w:w="11906" w:h="16838"/>'
+    + '<w:pgMar w:top="1417" w:right="1134" w:bottom="1417" w:left="1701" '
+    +          'w:header="708" w:footer="708" w:gutter="0"/>'
+    + '</w:sectPr>';
+
+  var XMLDECL = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n';
+  var documentXml = XMLDECL
+    + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:body>' + bodyXml + sectPr + '</w:body></w:document>';
+
+  var contentTypes = XMLDECL
+    + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+    + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+    + '<Default Extension="xml" ContentType="application/xml"/>'
+    + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+    + '</Types>';
+
+  var rootRels = XMLDECL
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+    + '</Relationships>';
+
+  var docRels = XMLDECL
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>';
+
+  /* ---------- CRC32 ---------- */
+  var CRC_TABLE = (function(){
+    var t=[], c, n, k;
+    for(n=0;n<256;n++){ c=n; for(k=0;k<8;k++){ c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); } t[n]=c>>>0; }
+    return t;
+  })();
+  function crc32(bytes){
+    var crc = 0xFFFFFFFF, i;
+    for(i=0;i<bytes.length;i++) crc = (crc>>>8) ^ CRC_TABLE[(crc ^ bytes[i]) & 0xFF];
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+  function strToU8(s){ return new TextEncoder().encode(s); } /* built-in, sem rede */
+
+  /* ---------- ZIP (método STORE, sem compressão) ---------- */
+  function zipStore(files){
+    var chunks=[], central=[], offset=0;
+    function u16(a,v){ a.push(v&0xFF,(v>>>8)&0xFF); }
+    function u32(a,v){ a.push(v&0xFF,(v>>>8)&0xFF,(v>>>16)&0xFF,(v>>>24)&0xFF); }
+    files.forEach(function(f){
+      var name = strToU8(f.name), data = f.data, crc = crc32(data), size = data.length;
+      var lh=[];
+      u32(lh,0x04034b50); u16(lh,20); u16(lh,0); u16(lh,0);   /* sig, ver, flags, método=0 */
+      u16(lh,0); u16(lh,0x21);                                /* hora=0, data=1980-01-01 */
+      u32(lh,crc); u32(lh,size); u32(lh,size);                /* crc, comp=uncomp */
+      u16(lh,name.length); u16(lh,0);                         /* nome, extra=0 */
+      var lhU8 = new Uint8Array(lh);
+      chunks.push(lhU8, name, data);
+      var cd=[];
+      u32(cd,0x02014b50); u16(cd,20); u16(cd,20); u16(cd,0); u16(cd,0); /* sig, madeBy, needed, flags, método */
+      u16(cd,0); u16(cd,0x21); u32(cd,crc); u32(cd,size); u32(cd,size);
+      u16(cd,name.length); u16(cd,0); u16(cd,0);              /* nome, extra, comment */
+      u16(cd,0); u16(cd,0); u32(cd,0);                        /* disk, internal, external attrs */
+      u32(cd,offset);                                         /* offset do local header */
+      central.push({h:new Uint8Array(cd), n:name});
+      offset += lhU8.length + name.length + size;
+    });
+    var cdStart = offset;
+    central.forEach(function(c){ chunks.push(c.h, c.n); offset += c.h.length + c.n.length; });
+    var cdSize = offset - cdStart;
+    var eo=[];
+    u32(eo,0x06054b50); u16(eo,0); u16(eo,0);
+    u16(eo,files.length); u16(eo,files.length);
+    u32(eo,cdSize); u32(eo,cdStart); u16(eo,0);
+    chunks.push(new Uint8Array(eo));
+    var total=0; chunks.forEach(function(c){ total+=c.length; });
+    var out=new Uint8Array(total), p=0;
+    chunks.forEach(function(c){ out.set(c,p); p+=c.length; });
+    return out;
+  }
+
+  /* ---------- empacota e baixa ---------- */
+  var zip = zipStore([
+    {name:'[Content_Types].xml',        data:strToU8(contentTypes)},
+    {name:'_rels/.rels',                data:strToU8(rootRels)},
+    {name:'word/_rels/document.xml.rels', data:strToU8(docRels)},
+    {name:'word/document.xml',          data:strToU8(documentXml)}
+  ]);
+  var blob = new Blob([zip], {type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (nomeArq && /\.docx$/i.test(nomeArq)) ? nomeArq : (nomeArq||'Defesa_Previa')+'.docx';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
 }
@@ -1025,6 +1227,7 @@ function renderAnalise(){
   var btnEx = document.getElementById('btnExcluir');
   if(btnEx) btnEx.style.display = AN.savedRef ? 'inline-flex' : 'none';
   atualizarMinuta();
+  atualizarPrazo();
   if(!AN.analiseIA){
     document.getElementById('painelIA').style.display='none';
     document.getElementById('nulidadesIA').innerHTML='';
@@ -1291,7 +1494,13 @@ function renderIA(){
     html += '<div class="achado '+cls+'"><div class="ico">🚨</div><div class="tx"><b>'+esc(n.titulo)+'</b> '+tag
          + (n.lei_seca?'<br><em>'+esc(n.lei_seca)+'</em>':'')
          + (n.trecho_base?'<br><small>📌 Base nos autos: “'+esc(n.trecho_base)+'”</small>':'')
-         + '<div style="margin-top:.5rem"><button onclick="prefillCorrecao(\''+jsEsc(n.titulo)+'\')" style="background:none;border:1px solid var(--line);color:var(--dim);font-size:.66rem;letter-spacing:.08em;padding:.22rem .6rem;border-radius:3px;cursor:pointer;font-family:var(--font-mono);text-transform:uppercase">✎ corrigir / ensinar</button></div>'
+         + '<div style="margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center">'
+         +   '<span class="fbPar" style="display:inline-flex;gap:.4rem">'
+         +     '<button onclick="enviarFeedback(\''+jsEsc(n.titulo)+'\',\'up\',this)" title="tese útil / acertou" style="background:none;border:1px solid var(--line);color:var(--dim);font-size:.8rem;padding:.2rem .5rem;border-radius:3px;cursor:pointer">👍</button>'
+         +     '<button onclick="enviarFeedback(\''+jsEsc(n.titulo)+'\',\'down\',this)" title="tese fraca / errada" style="background:none;border:1px solid var(--line);color:var(--dim);font-size:.8rem;padding:.2rem .5rem;border-radius:3px;cursor:pointer">👎</button>'
+         +   '</span>'
+         +   '<button onclick="prefillCorrecao(\''+jsEsc(n.titulo)+'\')" style="background:none;border:1px solid var(--line);color:var(--dim);font-size:.66rem;letter-spacing:.08em;padding:.22rem .6rem;border-radius:3px;cursor:pointer;font-family:var(--font-mono);text-transform:uppercase">✎ corrigir / ensinar</button>'
+         + '</div>'
          + '</div></div>';
   });
   (r.merito||[]).forEach(function(t){
@@ -1339,6 +1548,16 @@ function carregarAprendizados(){
           + '</div>';
       }).join('');
   }).catch(function(){ box.innerHTML=''; });
+}
+/* voto 👍/👎 por nulidade — grava direto (RLS por user, igual ao aprendizado); alimenta métrica de qualidade */
+function enviarFeedback(item, voto, btn){
+  if(!supaOn()){ if(btn) btn.title='Faça login para avaliar'; return; }
+  if(!AN.cat) return;
+  var reg = {categoria_id: AN.cat.id, item: String(item||'').slice(0,500), voto: voto};
+  var par = btn && btn.parentNode;
+  supaFetch('feedback_ia', {method:'POST', headers:{Prefer:'return=minimal'}, body: JSON.stringify(reg)})
+    .then(function(){ if(par) par.innerHTML = '<span style="font-size:.7rem;color:var(--ok);font-family:var(--font-mono)">'+(voto==='up'?'👍 obrigado':'👎 anotado')+'</span>'; })
+    .catch(function(){ if(btn) btn.textContent = '⚠'; });
 }
 function salvarAprendizado(){
   var el = document.getElementById('aprTexto'); var txt = (el.value||'').trim();
@@ -1394,6 +1613,56 @@ function aprenderComEdicao(original, editado){
         document.getElementById('ensinarBox').scrollIntoView({behavior:'smooth', block:'center'});
       } else if(msg){ msg.textContent=''; }
     }).catch(function(){ if(msg) msg.textContent=''; });
+}
+
+/* ═══════════ PRAZO PROCESSUAL — corrido (criminal, art.798 CPP) x útil (cível, art.219 CPC) ═══════════ */
+function calcularPrazo(dataIntimacaoISO, pecaId, feriados){
+  var FERIADOS = {};
+  (feriados || []).forEach(function(f){ FERIADOS[String(f).slice(0,10)] = true; });
+  var REGRAS = {
+    'crim-trafico':{dias:10,contagem:'corridos',nome:'Defesa prévia',base:'art. 55 da Lei 11.343/06'},
+    'crim-furto':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'crim-roubo':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'crim-homicidio':{dias:10,contagem:'corridos',nome:'Resposta à acusação (Júri)',base:'art. 406, caput e §1º, do CPP'},
+    'crim-estelionato':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'crim-armas':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'crim-vd':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'crim-ctb':{dias:10,contagem:'corridos',nome:'Resposta à acusação',base:'arts. 396 e 396-A do CPP'},
+    'civ-consumidor':{dias:15,contagem:'uteis',nome:'Contestação',base:'art. 335 do CPC'},
+    'civ-cobranca':{dias:15,contagem:'uteis',nome:'Contestação',base:'art. 335 do CPC'},
+    'civ-familia':{dias:15,contagem:'uteis',nome:'Contestação',base:'art. 335 c/c art. 697 do CPC'},
+    'civ-locacao':{dias:15,contagem:'uteis',nome:'Contestação',base:'art. 335 do CPC (c/c art. 59 da Lei 8.245/91)'},
+    'civ-execucao':{dias:15,contagem:'uteis',nome:'Embargos à execução / Impugnação',base:'art. 915 ou art. 525 do CPC'},
+    'civ-danos':{dias:15,contagem:'uteis',nome:'Contestação',base:'art. 335 do CPC'}
+  };
+  var regra = REGRAS[pecaId]; if(!regra) throw new Error('categoria sem regra de prazo');
+  function parseISO(s){ var p=String(s).slice(0,10).split('-'); return new Date(Number(p[0]),Number(p[1])-1,Number(p[2])); }
+  function toISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function ehDiaUtil(d){ var w=d.getDay(); return w!==0 && w!==6 && !FERIADOS[toISO(d)]; }
+  function proximoDiaUtil(d){ var x=new Date(d.getTime()); while(!ehDiaUtil(x)) x.setDate(x.getDate()+1); return x; }
+  var inicio = parseISO(dataIntimacaoISO); if(isNaN(inicio.getTime())) throw new Error('data inválida');
+  var venc = new Date(inicio.getTime());
+  if(regra.contagem==='uteis'){ var c=0; while(c<regra.dias){ venc.setDate(venc.getDate()+1); if(ehDiaUtil(venc)) c++; } }
+  else { venc.setDate(venc.getDate()+regra.dias); venc = proximoDiaUtil(venc); }
+  var vencISO = toISO(venc);
+  var tipoTxt = (regra.contagem==='uteis') ? 'dias úteis' : 'dias corridos';
+  return { vencimento: vencISO,
+    texto: regra.nome+' — '+regra.dias+' '+tipoTxt+' ('+regra.base+'), a contar da intimação de '+toISO(inicio)+'.' };
+}
+function brData(iso){ var p=String(iso).slice(0,10).split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function atualizarPrazo(){
+  var el = document.getElementById('prazoInfo'); if(!el) return;
+  var data = (document.getElementById('anIntimacao')||{}).value;
+  if(!data || !AN.cat){ el.innerHTML='Informe a data para calcular o vencimento.'; return; }
+  try{
+    var r = calcularPrazo(data, AN.cat.id);
+    var venc = new Date(r.vencimento+'T00:00:00'), hoje = new Date(); hoje.setHours(0,0,0,0);
+    var dias = Math.round((venc - hoje)/86400000);
+    var cor = dias < 0 ? 'var(--danger)' : (dias <= 3 ? 'var(--warn)' : 'var(--ok)');
+    var alerta = dias < 0 ? ' — ⚠️ VENCIDO' : (dias === 0 ? ' — ⚠️ vence HOJE' : (dias <= 3 ? ' — ⚠️ faltam '+dias+' dia(s)' : ''));
+    var jecrim = (AN.cat.id==='crim-ctb'||AN.cat.id==='crim-vd') ? '<br><small style="color:var(--dim)">Se for infração de menor potencial ofensivo (JECrim, Lei 9.099/95), o rito e o prazo mudam — confira.</small>' : '';
+    el.innerHTML = '<b style="color:'+cor+'">Vence em '+brData(r.vencimento)+alerta+'</b><br><small style="color:var(--dim)">'+esc(r.texto)+'</small>'+jecrim;
+  }catch(e){ el.innerHTML='<small style="color:var(--dim)">Não foi possível calcular o prazo.</small>'; }
 }
 
 function rolTestemunhas(){
