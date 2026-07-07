@@ -143,9 +143,9 @@ const ESTRATEGIAS = {
 - Prisão preventiva com fundamentação genérica (gravidade abstrata): pedido de revogação/substituição pelas cautelares do art. 319 do CPP.
 - Se a quantidade for pequena e a prova de mercancia frágil, suscite a desclassificação para uso (art. 28) e/ou a falta de laudo toxicológico DEFINITIVO (art. 50, §1º, da Lei 11.343/06) como preliminar.`,
   'crim-homicidio': `ESTRATÉGIA ESPECÍFICA — HOMICÍDIO/JÚRI (rito arts. 406-421 CPP, obrigatória):
-- Se a autoria se apoia SÓ no inquérito (não ratificada em juízo) ou em prova por "ouvir dizer", o pedido correto é IMPRONÚNCIA (art. 414 do CPP) — NÃO "absolvição sumária", NÃO "rejeição/inépcia".
-- Cite o art. 155 do CPP (vedação de decidir com base EXCLUSIVA nos elementos do inquérito) e o art. 413 do CPP (a pronúncia exige prova da materialidade e INDÍCIOS SUFICIENTES de autoria).
-- NUNCA deixe "merito" vazio: desenvolva a insuficiência probatória para a pronúncia e, se cabível, a desclassificação ou o in dubio pro reo (art. 414).`,
+- Nesta fase (resposta do art. 406), o pedido principal é ABSOLVIÇÃO SUMÁRIA (art. 415 do CPP) e, SUBSIDIARIAMENTE, a impronúncia (art. 414) por insuficiência de indícios. NÃO peça "rejeição da denúncia" (art. 395) — ela já foi recebida.
+- Se a autoria se apoia SÓ no inquérito (não ratificada em juízo) ou em prova por "ouvir dizer", cite o art. 155 do CPP (vedação de decidir com base EXCLUSIVA nos elementos do inquérito) e o art. 413 do CPP (a pronúncia exige prova da materialidade e INDÍCIOS SUFICIENTES de autoria) para sustentar a insuficiência probatória.
+- NUNCA deixe "merito" vazio: desenvolva a insuficiência probatória, e se cabível a desclassificação ou o in dubio pro reo.`,
   'crim-vd': `ESTRATÉGIA ESPECÍFICA — VIOLÊNCIA DOMÉSTICA (Lei 11.340/06, obrigatória):
 - AMEAÇA (art. 147 CP) é ação penal CONDICIONADA à representação: se a vítima não quer prosseguir, a renúncia só vale pelo RITO DO ART. 16 da Lei 11.340/06 — ratificada perante o JUIZ, em audiência designada para isso, ouvido o MP. A manifestação na fase policial NÃO basta; peça a designação dessa audiência.
 - NÃO invoque a Súmula 542/STJ a favor da defesa: ela diz que a LESÃO CORPORAL em VD é INCONDICIONADA (contraria a tese). Distinga: 542 é para lesão; a ameaça segue condicionada.`,
@@ -397,7 +397,7 @@ Responda neste formato JSON (se ehProcessoJudicial for false, os demais campos p
       estrutura?.conduta_narrada,
       Array.isArray(estrutura?.observacoes) ? estrutura.observacoes.join('; ') : ''
     ].filter(Boolean).join('. ')}`.slice(0, 3000);
-    const sumulasRag = await buscarSumulas(apiKey, consultaRag, {minSim: 0.38, limite: 6});
+    const sumulasRag = await buscarSumulas(apiKey, consultaRag, {minSim: 0.55, limite: 6});
 
     /* aprendizado: correções que o advogado ensinou para esta categoria (viram regras no prompt) */
     const aprendizados = await buscarAprendizados(token, cat.id);
@@ -432,13 +432,16 @@ ${blocoAprendizados}${ESTRATEGIAS[cat.id] ? ESTRATEGIAS[cat.id] + '\n' : ''}REGR
 - COERÊNCIA preliminar↔remédio e PODA: cada preliminar deve casar com o remédio correto (condição de procedibilidade = art. 395, II, CPP; inépcia/pressuposto = art. 395, I; no cível, questão de MÉRITO não é extinção sem resolução). NÃO empilhe preliminares genéricas/frágeis — ex.: "falta de interesse por não tentar acordo" em despejo, "ilegitimidade" onde a parte é claramente legítima, ou "falta de título executivo" em ação de CONHECIMENTO (cobrança). Prefira POUCAS teses fortes a muitas fracas.
 - HIGIENE DE PRECEDENTES: cite somente da lista permitida, com referência EXATA. NUNCA invente número de HC/REsp nem cite julgado "pendente"/de ano futuro; na dúvida, use jurisprudência consolidada sem número.
 - ANTES de citar uma súmula/precedente, confirme que ele AJUDA a tese da defesa (não a contraria).
-- Nulidade só entra em "preliminares" se houver base CONCRETA no texto (cite o trecho em "trecho_base"). O que não der para verificar pelo documento vai para "verificar_nos_autos" (lista de conferências para o advogado).
+- REMÉDIO CORRETO — a peça que você redige é: "${cat.peca}". Aplique: (a) se for RESPOSTA À ACUSAÇÃO (art. 396-A) ou defesa do rito do JÚRI (art. 406), a denúncia JÁ FOI RECEBIDA — o pedido é ABSOLVIÇÃO SUMÁRIA (art. 397 do CPP; art. 415 no Júri), NUNCA "rejeição da denúncia" (art. 395). No Júri, peça a absolvição sumária (art. 415) e, subsidiariamente, a impronúncia (art. 414) por insuficiência de indícios. (b) SOMENTE se a peça for DEFESA PRÉVIA da Lei de Drogas (art. 55 da Lei 11.343/06), que é ANTERIOR ao recebimento, cabe pedir a rejeição/não-recebimento da denúncia (art. 395) e a absolvição sumária como subsidiário.
+${!criminal ? `- (CÍVEL) IMPUGNAÇÃO ESPECIFICADA (art. 341 do CPC): preencha "impugnacao_fatos" rebatendo PONTO A PONTO cada fato relevante da petição inicial — o fato NÃO impugnado presume-se verdadeiro (confissão ficta). Só depois venham preliminares e mérito. NÃO alegue inépcia por "falta de documento" quando o documento cabe à parte contrária (ex.: em ação declaratória de inexistência de débito, o contrato cabe ao credor/réu — isso é MÉRITO, não preliminar). Impugne também, se cabível, o valor da causa (art. 293) e a gratuidade (art. 100).
+` : ''}- Nulidade só entra em "preliminares" se houver base CONCRETA no texto (cite o trecho em "trecho_base"). O que não der para verificar pelo documento vai para "verificar_nos_autos" (lista de conferências para o advogado).
 - Tudo que for nulidade deve ser alegado AGORA (preclusão) — seja minucioso no checklist, não deixe passar nada que o texto sustente.
 - Redija em português forense claro, sem retórica vazia, pronto para protocolar.
 
 Responda APENAS neste formato JSON:
 {"tipo_peca": "${cat.peca}",
  "sintese": "síntese dos fatos em 2-4 parágrafos, CONCRETA, com os fatos deste processo (nomes, datas, dinâmica) e já apontando as fragilidades da tese adversa",
+ "impugnacao_fatos": ["SOMENTE no cível (art. 341 CPC): impugnação específica de cada fato relevante da inicial, um por item; use [] no criminal"],
  "preliminares": [{"titulo": "ex.: Inépcia da denúncia — ausência de individualização da conduta", "lei_seca": "art. 41 c/c art. 395, I, do CPP", "gravidade": "alta|media|baixa", "trecho_base": "trecho literal ou paráfrase fiel do documento que sustenta a alegação", "desenvolvimento": "1-3 parágrafos aplicando ao caso concreto", "jurisprudencia": "referência EXATA da lista ou null", "prioritario": true}],
  "merito": [{"titulo": "...", "lei_seca": "...", "desenvolvimento": "1-3 parágrafos aplicados ao caso", "jurisprudencia": "referência EXATA da lista ou null", "prioritario": false}],
  "provas": ["cada prova a requerer, específica para ESTE caso"],

@@ -376,7 +376,7 @@
           <div><label>Nº do processo</label><input type="text" id="anNum"></div>
         </div>
         <div class="grid2">
-          <div><label>Juízo (Vara / Comarca)</label><input type="text" id="anJuizo"></div>
+          <div><label>Juízo (Vara / Comarca)</label><input type="text" id="anJuizo" placeholder="ex.: 3ª Vara Criminal da Comarca de Guarujá/SP"></div>
           <div><label>Advogado(a) — OAB</label><input type="text" id="anAdv" placeholder="ex.: Nome — OAB/SP 000.000"></div>
         </div>
         <div style="margin-top:.6rem">
@@ -408,7 +408,7 @@
 /* ══════════ util: download .doc / copiar ══════════ */
 function baixarDoc(idEl, nomeArq){
   var conteudo = document.getElementById(idEl).innerHTML;
-  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;text-align:justify;line-height:1.5}p{margin:0 0 10pt;text-indent:35pt}h1,h2,h3{font-size:12pt}h1{text-align:center;text-transform:uppercase}blockquote{margin-left:120pt;font-size:10pt;font-style:italic}</style></head><body>'+conteudo+'</body></html>';
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>@page{size:21cm 29.7cm;margin:2.5cm 2cm 2.5cm 3cm}body{font-family:"Times New Roman";font-size:12pt;text-align:justify;line-height:1.5}p{margin:0 0 10pt;text-indent:35pt}h1,h2,h3{font-size:12pt}h1{text-align:center;text-transform:uppercase}blockquote{margin-left:120pt;font-size:10pt;font-style:italic}</style></head><body>'+conteudo+'</body></html>';
   var blob = new Blob(['﻿'+html], {type:'application/msword'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1383,7 +1383,13 @@ function rolTestemunhas(){
     ? linhas.map(function(l){ return '<li>'+esc(l)+';</li>'; }).join('')
     : '<li>_______________________________________________________ (nome, qualificação e endereço);</li>'
      +'<li>_______________________________________________________ (nome, qualificação e endereço).</li>';
-  return '<p class="ni"><strong>Rol de testemunhas:</strong></p><ol>'+itens+'</ol>';
+  return '<p class="ni"><strong>Rol de testemunhas:</strong></p><ol>'+itens+'</ol>'
+    +'<p class="ni">Requer-se, desde já, a intimação das testemunhas arroladas para a audiência de instrução e julgamento (art. 396-A, §1º, c/c art. 400 do CPP).</p>';
+}
+
+function protestoProvasCivel(){
+  /* no cível o rol de testemunhas não se junta com a contestação — vai após o saneamento (art. 357, §4º, CPC) */
+  return '<p class="ni">Protesta-se por todos os meios de prova em direito admitidos, especialmente prova documental, pericial, testemunhal e depoimento pessoal da parte autora, reservando-se a apresentar o rol de testemunhas na forma e no prazo do art. 357, §4º, do CPC, quando da decisão de saneamento.</p>';
 }
 
 function paragrafosIA(t){
@@ -1416,14 +1422,14 @@ function montarPecaIA(){
     if(t.jurisprudencia && !jurisUsadas[t.jurisprudencia]){
       jurisUsadas[t.jurisprudencia] = true;
       var tese = teseJuris(t.jurisprudencia);
-      h += '<blockquote>'+(tese?esc(tese)+' ':'')+'('+esc(t.jurisprudencia)+')</blockquote>';
+      h += '<blockquote>'+(tese?'Nesse sentido, '+esc(tese)+' ':'')+'('+esc(t.jurisprudencia)+')</blockquote>';
     }
     return h;
   }
   function lista(itens){ return '<ol>'+itens.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+'</ol>'; }
 
   var html =
-    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito — '+esc(juizo)+'</p>'
+    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito da '+esc(juizo)+'</p>'
     +'<p class="ni"><strong>Autos nº '+esc(num)+'</strong>'+(preso?'<br><strong>Réu preso — tramitação prioritária</strong>':'')+'</p>'
     +'<p><strong>'+esc(nome).toUpperCase()+'</strong>, já qualificado(a) nos autos, vem, respeitosamente, por seu(sua) advogado(a) que esta subscreve, com fundamento no(s) '+esc(cat.fundamento)+', apresentar</p>'
     +'<h1>'+esc(r.tipo_peca || cat.peca)+'</h1>'
@@ -1434,6 +1440,10 @@ function montarPecaIA(){
 
   sec('Da tempestividade', '<p>A presente defesa é apresentada no prazo legal de '+esc(cat.prazo)+' ('+esc(cat.fundamento)+'), sendo tempestiva.</p>');
   sec('Síntese dos fatos', paragrafosIA(r.sintese) || '<p>[Síntese dos fatos]</p>');
+  if(cat.area!=='Criminal' && r.impugnacao_fatos && r.impugnacao_fatos.length){
+    sec('Da impugnação especificada dos fatos (art. 341 do CPC)',
+      '<p>Impugnam-se especificamente os fatos alegados na petição inicial, nos termos do art. 341 do CPC, presumindo-se controvertidos os pontos a seguir:</p>'+lista(r.impugnacao_fatos));
+  }
   if(r.preliminares && r.preliminares.length){
     var p1 = rom[si];
     sec('Das preliminares e nulidades', r.preliminares.map(function(t,i){ return topico(p1,i,t); }).join(''));
@@ -1445,7 +1455,7 @@ function montarPecaIA(){
   if(r.provas && r.provas.length) sec('Das provas requeridas', lista(r.provas));
   if(r.pedidos && r.pedidos.length) sec('Dos pedidos', lista(r.pedidos));
 
-  html += rolTestemunhas()
+  html += (cat.area==='Criminal' ? rolTestemunhas() : protestoProvasCivel())
     +'<p class="center">Termos em que,<br>pede deferimento.</p>'
     +'<p class="right">'+(d.comarca?esc(d.comarca):'[Local]')+', ____ de ____________ de 20___.</p>'
     +'<p class="sign">_______________________________________<br><strong>'+esc(adv)+'</strong></p>';
@@ -1525,13 +1535,13 @@ function montarMinutaAnalise(){
     return '<h3>III.'+(i+1)+' — '+esc(ts.t)+'</h3><p>'+esc(ts.d)+' [Adequar aos elementos concretos dos autos.]</p>';
   }).join('');
   var jurisBloco = cat.juris.map(function(j){
-    return '<blockquote>'+esc(j.tese)+' ('+esc(j.ref)+')</blockquote>';
+    return '<blockquote>Nesse sentido, '+esc(j.tese)+' ('+esc(j.ref)+')</blockquote>';
   }).join('');
   var provas = '<ol>'+cat.provas.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+'<li>Oitiva das testemunhas arroladas ao final e demais provas admitidas em direito.</li></ol>';
   var pedidos = '<ol>'+cat.pedidos.map(function(p){return '<li>'+esc(p)+';</li>';}).join('')+(preso?'<li>A revogação da prisão preventiva ou sua substituição pelas medidas do art. 319 do CPP;</li>':'')+'<li>A produção de todas as provas especificadas.</li></ol>';
 
   var html =
-    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito — '+esc(juizo)+'</p>'
+    '<p class="addr">Excelentíssimo(a) Senhor(a) Doutor(a) Juiz(a) de Direito da '+esc(juizo)+'</p>'
     +'<p class="ni"><strong>Autos nº '+esc(num)+'</strong>'+(preso?'<br><strong>Réu preso — tramitação prioritária</strong>':'')+'</p>'
     +'<p><strong>'+esc(nome).toUpperCase()+'</strong>, já qualificado(a) nos autos, vem, respeitosamente, por seu(sua) advogado(a) que esta subscreve, com fundamento no(s) '+esc(cat.fundamento)+', apresentar</p>'
     +'<h1>'+esc(cat.peca)+'</h1>'
@@ -1550,7 +1560,7 @@ function montarMinutaAnalise(){
     + provas
     +'<h2>VI — Dos pedidos</h2>'
     + pedidos
-    + rolTestemunhas()
+    + (cat.area==='Criminal' ? rolTestemunhas() : protestoProvasCivel())
     +'<p class="center">Termos em que,<br>pede deferimento.</p>'
     +'<p class="right">'+(AN.dados.comarca?esc(AN.dados.comarca):'[Local]')+', ____ de ____________ de 20___.</p>'
     +'<p class="sign">_______________________________________<br><strong>'+esc(adv)+'</strong></p>';
