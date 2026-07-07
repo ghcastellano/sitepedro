@@ -423,6 +423,27 @@ function copiarTexto(idEl){
 
 function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
 
+/* sanitiza HTML vindo do banco (minuta salva) antes de injetar — defesa em profundidade contra XSS
+   armazenado. Vanilla, sem dependência de CDN (compatível com a CSP). */
+function sanitizarHtml(html){
+  var box = document.createElement('div');
+  box.innerHTML = String(html == null ? '' : html);
+  var perigosos = box.querySelectorAll('script,style,iframe,object,embed,link,meta,form,base,svg,math');
+  for(var i=0;i<perigosos.length;i++) perigosos[i].remove();
+  var todos = box.querySelectorAll('*');
+  for(var j=0;j<todos.length;j++){
+    var el = todos[j];
+    for(var k=el.attributes.length-1;k>=0;k--){
+      var nome = el.attributes[k].name.toLowerCase();
+      var val = (el.attributes[k].value||'').toLowerCase().replace(/[\s-]/g,'');
+      if(nome.indexOf('on')===0) el.removeAttribute(el.attributes[k].name);
+      else if((nome==='href'||nome==='src'||nome==='xlink:href'||nome==='action'||nome==='formaction') && val.indexOf('javascript:')===0) el.removeAttribute(el.attributes[k].name);
+      else if(nome==='style' && /expression\(|javascript:|url\(/.test(val)) el.removeAttribute(el.attributes[k].name);
+    }
+  }
+  return box.innerHTML;
+}
+
 /* nav ativo */
 document.querySelectorAll('nav a').forEach(function(a){
   a.addEventListener('click', function(){
@@ -433,8 +454,8 @@ document.querySelectorAll('nav a').forEach(function(a){
 
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.min.js" integrity="sha384-fx4y4cDx8NYfissnVzdGJY3yVXWY3rn5ab5HTUjpvgT35oDiyAbjjqnLhnRmESNE" crossorigin="anonymous"></script>
 <script>
 /* ═══════════════════ ANALISADOR AUTOMÁTICO DE PROCESSOS ═══════════════════ */
 if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -1574,7 +1595,9 @@ function carregarTesseract(){
   if(tessPronto) return tessPronto;
   tessPronto = new Promise(function(res, rej){
     var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+    s.integrity = 'sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F';
+    s.crossOrigin = 'anonymous';
     s.onload = res;
     s.onerror = function(){
       tessPronto = null; /* não cacheia a falha — próxima tentativa recarrega o script */
@@ -1885,7 +1908,7 @@ function restaurarProcesso(reg){
   document.getElementById('bigdropSub').textContent = 'Extração e OCR rodam no seu navegador; o texto segue com segurança para a análise por IA do sistema (sigilo profissional preservado). A defesa sai quase pronta, com as nulidades apontadas.';
   preencherCatSelect();
   renderAnalise();
-  if(AN.minutaArquivada) document.getElementById('documento-analise').innerHTML = AN.minutaArquivada;
+  if(AN.minutaArquivada) document.getElementById('documento-analise').innerHTML = sanitizarHtml(AN.minutaArquivada);
   if(AN.analiseIA){
     renderIA();
     setStatusIA('📂 Análise por IA recuperada do arquivo — nenhum reprocessamento ou custo. Clique em <b>🧠 Reanalisar com IA</b> se quiser refazê-la.');
