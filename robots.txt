@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /defesaprevia
-Disallow: /api
 
 Sitemap: https://pedrohenrikadv.com.br/sitemap.xml
